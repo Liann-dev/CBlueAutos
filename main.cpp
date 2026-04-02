@@ -3,8 +3,14 @@
 #include <sstream>
 #include <string>
 
+// Memanggil header navigasi menu
+#include "app/home/user/home.h" 
+#include "app/home/admin/home.h" 
+#include "app/features/features.h"
+
 using namespace std;
 
+// Struct User untuk menampung data sesi login
 struct User {
     int id;
     string username;
@@ -14,42 +20,45 @@ struct User {
 
 string dbUser = "data/database_user.csv";
 
+// Fungsi untuk memastikan folder data dan file csv tersedia
 bool cekfile() {
     ifstream file(dbUser.c_str());
     return file.good();
 }
 
+// Fungsi cek duplikasi username saat register
 bool cekUsernameAda(string username) {
     ifstream file(dbUser.c_str());
-    for (string line; getline(file, line); ) {
+    string line;
+    while (getline(file, line)) {
+        if (line.empty()) continue;
         stringstream ss(line);
-        string id, fileUsername, filePassword, fileRole;
+        string id, fileUsername;
 
         getline(ss, id, ',');
         getline(ss, fileUsername, ',');
-        getline(ss, filePassword, ',');
-        getline(ss, fileRole, ',');
 
         if (fileUsername == username) {
             file.close();
             return true;
         }
     }
-
     file.close();
     return false;
 }
 
+// Fungsi auto-increment ID untuk user baru
 int userIdSelanjutnya() {
     ifstream file(dbUser.c_str());
     int lastId = 0;
+    string line;
 
-    for (string line; getline(file, line); ) {
+    while (getline(file, line)) {
+        if (line.empty()) continue;
         stringstream ss(line);
         string id;
-
         getline(ss, id, ',');
-        lastId = stoi(id);
+        if(!id.empty()) lastId = stoi(id);
     }
 
     file.close();
@@ -75,6 +84,7 @@ void registerUser() {
         return;
     }
 
+    // Cek apakah perlu baris baru (newline) di akhir file
     bool perluBarisBaru = false;
     ifstream cekAkhir(dbUser.c_str(), ios::binary);
     if (cekAkhir.good()) {
@@ -83,7 +93,6 @@ void registerUser() {
             cekAkhir.seekg(-1, ios::end);
             char karakterTerakhir;
             cekAkhir.get(karakterTerakhir);
-
             if (karakterTerakhir != '\n' && karakterTerakhir != '\r') {
                 perluBarisBaru = true;
             }
@@ -92,12 +101,9 @@ void registerUser() {
     cekAkhir.close();
 
     ofstream file(dbUser.c_str(), ios::app);
-    int id = userIdSelanjutnya();
-
-    if (perluBarisBaru) {
-        file << "\n";
-    }
-    file << id << "," << username << "," << password << ",user\n";
+    if (perluBarisBaru) file << "\n";
+    
+    file << userIdSelanjutnya() << "," << username << "," << password << ",user";
     file.close();
 
     cout << "Register berhasil. Silakan login.\n";
@@ -113,8 +119,10 @@ bool loginUser(User &userTerdaftar) {
     getline(cin, password);
 
     ifstream file(dbUser.c_str());
+    string line;
 
-    for (string line; getline(file, line); ) {
+    while (getline(file, line)) {
+        if (line.empty()) continue;
         stringstream ss(line);
         string id, fileUsername, filePassword, fileRole;
 
@@ -128,24 +136,25 @@ bool loginUser(User &userTerdaftar) {
             userTerdaftar.username = fileUsername;
             userTerdaftar.password = filePassword;
             userTerdaftar.role = fileRole;
-
             file.close();
             return true;
         }
     }
-
     file.close();
     return false;
 }
 
 int main() {
+    inisialisasiData();
 
     User userTerdaftar;
-    int mulai = 1;
+    bool programJalan = true;
 
-    for (; mulai == 1; ) {
+    while (programJalan) {
         int pilihan;
-        cout << "\n=== CAR SHOWROOM ===\n";
+        cout << "\n==============================\n";
+        cout << "      SHOWROOM MOBIL UPI      \n";
+        cout << "==============================\n";
         cout << "1. Login\n";
         cout << "2. Register\n";
         cout << "3. Keluar\n";
@@ -154,27 +163,31 @@ int main() {
         if (!(cin >> pilihan)) {
             cin.clear();
             cin.ignore(10000, '\n');
-            cout << "Input harus angka menu.\n";
+            cout << "Input harus berupa angka!\n";
             continue;
         }
-        cin.ignore(10000, '\n');
+        cin.ignore(10000, '\n'); 
 
         if (pilihan == 1) {
-            bool loginBerhasil = loginUser(userTerdaftar);
-
-            if (loginBerhasil) {
-                cout << "Login berhasil.\n";
-                cout << "Login sebagai: " << userTerdaftar.role << "\n";
+            if (loginUser(userTerdaftar)) {
+                cout << "\nLogin Berhasil! Selamat Datang, " << userTerdaftar.username << ".\n";
+                
+                // 2. Percabangan Menu berdasarkan Role
+                if (userTerdaftar.role == "admin") {
+                    menuUtamaAdmin(userTerdaftar.role); // Masuk ke folder admin
+                } else {
+                    menuUtama(userTerdaftar.role);      // Masuk ke folder user
+                }
             } else {
-                cout << "Username atau password salah.\n";
+                cout << "Username atau password salah!\n";
             }
         } else if (pilihan == 2) {
             registerUser();
         } else if (pilihan == 3) {
-                cout << "Program selesai.\n";
-                mulai = 0;
+            cout << "Terima kasih telah menggunakan layanan kami.\n";
+            programJalan = false;
         } else {
-            cout << "Pilihan tidak valid.\n";
+            cout << "Pilihan tidak tersedia.\n";
         }
     }
 
