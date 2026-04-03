@@ -31,7 +31,7 @@ int main() {
                 cout << "Login berhasil.\n";
                 cout << "Login sebagai: " << userTerdaftar.role << "\n";
             } else {
-                cout << "Username atau password salah.\n";
+                cout << "Kembali ke menu utama.\n";
             }
         } else if (pilihan == 2) {
             registerUser();
