@@ -1,64 +1,81 @@
 #include <iostream>
 using namespace std;
 
-struct Car {
-    int year;
-    string brand;
+struct Mobil {
+    string merk;
     string model;
+    int Tahun;
+    string kondisi;
+    Mobil* next;
 };
 
-struct Node {
-    Car data;
-    Node* next;
-};
-
-void showCars(Node* head) {
-    Node* temp = head;
+void tampilkanKatalog(Mobil* head) {
+    Mobil* temp = head;
     int i = 1;
 
     while (temp != NULL) {
         cout << i++ << ". "
-             << temp->data.year << " | "
-             << temp->data.brand << " | "
-             << temp->data.model << endl;
+             << temp->Tahun << " | "
+             << temp->merk << " | "
+             << temp->model << " | "
+             << temp->kondisi << endl;
+
         temp = temp->next;
     }
 }
 
-void addCar(Node*& head) {
-    Car car;
+void tambahMobilAdmin(Mobil*& head) {
+    Mobil* baru = new Mobil;
 
-    cout << "Tahun: ";
-    cin >> car.year;
     cin.ignore();
 
-    cout << "Brand: ";
-    getline(cin, car.brand);
+    cout << "Merk: ";
+    getline(cin, baru->merk);
 
     cout << "Model: ";
-    getline(cin, car.model);
+    getline(cin, baru->model);
 
-    Node* newNode = new Node{car, NULL};
+    cout << "Tahun: ";
+    cin >> baru->Tahun;
+    cin.ignore();
+
+    do {
+        cout << "Kondisi (baru/bekas): ";
+        getline(cin, baru->kondisi);
+
+        if (baru->kondisi != "baru" && baru->kondisi != "bekas") {
+            cout << "Input hanya boleh 'baru' atau 'bekas'!\n";
+        }
+
+    } while (baru->kondisi != "baru" && baru->kondisi != "bekas");
+
+    baru->next = NULL;
 
     if (head == NULL) {
-        head = newNode;
+        head = baru;
     } else {
-        Node* temp = head;
+        Mobil* temp = head;
         while (temp->next != NULL)
             temp = temp->next;
 
-        temp->next = newNode;
+        temp->next = baru;
     }
 
     cout << "Mobil berhasil ditambahkan!\n";
 }
 
-void updateCar(Node* head) {
+void updateMobilAdmin(Mobil* head) {
     int index;
     cout << "Pilih nomor mobil: ";
-    cin >> index;
 
-    Node* temp = head;
+    if (!(cin >> index)) {
+        cin.clear();
+        cin.ignore(10000, '\n');
+        cout << "Input harus angka!\n";
+        return;
+    }
+
+    Mobil* temp = head;
     int i = 1;
 
     while (temp != NULL && i < index) {
@@ -71,35 +88,31 @@ void updateCar(Node* head) {
         return;
     }
 
-    cin.ignore();
-    cout << "Brand baru: ";
-    getline(cin, temp->data.brand);
-
-    cout << "Model baru: ";
-    getline(cin, temp->data.model);
-
-    cout << "Tahun baru: ";
-    cin >> temp->data.year;
-
     cout << "Data berhasil diupdate!\n";
 }
 
-void deleteCar(Node*& head) {
+void hapusMobilAdmin(Mobil*& head) {
     int index;
     cout << "Pilih nomor mobil: ";
-    cin >> index;
+
+    if (!(cin >> index)) {
+        cin.clear();
+        cin.ignore(10000, '\n');
+        cout << "Input harus angka!\n";
+        return;
+    }
 
     if (head == NULL) return;
 
     if (index == 1) {
-        Node* del = head;
+        Mobil* del = head;
         head = head->next;
         delete del;
         cout << "Data terhapus!\n";
         return;
     }
 
-    Node* temp = head;
+    Mobil* temp = head;
     for (int i = 1; i < index - 1; i++) {
         temp = temp->next;
     }
@@ -109,7 +122,7 @@ void deleteCar(Node*& head) {
         return;
     }
 
-    Node* del = temp->next;
+    Mobil* del = temp->next;
     temp->next = del->next;
     delete del;
 

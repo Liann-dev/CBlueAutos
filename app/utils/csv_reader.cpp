@@ -1,75 +1,92 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <string>
 using namespace std;
 
-struct Car {
-    int year;
-    string brand;
+struct Mobil {
+    string merk;
     string model;
+    int Tahun;
+    string kondisi;
+    Mobil* next;
 };
 
-struct Node {
-    Car data;
-    Node* next;
-};
+void insert(Mobil*& head, string merk, string model, int tahun) {
+    Mobil* baru = new Mobil;
 
-void insert(Node*& head, Car car) {
-    Node* newNode = new Node{car, NULL};
+    baru->merk = merk;
+    baru->model = model;
+    baru->Tahun = tahun;
+    baru->next = NULL;
 
     if (head == NULL) {
-        head = newNode;
+        head = baru;
         return;
     }
 
-    Node* temp = head;
+    Mobil* temp = head;
     while (temp->next != NULL)
         temp = temp->next;
 
-    temp->next = newNode;
+    temp->next = baru;
 }
 
-Node* loadCSV(string path) {
+Mobil* loadCSV(string path) {
     ifstream file(path);
+
     if (!file.is_open()) {
         cout << "File gagal dibuka!\n";
         return NULL;
     }
 
-    Node* head = NULL;
+    Mobil* head = NULL;
     string line;
 
     getline(file, line); // skip header
 
     while (getline(file, line)) {
         stringstream ss(line);
-        string year, brand, model;
+        string tahun, merk, model, kondisi;
 
-        getline(ss, year, ',');
-        getline(ss, brand, ',');
+        getline(ss, tahun, ',');
+        getline(ss, merk, ',');
         getline(ss, model, ',');
+        getline(ss, kondisi, ',');
 
-        Car car;
-        car.year = stoi(year);
-        car.brand = brand;
-        car.model = model;
+        Mobil* baru = new Mobil;
 
-        insert(head, car);
+        baru->Tahun = stoi(tahun);
+        baru->merk = merk;
+        baru->model = model;
+        baru->kondisi = kondisi;
+        baru->next = NULL;
+
+        if (head == NULL) {
+            head = baru;
+        } else {
+            Mobil* temp = head;
+            while (temp->next != NULL)
+                temp = temp->next;
+
+            temp->next = baru;
+        }
     }
 
     return head;
 }
 
-void saveCSV(string path, Node* head) {
+void saveCSV(string path, Mobil* head) {
     ofstream file(path);
 
-    file << "Tahun Rilis,Pabrikan,Model Mobil\n";
+    file << "Tahun Rilis,Pabrikan,Model Mobil,Kondisi\n";
 
-    Node* temp = head;
+    Mobil* temp = head;
     while (temp != NULL) {
-        file << temp->data.year << ","
-             << temp->data.brand << ","
-             << temp->data.model << "\n";
+        file << temp->Tahun << ","
+             << temp->merk << ","
+             << temp->model << ","
+             << temp->kondisi << "\n";
         temp = temp->next;
     }
 

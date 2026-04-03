@@ -3,26 +3,21 @@
 
 using namespace std;
 
-
-struct Car {
-    int year;
-    string brand;
+struct Mobil {
+    string merk;
     string model;
+    int Tahun;
+    string kondisi;
+    Mobil* next;
 };
 
-struct Node {
-    Car data;
-    Node* next;
-};
+Mobil* loadCSV(string path);
+void saveCSV(string path, Mobil* head);
 
-
-Node* loadCSV(string path);
-void saveCSV(string path, Node* head);
-
-void showCars(Node* head);
-void addCar(Node*& head);
-void updateCar(Node* head);
-void deleteCar(Node*& head);
+void tampilkanKatalog(Mobil* head);
+void tambahMobilAdmin(Mobil*& head);
+void updateMobilAdmin(Mobil* head);
+void hapusMobilAdmin(Mobil*& head);
 
 int main() {
 
@@ -37,7 +32,13 @@ int main() {
         cout << "2. Register\n";
         cout << "3. Keluar\n";
         cout << "Pilih: ";
-        cin >> pilihan;
+
+        if (!(cin >> pilihan)) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "Input harus angka!\n";
+            continue;
+        }
         cin.ignore();
 
         if (pilihan == 1) {
@@ -46,7 +47,7 @@ int main() {
 
                 cout << "Login sebagai: " << userTerdaftar.role << endl;
 
-                Node* head = loadCSV(path);
+                Mobil* head = loadCSV(path);
 
                 int menu;
                 do {
@@ -61,32 +62,38 @@ int main() {
 
                     cout << "0. Logout\n";
                     cout << "Pilih: ";
-                    cin >> menu;
+
+                    if (!(cin >> menu)) {
+                        cin.clear();
+                        cin.ignore(10000, '\n');
+                        cout << "Input harus angka!\n";
+                        continue;
+                    }
 
                     switch (menu) {
                         case 1:
-                            showCars(head);
+                            tampilkanKatalog(head);
                             break;
 
                         case 2:
                             if (userTerdaftar.role == "admin") {
-                                addCar(head);
+                                tambahMobilAdmin(head);
                                 saveCSV(path, head);
                             }
                             break;
 
                         case 3:
                             if (userTerdaftar.role == "admin") {
-                                showCars(head);
-                                updateCar(head);
+                                tampilkanKatalog(head);
+                                updateMobilAdmin(head);
                                 saveCSV(path, head);
                             }
                             break;
 
                         case 4:
                             if (userTerdaftar.role == "admin") {
-                                showCars(head);
-                                deleteCar(head);
+                                tampilkanKatalog(head);
+                                hapusMobilAdmin(head);
                                 saveCSV(path, head);
                             }
                             break;
