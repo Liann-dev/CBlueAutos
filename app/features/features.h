@@ -3,9 +3,8 @@
 
 #include <string>
 
-// ==========================================
-// 1. STRUKTUR DATA (HANYA BOLEH DI SINI)
-// ==========================================
+
+// 1. STRUKTUR DATA 
 struct Mobil {
     std::string Model;
     int Tahun;
@@ -20,16 +19,13 @@ struct Kategori {
 
 
 // 2. FUNGSI KHUSUS USESR
-
 void inisialisasiData();
 void tambahUnit(Kategori &kat, std::string model, int tahun, double harga);
 void tampilkanKatalog();
 void cariMobil(); // Fungsi search untuk user
 void inisialisasiData();
 
-// ==========================================
 // 3. FUNGSI KHUSUS ADMIN
-// ==========================================
 void tambahMobilAdmin();       // Tambah unit baru
 void tampilkanKatalogAdmin();  // Lihat inventaris + total aset
 void hapusMobilAdmin();        // Hapus unit berdasarkan model
