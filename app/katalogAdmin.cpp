@@ -4,8 +4,6 @@
 #include "features.h"
 
 using namespace std;
-
-
 extern Kategori showroom[3]; 
 
 

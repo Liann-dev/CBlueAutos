@@ -8,7 +8,6 @@
 using namespace std;
 
 extern Kategori showroom[3]; 
-
 const string dbMobil = "database_mobil.csv"; 
 
 void tambahMobilAdmin() {
@@ -44,15 +43,6 @@ void tambahMobilAdmin() {
     cout << "Harga (Jt)  : ";
     cin >> hargaBaru;
 
-    // --- TAMBAHAN PELACAK DEBUG ---
-    cout << "\n[DEBUG 1] Input harga berhasil diterima." << endl;
-
-    // 1. Simpan ke dalam memori (Linked List)
-    tambahUnit(showroom[indeks], modelBaru, tahunBaru, hargaBaru);
-
-    cout << "[DEBUG 2] Penyimpanan ke memori (tambahUnit) berhasil." << endl;
-
-    // 2. Simpan ke dalam file CSV agar permanen
     ofstream file(dbMobil.c_str(), ios::app);
     if(file.is_open()) {
         file << showroom[indeks].NamaMerk << "," 
