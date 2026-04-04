@@ -44,8 +44,15 @@ void tambahMobilAdmin() {
     cout << "Harga (Jt)  : ";
     cin >> hargaBaru;
 
+    // --- TAMBAHAN PELACAK DEBUG ---
+    cout << "\n[DEBUG 1] Input harga berhasil diterima." << endl;
+
+    // 1. Simpan ke dalam memori (Linked List)
     tambahUnit(showroom[indeks], modelBaru, tahunBaru, hargaBaru);
 
+    cout << "[DEBUG 2] Penyimpanan ke memori (tambahUnit) berhasil." << endl;
+
+    // 2. Simpan ke dalam file CSV agar permanen
     ofstream file(dbMobil.c_str(), ios::app);
     if(file.is_open()) {
         file << showroom[indeks].NamaMerk << "," 
@@ -53,7 +60,7 @@ void tambahMobilAdmin() {
              << tahunBaru << "," 
              << hargaBaru << "\n";
         file.close();
-        cout << "\n[SUKSES] " << modelBaru << " berhasil ditambahkan ke " << showroom[indeks].NamaMerk << " dan tersimpan di database!" << endl;
+        cout << "\n[SUKSES] " << modelBaru << " berhasil ditambahkan!" << endl;
     } else {
         cout << "\n[Error] Gagal membuka database_mobil.csv!" << endl;
     }

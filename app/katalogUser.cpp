@@ -18,9 +18,7 @@ void tambahUnit(Kategori &kat, string model, int tahun, double harga) {
     kat.head = baru;
 }
 
-// Fungsi ini sekarang akan membaca dari CSV
 void inisialisasiData() {
-    // Set merk dasar terlebih dahulu
     showroom[0].NamaMerk = "Toyota"; 
     showroom[1].NamaMerk = "Honda";
     showroom[2].NamaMerk = "Suzuki";
@@ -29,10 +27,9 @@ void inisialisasiData() {
     showroom[1].head = nullptr;
     showroom[2].head = nullptr;
 
-    // Buka file database mobil
     ifstream file(dbMobil.c_str());
     if (!file.is_open()) {
-        return; // Jika file belum ada (misal program baru pertama jalan), keluar dari fungsi
+        return; 
     }
 
     // Baca per baris
