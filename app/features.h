@@ -4,31 +4,32 @@
 #include <string>
 using namespace std;
 
-
 // 1. STRUKTUR DATA
-struct Mobil {
-    int    id;
-    string Merk;    
+struct Mobil
+{
+    int id;
+    string Merk;
     string Model;
-    int    Tahun;
-    string Kondisi; 
-    Mobil* next;
-    Mobil* prev;
+    int Tahun;
+    string Kondisi;
+    Mobil *next;
+    Mobil *prev;
 };
 
-struct Kategori {
+struct Kategori
+{
     string NamaMerk;
-    Mobil* head;
+    Mobil *head;
 };
 
-
-struct Page {
-    Mobil*  items[10];
-    string  merkItems[10];
-    int     jumlah;
-    int     nomorHalaman;
-    Page*   next;
-    Page*   prev;
+struct Page
+{
+    Mobil *items[10];
+    string merkItems[10];
+    int jumlah;
+    int nomorHalaman;
+    Page *next;
+    Page *prev;
 };
 
 // 2. FUNGSI KHUSUS USER
@@ -44,6 +45,7 @@ void tampilkanKatalogAdmin();
 void hapusMobilAdmin();
 void updateMobilAdmin();
 void searchFilterAdmin();
+void sinkronisasiKeCSV();
 string keHurufKecil(string str);
 
 #endif
