@@ -2,7 +2,7 @@
 #include <string>
 #include <algorithm>
 #include <iomanip>
-#include "../../features.h"
+#include "features.h"
 
 using namespace std;
 

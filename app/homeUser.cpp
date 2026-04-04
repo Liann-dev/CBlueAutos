@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
-#include "home.h"
-#include "../../features/features.h"
+#include "homeUser.h"
+#include "features.h"
 
 using namespace std;
 

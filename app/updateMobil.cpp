@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "../../features.h"
+#include "features.h"
 using namespace std;
 
 extern Kategori showroom[3];

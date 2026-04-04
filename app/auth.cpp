@@ -7,7 +7,7 @@
 
 using namespace std;
 
-static string dbUser = "app/database_user.csv";
+static string dbUser = "database_user.csv";
 
 bool cekUsernameAda(string username) {
 	ifstream file(dbUser.c_str());

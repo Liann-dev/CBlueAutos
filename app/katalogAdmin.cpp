@@ -1,33 +1,15 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
-#include "../../features.h"
+#include "features.h"
 
 using namespace std;
 
 
-Kategori showroom[3];
-
-void inisialisasiData() {
-    showroom[0].NamaMerk = "Toyota"; 
-    showroom[1].NamaMerk = "Honda";
-    showroom[2].NamaMerk = "Suzuki";
-    
-    showroom[0].head = nullptr;
-    showroom[1].head = nullptr;
-    showroom[2].head = nullptr;
-}
-void tambahUnit(Kategori &kat, string model, int tahun, double harga) {
-    Mobil* baru = new Mobil;
-    baru->Model = model;
-    baru->Tahun = tahun;
-    baru->Harga = harga;
-    baru->next = kat.head;
-    kat.head = baru;
-}
+extern Kategori showroom[3]; 
 
 
-void tampilkanKatalog() {
+void tampilkanKatalogAdmin() {
  
     bool adaData = false;
     for (int i = 0; i < 3; i++) {

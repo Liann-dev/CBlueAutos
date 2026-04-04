@@ -1,6 +1,6 @@
-#ifndef HOME_H
-#define HOME_H
-#include "home.h"
+#ifndef HOME_USER_H
+#define HOME_USER_H
+#include "homeUser.h"
 
 #include <string>
 
