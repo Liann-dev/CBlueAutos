@@ -1,19 +1,19 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
-#include <fstream>   // Untuk baca file
-#include <sstream>   // Untuk memecah string (koma)
+#include <fstream>
+#include <sstream>
 #include "features.h"
 
 using namespace std;
 Kategori showroom[3];
 const string dbMobil = "database_mobil.csv";
 
-void tambahUnit(Kategori &kat, string model, int tahun, double harga) {
+void tambahUnit(Kategori &kat, string model, int tahun, string kondisi) {
     Mobil* baru = new Mobil;
     baru->Model = model;
     baru->Tahun = tahun;
-    baru->Harga = harga;
+    baru->Kondisi = kondisi;
     baru->next = kat.head;
     kat.head = baru;
 }
@@ -23,35 +23,35 @@ void inisialisasiData() {
     showroom[1].NamaMerk = "Honda";
     showroom[2].NamaMerk = "Suzuki";
     
-    showroom[0].head = nullptr;
-    showroom[1].head = nullptr;
-    showroom[2].head = nullptr;
+    for(int i = 0; i < 3; i++) showroom[i].head = nullptr;
 
     ifstream file(dbMobil.c_str());
-    if (!file.is_open()) {
-        return; 
-    }
+    string line;
+    getline(file, line); // Melewati baris header (ID,Merk,Model,Tahun,Kondisi)
 
-    // Baca per baris
-    for (string line; getline(file, line); ) {
-        if(line.empty()) continue; // Abaikan baris kosong
+    while (getline(file, line)) {
+        if(line.empty()) continue;
         
         stringstream ss(line);
-        string merkStr, modelStr, tahunStr, hargaStr;
+        string idStr, merkStr, modelStr, tahunStr, kondisiStr;
 
-        // Pisahkan berdasarkan koma
-        getline(ss, merkStr, ',');
-        getline(ss, modelStr, ',');
-        getline(ss, tahunStr, ',');
-        getline(ss, hargaStr, ',');
+        getline(ss, idStr, ',');    // Ambil ID
+        getline(ss, merkStr, ',');  // Ambil Merk
+        getline(ss, modelStr, ','); // Ambil Model
+        getline(ss, tahunStr, ','); // Ambil Tahun
+        getline(ss, kondisiStr, ','); // Ambil Kondisi
 
-        int tahun = stoi(tahunStr);
-        double harga = stod(hargaStr);
-
-        // Masukkan data ke kategori merk yang tepat
+        Mobil* baru = new Mobil;
+        baru->id = stoi(idStr);
+        baru->Model = modelStr;
+        baru->Tahun = stoi(tahunStr);
+        baru->Kondisi = kondisiStr;
+        
+        // Masukkan ke kategori yang sesuai
         for(int i = 0; i < 3; i++) {
             if(showroom[i].NamaMerk == merkStr) {
-                tambahUnit(showroom[i], modelStr, tahun, harga);
+                baru->next = showroom[i].head;
+                showroom[i].head = baru;
                 break;
             }
         }
@@ -60,18 +60,9 @@ void inisialisasiData() {
 }
 
 void tampilkanKatalog() {
-    bool adaData = false;
-    for (int i = 0; i < 3; i++) {
-        if (showroom[i].head != nullptr) adaData = true;
-    }
-
-    if (!adaData) {
-        cout << "\n[!] Katalog Kosong. Belum ada mobil di dalam database.\n";
-        return;
-    }
-
+    // Header tabel disesuaikan: Harga dihapus, Kondisi ditambah
     cout << "\n" << setfill('=') << setw(65) << "=" << endl;
-    cout << left << setw(15) << "MERK" << setw(20) << "MODEL" << setw(10) << "TAHUN" << "HARGA" << endl;
+    cout << left << setw(15) << "MERK" << setw(20) << "MODEL" << setw(10) << "TAHUN" << "KONDISI" << endl;
     cout << setfill('-') << setw(65) << "-" << setfill(' ') << endl;
 
     for (int i = 0; i < 3; i++) { 
@@ -80,7 +71,7 @@ void tampilkanKatalog() {
             cout << left << setw(15) << showroom[i].NamaMerk 
                  << setw(20) << temp->Model 
                  << setw(10) << temp->Tahun 
-                 << fixed << setprecision(1) << "$" << temp->Harga << " Jt" << endl;
+                 << temp->Kondisi << endl;
             temp = temp->next;
         }
     }

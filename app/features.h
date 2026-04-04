@@ -3,13 +3,15 @@
 
 #include <string>
 using namespace std;
+
 // ==========================================
-// 1. STRUKTUR DATA (HANYA BOLEH DI SINI)
+// 1. STRUKTUR DATA
 // ==========================================
 struct Mobil {
+    int id;          // Unique Key baru
     string Model;
     int Tahun;
-    double Harga;
+    string Kondisi; 
     Mobil* next;
 };
 
@@ -18,22 +20,17 @@ struct Kategori {
     Mobil* head;
 };
 
-
-// 2. FUNGSI KHUSUS USESR
-
+// 2. FUNGSI KHUSUS USER
 void inisialisasiData();
-void tambahUnit(Kategori &kat, std::string model, int tahun, double harga);
+void tambahUnit(Kategori &kat, string model, int tahun, string kondisi);
 void tampilkanKatalog();
-void cariMobil(); // Fungsi search untuk user
-void inisialisasiData();
+void cariMobil();
 
-// ==========================================
 // 3. FUNGSI KHUSUS ADMIN
-// ==========================================
-void tambahMobilAdmin();       // Tambah unit baru
-void tampilkanKatalogAdmin();  // Lihat inventaris + total aset
-void hapusMobilAdmin();        // Hapus unit berdasarkan model
-void updateMobilAdmin();       // Update harga unit
-void searchFilterAdmin();      // Filter berdasarkan tahun
-string keHurufKecil(std::string str);
+void tambahMobilAdmin();
+void tampilkanKatalogAdmin();
+void hapusMobilAdmin();
+void updateMobilAdmin(); // Sekarang mengupdate kondisi
+void searchFilterAdmin();
+string keHurufKecil(string str);
 #endif
