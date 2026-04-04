@@ -1,5 +1,7 @@
 #include <iostream>
 #include "auth.h"
+#include "homeAdmin.h"
+#include "homeUser.h"
 
 using namespace std;
 
@@ -42,6 +44,13 @@ int main() {
                 cout << "Login berhasil.\n";
                 cout << "Login sebagai: " << userTerdaftar.role << "\n";
 
+                if (userTerdaftar.role == "admin") {
+                    menuUtamaAdmin(userTerdaftar.role);
+                } else if (userTerdaftar.role == "user") {
+                    menuUtama(userTerdaftar.role);
+                } else {
+                    cout << "Role tidak dikenali. Kembali ke menu utama.\n";
+                }
             } else {
                 cout << "Kembali ke menu utama.\n"; 
             }
