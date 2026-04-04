@@ -43,13 +43,36 @@ void tambahMobilAdmin() {
     cout << "Harga (Jt)  : ";
     cin >> hargaBaru;
 
+    bool perluBarisBaru = false;
+    ifstream cekAkhir(dbMobil.c_str(), ios::binary);
+    if (cekAkhir.good()) {
+        cekAkhir.seekg(0, ios::end);
+        if (cekAkhir.tellg() > 0) {
+            cekAkhir.seekg(-1, ios::end);
+            char karakterTerakhir;
+            cekAkhir.get(karakterTerakhir);
+
+            if (karakterTerakhir != '\n' && karakterTerakhir != '\r') {
+                perluBarisBaru = true;
+            }
+        }
+    }
+    cekAkhir.close();
+
     ofstream file(dbMobil.c_str(), ios::app);
     if(file.is_open()) {
+        if (perluBarisBaru) {
+            file << "\n";
+        }
+
         file << showroom[indeks].NamaMerk << "," 
              << modelBaru << "," 
              << tahunBaru << "," 
              << hargaBaru << "\n";
         file.close();
+        
+        tambahUnit(showroom[indeks], modelBaru, tahunBaru, hargaBaru);
+
         cout << "\n[SUKSES] " << modelBaru << " berhasil ditambahkan!" << endl;
     } else {
         cout << "\n[Error] Gagal membuka database_mobil.csv!" << endl;
