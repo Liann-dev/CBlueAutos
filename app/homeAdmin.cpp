@@ -34,7 +34,7 @@ void menuUtamaAdmin(string role) {
             tampilkanKatalogAdmin();
         } else if (pilihan == 6){
             cout << "\nLogging out... Kembali ke menu utama.\n";
-            tetapDiHome = false; 
+            tetapDiHome = false;
         } else {
            cout << "Pilihan tidak valid.\n"; 
         }
