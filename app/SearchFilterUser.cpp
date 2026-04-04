@@ -6,7 +6,6 @@
 
 using namespace std;
 
-
 extern Kategori showroom[3];
 
 string keHurufKecil(string teks) {
@@ -16,23 +15,27 @@ string keHurufKecil(string teks) {
 
 void cariMobil() {
     string key;
-    double budgetMaks;
-    int tahunMin;
 
-    cout << "\n=== PENCARIAN MOBIL ===\n";
-    cout << "Masukkan nama mobil (Merk/Model) atau '0' untuk semua: ";
+    cout << "\n=== PENCARIAN KOLEKSI MOBIL ===\n";
+    cout << "Masukkan Model (atau '0' untuk semua): ";
     getline(cin >> ws, key);
     string keyKecil = keHurufKecil(key);
 
-    cout << "Masukkan budget maksimal (Juta) atau '0': ";
-    cin >> budgetMaks;
+    // ── Clear screen setelah input selesai ────────────────
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
 
-    cout << "Masukkan minimal tahun mobil atau '0': ";
-    cin >> tahunMin;
-
-    cout << "\n" << setfill('=') << setw(65) << "=" << endl;
-    cout << left << setw(15) << "MERK" << setw(20) << "MODEL" << setw(10) << "TAHUN" << "HARGA" << endl;
-    cout << setfill('-') << setw(65) << "-" << setfill(' ') << endl;
+    cout << "\n" << setfill('=') << setw(70) << "=" << setfill(' ') << endl;
+    cout << left
+         << setw(5)  << "ID"
+         << setw(12) << "MERK"
+         << setw(22) << "MODEL"
+         << setw(8)  << "TAHUN"
+         << "KONDISI" << endl;
+    cout << setfill('-') << setw(70) << "-" << setfill(' ') << endl;
 
     int counter = 0;
     for (int i = 0; i < 3; i++) {
@@ -42,24 +45,24 @@ void cariMobil() {
         while (temp != nullptr) {
             string modelKecil = keHurufKecil(temp->Model);
 
-            if ((keyKecil == "" || keyKecil == "0" || merkKecil.find(keyKecil) != string::npos || modelKecil.find(keyKecil) != string::npos)
-                && (budgetMaks == 0 || temp->Harga <= budgetMaks) 
-                && (tahunMin == 0 || temp->Tahun >= tahunMin)) {
-                
+            if (keyKecil == "0" || keyKecil == "" || modelKecil.find(keyKecil) != string::npos) {
                 counter++;
-                cout << left << setw(15) << showroom[i].NamaMerk 
-                     << setw(20) << temp->Model 
-                     << setw(10) << temp->Tahun 
-                     << fixed << setprecision(1) << "$" << temp->Harga << " Jt" << endl;
+                cout << left
+                     << setw(5)  << temp->id
+                     << setw(12) << showroom[i].NamaMerk
+                     << setw(22) << temp->Model
+                     << setw(8)  << temp->Tahun
+                     << temp->Kondisi << endl;
             }
             temp = temp->next;
         }
     }
 
     if (counter > 0) {
-        cout << setfill('=') << setw(65) << "=" << setfill(' ') << endl;
-        cout << "Total ditemukan: " << counter << " mobil." << endl;
+        cout << setfill('=') << setw(70) << "=" << setfill(' ') << endl;
+        cout << "Berhasil menemukan " << counter << " unit." << endl;
     } else {
-        cout << "\nMobil dengan kriteria tersebut tidak ditemukan!" << endl;
+        cout << setfill('=') << setw(70) << "=" << setfill(' ') << endl;
+        cout << "[!] Tidak ada mobil yang sesuai dengan kriteria tersebut." << endl;
     }
 }

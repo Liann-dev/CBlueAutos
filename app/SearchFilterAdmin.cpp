@@ -6,30 +6,24 @@
 
 using namespace std;
 
-
 extern Kategori showroom[3];
-
-
 
 void searchFilterAdmin() {
     string key;
-    double budgetMaks;
-    int tahunMin;
+    string filterKondisi;
 
-    cout << "\n=== PENCARIAN MOBIL ===\n";
-    cout << "Masukkan nama mobil (Merk/Model) atau '0' untuk semua: ";
+    cout << "\n=== MANAJEMEN STOK (SEARCH) ===\n";
+    cout << "Cari Merk/Model: ";
     getline(cin >> ws, key);
     string keyKecil = keHurufKecil(key);
 
-    cout << "Masukkan budget maksimal (Juta) atau '0': ";
-    cin >> budgetMaks;
+    cout << "Filter Kondisi (Baru/Bekas/0): ";
+    getline(cin, filterKondisi);
+    string kondKecil = keHurufKecil(filterKondisi);
 
-    cout << "Masukkan minimal tahun mobil atau '0': ";
-    cin >> tahunMin;
-
-    cout << "\n" << setfill('=') << setw(65) << "=" << endl;
-    cout << left << setw(15) << "MERK" << setw(20) << "MODEL" << setw(10) << "TAHUN" << "HARGA" << endl;
-    cout << setfill('-') << setw(65) << "-" << setfill(' ') << endl;
+    cout << "\n" << setfill('=') << setw(75) << "=" << endl;
+    cout << left << setw(5) << "ID" << setw(15) << "MERK" << setw(20) << "MODEL" << setw(10) << "THN" << "KONDISI" << endl;
+    cout << setfill('-') << setw(75) << "-" << setfill(' ') << endl;
 
     int counter = 0;
     for (int i = 0; i < 3; i++) {
@@ -38,25 +32,27 @@ void searchFilterAdmin() {
 
         while (temp != nullptr) {
             string modelKecil = keHurufKecil(temp->Model);
+            string unitKondKecil = keHurufKecil(temp->Kondisi);
 
-            if ((keyKecil == "" || keyKecil == "0" || merkKecil.find(keyKecil) != string::npos || modelKecil.find(keyKecil) != string::npos)
-                && (budgetMaks == 0 || temp->Harga <= budgetMaks) 
-                && (tahunMin == 0 || temp->Tahun >= tahunMin)) {
-                
+            bool cocokKeyword = (keyKecil == "0" || keyKecil == "" || merkKecil.find(keyKecil) != string::npos || modelKecil.find(keyKecil) != string::npos);
+            bool cocokKondisi = (kondKecil == "0" || unitKondKecil == kondKecil);
+
+            if (cocokKeyword && cocokKondisi) {
                 counter++;
-                cout << left << setw(15) << showroom[i].NamaMerk 
+                cout << left << setw(5) << temp->id 
+                     << setw(15) << showroom[i].NamaMerk 
                      << setw(20) << temp->Model 
                      << setw(10) << temp->Tahun 
-                     << fixed << setprecision(1) << "$" << temp->Harga << " Jt" << endl;
+                     << temp->Kondisi << endl;
             }
             temp = temp->next;
         }
     }
 
     if (counter > 0) {
-        cout << setfill('=') << setw(65) << "=" << setfill(' ') << endl;
-        cout << "Total ditemukan: " << counter << " mobil." << endl;
+        cout << setfill('=') << setw(75) << "=" << setfill(' ') << endl;
+        cout << "Total aset ditemukan: " << counter << " unit." << endl;
     } else {
-        cout << "\nMobil dengan kriteria tersebut tidak ditemukan!" << endl;
+        cout << "\n[!] Data tidak ditemukan dalam database." << endl;
     }
 }

@@ -2,38 +2,48 @@
 #define FEATURES_H
 
 #include <string>
+using namespace std;
 
-// ==========================================
-// 1. STRUKTUR DATA (HANYA BOLEH DI SINI)
-// ==========================================
+
+// 1. STRUKTUR DATA
 struct Mobil {
-    std::string Model;
-    int Tahun;
-    double Harga;
+    int    id;
+    string Merk;    
+    string Model;
+    int    Tahun;
+    string Kondisi; 
     Mobil* next;
+    Mobil* prev;
 };
 
 struct Kategori {
-    std::string NamaMerk;
+    string NamaMerk;
     Mobil* head;
 };
 
 
-// 2. FUNGSI KHUSUS USESR
+struct Page {
+    Mobil*  items[10];
+    string  merkItems[10];
+    int     jumlah;
+    int     nomorHalaman;
+    Page*   next;
+    Page*   prev;
+};
 
+// 2. FUNGSI KHUSUS USER
 void inisialisasiData();
-void tambahUnit(Kategori &kat, std::string model, int tahun, double harga);
+void tambahUnit(Kategori &kat, string model, int tahun, string kondisi);
 void tampilkanKatalog();
-void cariMobil(); // Fungsi search untuk user
-void inisialisasiData();
+void cariMobil();
+void filterMobil();
 
-// ==========================================
 // 3. FUNGSI KHUSUS ADMIN
-// ==========================================
-void tambahMobilAdmin();       // Tambah unit baru
-void tampilkanKatalogAdmin();  // Lihat inventaris + total aset
-void hapusMobilAdmin();        // Hapus unit berdasarkan model
-void updateMobilAdmin();       // Update harga unit
-void searchFilterAdmin();      // Filter berdasarkan tahun
-std::string keHurufKecil(std::string str);
+void tambahMobilAdmin();
+void tampilkanKatalogAdmin();
+void hapusMobilAdmin();
+void updateMobilAdmin();
+void searchFilterAdmin();
+string keHurufKecil(string str);
+
 #endif

@@ -8,14 +8,25 @@
 using namespace std;
 
 extern Kategori showroom[3]; 
-
 const string dbMobil = "database_mobil.csv"; 
-
+int getNextMobilId() {
+    ifstream file("database_mobil.csv");
+    string line;
+    int lastId = 0;
+    getline(file, line);
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string idStr;
+        if (getline(ss, idStr, ',')) {
+            try { lastId = stoi(idStr); } catch(...) {}
+        }
+    }
+    return lastId + 1;
+}
 void tambahMobilAdmin() {
     int indeks;
     string modelBaru;
     int tahunBaru;
-    double hargaBaru;
 
     cout << "\n======================================" << endl;
     cout << "     TAMBAH UNIT MOBIL (ADMIN)        " << endl;
@@ -34,6 +45,8 @@ void tambahMobilAdmin() {
         return;
     }
 
+    string kondisiBaru;
+    
     cout << "Nama Model  : ";
     cin.ignore(10000, '\n'); 
     getline(cin, modelBaru);
@@ -41,29 +54,40 @@ void tambahMobilAdmin() {
     cout << "Tahun Rilis : ";
     cin >> tahunBaru;
 
-    cout << "Harga (Jt)  : ";
-    cin >> hargaBaru;
+    bool perlubarisbaru = false;
+    ifstream checkakhir(dbMobil.c_str (), ios::binary);
+    if (checkakhir.good()) {
+        checkakhir.seekg(0, ios::end);
+        if (checkakhir.tellg() > 0) {
+            checkakhir.seekg(-1, ios::end);
+            char lastChar;
+            checkakhir.get(lastChar);
+            if (lastChar != '\n' && lastChar != '\r') {
+                perlubarisbaru = true;
+            }
+        checkakhir.close();
+        }
+    }
 
-    // --- TAMBAHAN PELACAK DEBUG ---
-    cout << "\n[DEBUG 1] Input harga berhasil diterima." << endl;
 
-    // 1. Simpan ke dalam memori (Linked List)
-    tambahUnit(showroom[indeks], modelBaru, tahunBaru, hargaBaru);
+    cout << "Kondisi (Baru/Bekas): ";
+    cin.ignore();
+    getline(cin, kondisiBaru);
 
-    cout << "[DEBUG 2] Penyimpanan ke memori (tambahUnit) berhasil." << endl;
+    int idBaru = getNextMobilId();
 
-    // 2. Simpan ke dalam file CSV agar permanen
     ofstream file(dbMobil.c_str(), ios::app);
     if(file.is_open()) {
-        file << showroom[indeks].NamaMerk << "," 
+        file << idBaru << "," 
+             << showroom[indeks].NamaMerk << "," 
              << modelBaru << "," 
              << tahunBaru << "," 
-             << hargaBaru << "\n";
+             << kondisiBaru << "\n";
         file.close();
-        cout << "\n[SUKSES] " << modelBaru << " berhasil ditambahkan!" << endl;
-    } else {
-        cout << "\n[Error] Gagal membuka database_mobil.csv!" << endl;
+        tambahUnit(showroom[indeks], modelBaru, tahunBaru, kondisiBaru);
+        cout << "\n[SUKSES] Unit dengan ID " << idBaru << " berhasil ditambahkan!" << endl;
     }
-    
-    cout << "======================================" << endl;
+    else {
+        cout << "\n[ERROR] Gagal membuka file database_mobil.csv!" << endl;
+    }
 }

@@ -3,230 +3,151 @@
 #include <sstream>
 #include <string>
 #include <cctype>
+#include <conio.h> // Penting untuk _getch()
 #include "auth.h"
 
 using namespace std;
 
-static string dbUser = "database_user.csv";
+// Gunakan jalur file yang konsisten dengan struktur folder kamu
+static string dbUser = "database_user.csv"; 
+
+string getHiddenPassword() {
+    string password = "";
+    char ch;
+    while (true) {
+        ch = _getch();
+        if (ch == '\r' || ch == '\n') { // Tombol Enter
+            cout << endl;
+            break;
+        } else if (ch == '\b') { // Tombol Backspace
+            if (!password.empty()) {
+                password.pop_back();
+                cout << "\b \b";
+            }
+        } else if (ch >= 32) { // Karakter yang bisa dicetak
+            password.push_back(ch);
+            cout << '*';
+        }
+    }
+    return password;
+}
 
 bool cekUsernameAda(string username) {
-	ifstream file(dbUser.c_str());
-	for (string line; getline(file, line); ) {
-		stringstream ss(line);
-		string id, fileUsername, filePassword, fileRole;
-
-		getline(ss, id, ',');
-		getline(ss, fileUsername, ',');
-		getline(ss, filePassword, ',');
-		getline(ss, fileRole, ',');
-
-		if (fileUsername == username) {
-			file.close();
-			return true;
-		}
-	}
-
-	file.close();
-	return false;
+    ifstream file(dbUser.c_str());
+    string line;
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string id, fileUsername;
+        getline(ss, id, ',');
+        getline(ss, fileUsername, ',');
+        if (fileUsername == username) {
+            file.close();
+            return true;
+        }
+    }
+    file.close();
+    return false;
 }
 
 int userIdSelanjutnya() {
-	ifstream file(dbUser.c_str());
-	int lastId = 0;
-
-	for (string line; getline(file, line); ) {
-		stringstream ss(line);
-		string id;
-
-		getline(ss, id, ',');
-		lastId = stoi(id);
-	}
-
-	file.close();
-	return lastId + 1;
+    ifstream file(dbUser.c_str());
+    string line;
+    int lastId = 0;
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string id;
+        if (getline(ss, id, ',')) {
+            try { lastId = stoi(id); } catch (...) {}
+        }
+    }
+    file.close();
+    return lastId + 1;
 }
 
 void registerUser() {
-	string username, password;
+    string username, password;
+    cout << "\n>>> REGISTER AKUN <<<\n";
 
-	cout << "\n>>> REGISTER AKUN <<<\n";
+    while (true) {
+        cout << "Masukkan username (atau Enter untuk kembali): ";
+        getline(cin, username);
+        if (username == "") return;
 
-	for (;;) {
-		cout << "Masukkan username (atau tekan Enter untuk kembali): ";
-		getline(cin, username);
+        bool valid = true;
+        for (char c : username) {
+            if (isspace(c) || !isalnum(c)) {
+                cout << ">> Username hanya boleh huruf dan angka tanpa spasi.\n";
+                valid = false;
+                break;
+            }
+        }
+        if (valid && cekUsernameAda(username)) {
+            cout << ">> Username sudah digunakan.\n";
+            valid = false;
+        }
+        if (valid) break;
+    }
 
-		if (username == "") {
-			cout << ">> Berhasil kembali ke menu utama.\n";
-			return;
-		}
+    while (true) {
+        cout << "Masukkan password: ";
+        password = getHiddenPassword();
 
-		bool usernameValid = true;
-		for (int i = 0; i < username.length(); i++) {
-			if (username[i] == ' ') {
-				cout << ">> Username tidak boleh mengandung spasi.\n";
-				usernameValid = false;
-				break;
-			}
+        bool adaHuruf = false, adaAngka = false, valid = true;
+        if (password.length() < 8) {
+            cout << ">> Password minimal 8 karakter.\n";
+            continue;
+        }
+        for (char c : password) {
+            if (isspace(c)) valid = false;
+            if (isalpha(c)) adaHuruf = true;
+            if (isdigit(c)) adaAngka = true;
+        }
+        if (!valid || !adaHuruf || !adaAngka) {
+            cout << ">> Password harus mengandung huruf, angka, dan tanpa spasi.\n";
+            continue;
+        }
+        break;
+    }
 
-			if (!isalnum(username[i])) {
-				cout << ">> Username tidak boleh mengandung simbol.\n";
-				usernameValid = false;
-				break;
-			}
-		}
-
-		if (!usernameValid) {
-			continue;
-		}
-
-		if (cekUsernameAda(username)) {
-			cout << ">> Username sudah digunakan.\n";
-			continue;
-		}
-
-		break;
-	}
-
-	for (;;) {
-		cout << "Masukkan password: ";
-		getline(cin, password);
-
-		if (password == "") {
-			cout << ">> Password tidak boleh kosong.\n";
-			continue;
-		}
-
-		if (password.length() < 8) {
-			cout << ">> Password minimal 8 karakter.\n";
-			continue;
-		}
-
-		bool adaHuruf = false;
-		bool adaAngka = false;
-		bool passwordValid = true;
-
-		for (int i = 0; i < password.length(); i++) {
-			if (password[i] == ' ') {
-				cout << ">> Password tidak boleh mengandung spasi.\n";
-				passwordValid = false;
-				break;
-			}
-
-			if (isalpha(password[i])) {
-				adaHuruf = true;
-			}
-
-			if (isdigit(password[i])) {
-				adaAngka = true;
-			}
-		}
-
-		if (!passwordValid) {
-			continue;
-		}
-
-		if (!adaHuruf || !adaAngka) {
-			cout << ">> Password harus mengandung huruf dan angka.\n";
-			continue;
-		}
-
-		break;
-	}
-
-	bool perluBarisBaru = false;
-	ifstream cekAkhir(dbUser.c_str(), ios::binary);
-	if (cekAkhir.good()) {
-		cekAkhir.seekg(0, ios::end);
-		if (cekAkhir.tellg() > 0) {
-			cekAkhir.seekg(-1, ios::end);
-			char karakterTerakhir;
-			cekAkhir.get(karakterTerakhir);
-
-			if (karakterTerakhir != '\n' && karakterTerakhir != '\r') {
-				perluBarisBaru = true;
-			}
-		}
-	}
-	cekAkhir.close();
-
-	ofstream file(dbUser.c_str(), ios::app);
-	if (!file.is_open()) {
-		cout << ">> Database user tidak bisa dibuka.\n";
-		return;
-	}
-
-	int id = userIdSelanjutnya();
-
-	if (perluBarisBaru) {
-		file << "\n";
-	}
-	file << id << "," << username << "," << password << ",user\n";
-	file.close();
-
-	cout << ">> Register berhasil. Silakan login.\n";
+    ofstream file(dbUser.c_str(), ios::app);
+    if (file.is_open()) {
+        file << userIdSelanjutnya() << "," << username << "," << password << ",user\n";
+        file.close();
+        cout << ">> Register berhasil!\n";
+    }
 }
 
 bool loginUser(User &userTerdaftar) {
-	int sisaKesempatan = 3;
+    for (int sisa = 3; sisa > 0; sisa--) {
+        string username, password;
+        cout << "\n>>> LOGIN (Sisa percobaan: " << sisa << ") <<<\n";
+        cout << "Username: ";
+        getline(cin, username);
+        if (username == "") return false;
 
-	for (; sisaKesempatan > 0; sisaKesempatan--) {
-		string username, password;
+        cout << "Password: ";
+        password = getHiddenPassword();
 
-		cout << "\n>>> LOGIN <<<\n";
-		cout << "Masukkan username (atau tekan Enter untuk kembali): ";
-		getline(cin, username);
-		if (username == "") {
-			cout << ">> Berhasil kembali ke menu utama.\n";
-			return false;
-		}
+        ifstream file(dbUser.c_str());
+        string line;
+        while (getline(file, line)) {
+            stringstream ss(line);
+            string id, fUser, fPass, fRole;
+            getline(ss, id, ',');
+            getline(ss, fUser, ',');
+            getline(ss, fPass, ',');
+            getline(ss, fRole, ',');
 
-		cout << "Masukkan password: ";
-		getline(cin, password);
-		if (password == "") {
-			cout << ">> Password tidak boleh kosong.\n";
-			sisaKesempatan++;
-			continue;
-		}
-
-		ifstream file(dbUser.c_str());
-		if (!file.is_open()) {
-			cout << ">> Database user tidak bisa dibuka.\n";
-			return false;
-		}
-
-		bool loginBerhasil = false;
-
-		for (string line; getline(file, line); ) {
-			stringstream ss(line);
-			string id, fileUsername, filePassword, fileRole;
-
-			getline(ss, id, ',');
-			getline(ss, fileUsername, ',');
-			getline(ss, filePassword, ',');
-			getline(ss, fileRole, ',');
-
-			if (fileUsername == username && filePassword == password) {
-				userTerdaftar.id = stoi(id);
-				userTerdaftar.username = fileUsername;
-				userTerdaftar.password = filePassword;
-				userTerdaftar.role = fileRole;
-				loginBerhasil = true;
-				break;
-			}
-		}
-
-		file.close();
-
-		if (loginBerhasil) {
-			return true;
-		}
-
-		if (sisaKesempatan > 1) {
-			cout << ">> Username atau password salah. Sisa kesempatan: " << sisaKesempatan - 1 << "\n";
-		} else {
-			cout << ">> Kesempatan login habis. Kembali ke menu awal.\n";
-		}
-	}
-
-	return false;
+            if (fUser == username && fPass == password) {
+                userTerdaftar.id = stoi(id);
+                userTerdaftar.username = fUser;
+                userTerdaftar.role = fRole;
+                file.close();
+                return true;
+            }
+        }
+        file.close();
+        cout << ">> Username atau password salah.\n";
+    }
+    return false;
 }
