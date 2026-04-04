@@ -1,22 +1,14 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
+#include <fstream>   // Untuk baca file
+#include <sstream>   // Untuk memecah string (koma)
 #include "features.h"
 
 using namespace std;
-
-
 Kategori showroom[3];
+const string dbMobil = "database_mobil.csv";
 
-void inisialisasiData() {
-    showroom[0].NamaMerk = "Toyota"; 
-    showroom[1].NamaMerk = "Honda";
-    showroom[2].NamaMerk = "Suzuki";
-    
-    showroom[0].head = nullptr;
-    showroom[1].head = nullptr;
-    showroom[2].head = nullptr;
-}
 void tambahUnit(Kategori &kat, string model, int tahun, double harga) {
     Mobil* baru = new Mobil;
     baru->Model = model;
@@ -26,16 +18,55 @@ void tambahUnit(Kategori &kat, string model, int tahun, double harga) {
     kat.head = baru;
 }
 
+void inisialisasiData() {
+    showroom[0].NamaMerk = "Toyota"; 
+    showroom[1].NamaMerk = "Honda";
+    showroom[2].NamaMerk = "Suzuki";
+    
+    showroom[0].head = nullptr;
+    showroom[1].head = nullptr;
+    showroom[2].head = nullptr;
+
+    ifstream file(dbMobil.c_str());
+    if (!file.is_open()) {
+        return; 
+    }
+
+    // Baca per baris
+    for (string line; getline(file, line); ) {
+        if(line.empty()) continue; // Abaikan baris kosong
+        
+        stringstream ss(line);
+        string merkStr, modelStr, tahunStr, hargaStr;
+
+        // Pisahkan berdasarkan koma
+        getline(ss, merkStr, ',');
+        getline(ss, modelStr, ',');
+        getline(ss, tahunStr, ',');
+        getline(ss, hargaStr, ',');
+
+        int tahun = stoi(tahunStr);
+        double harga = stod(hargaStr);
+
+        // Masukkan data ke kategori merk yang tepat
+        for(int i = 0; i < 3; i++) {
+            if(showroom[i].NamaMerk == merkStr) {
+                tambahUnit(showroom[i], modelStr, tahun, harga);
+                break;
+            }
+        }
+    }
+    file.close();
+}
 
 void tampilkanKatalog() {
- 
     bool adaData = false;
     for (int i = 0; i < 3; i++) {
         if (showroom[i].head != nullptr) adaData = true;
     }
 
     if (!adaData) {
-        cout << "\n[!] Katalog Kosong. Pastikan inisialisasiData() sudah dipanggil.\n";
+        cout << "\n[!] Katalog Kosong. Belum ada mobil di dalam database.\n";
         return;
     }
 

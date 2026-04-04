@@ -2,11 +2,13 @@
 #include <string>
 #include <algorithm>
 #include <iomanip>
+#include <fstream>
 #include "features.h"
 
 using namespace std;
 
 extern Kategori showroom[3]; 
+const string dbMobil = "database_mobil.csv"; 
 
 void tambahMobilAdmin() {
     int indeks;
@@ -18,7 +20,6 @@ void tambahMobilAdmin() {
     cout << "     TAMBAH UNIT MOBIL (ADMIN)        " << endl;
     cout << "======================================" << endl;
     
-    // 1. Pilih Kategori Merk
     cout << "Pilih Merk Unit:" << endl;
     for (int i = 0; i < 3; i++) {
         cout << i << ". " << showroom[i].NamaMerk << endl;
@@ -42,8 +43,40 @@ void tambahMobilAdmin() {
     cout << "Harga (Jt)  : ";
     cin >> hargaBaru;
 
-    tambahUnit(showroom[indeks], modelBaru, tahunBaru, hargaBaru);
+    bool perluBarisBaru = false;
+    ifstream cekAkhir(dbMobil.c_str(), ios::binary);
+    if (cekAkhir.good()) {
+        cekAkhir.seekg(0, ios::end);
+        if (cekAkhir.tellg() > 0) {
+            cekAkhir.seekg(-1, ios::end);
+            char karakterTerakhir;
+            cekAkhir.get(karakterTerakhir);
 
-    cout << "\n[SUKSES] " << modelBaru << " berhasil ditambahkan ke " << showroom[indeks].NamaMerk << "!" << endl;
+            if (karakterTerakhir != '\n' && karakterTerakhir != '\r') {
+                perluBarisBaru = true;
+            }
+        }
+    }
+    cekAkhir.close();
+
+    ofstream file(dbMobil.c_str(), ios::app);
+    if(file.is_open()) {
+        if (perluBarisBaru) {
+            file << "\n";
+        }
+
+        file << showroom[indeks].NamaMerk << "," 
+             << modelBaru << "," 
+             << tahunBaru << "," 
+             << hargaBaru << "\n";
+        file.close();
+        
+        tambahUnit(showroom[indeks], modelBaru, tahunBaru, hargaBaru);
+
+        cout << "\n[SUKSES] " << modelBaru << " berhasil ditambahkan!" << endl;
+    } else {
+        cout << "\n[Error] Gagal membuka database_mobil.csv!" << endl;
+    }
+    
     cout << "======================================" << endl;
 }
