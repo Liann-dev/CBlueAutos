@@ -2,6 +2,7 @@
 #include "auth.h"
 #include "homeAdmin.h"
 #include "homeUser.h"
+#include "features.h"
 
 using namespace std;
 
@@ -9,6 +10,8 @@ void efekNgetik(string teks, int jedaMs = 30);
 void tampilkanLoading(string pesan = "Memuat", int iterasi = 3);
 
 int main() {
+    inisialisasiData(); // <-- Tambahkan baris ini tepat di bawah int main()
+
     User userTerdaftar;
     int mulai = 1;
 

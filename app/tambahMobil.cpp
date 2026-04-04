@@ -2,11 +2,14 @@
 #include <string>
 #include <algorithm>
 #include <iomanip>
+#include <fstream>
 #include "features.h"
 
 using namespace std;
 
 extern Kategori showroom[3]; 
+
+const string dbMobil = "database_mobil.csv"; 
 
 void tambahMobilAdmin() {
     int indeks;
@@ -18,7 +21,6 @@ void tambahMobilAdmin() {
     cout << "     TAMBAH UNIT MOBIL (ADMIN)        " << endl;
     cout << "======================================" << endl;
     
-    // 1. Pilih Kategori Merk
     cout << "Pilih Merk Unit:" << endl;
     for (int i = 0; i < 3; i++) {
         cout << i << ". " << showroom[i].NamaMerk << endl;
@@ -44,6 +46,17 @@ void tambahMobilAdmin() {
 
     tambahUnit(showroom[indeks], modelBaru, tahunBaru, hargaBaru);
 
-    cout << "\n[SUKSES] " << modelBaru << " berhasil ditambahkan ke " << showroom[indeks].NamaMerk << "!" << endl;
+    ofstream file(dbMobil.c_str(), ios::app);
+    if(file.is_open()) {
+        file << showroom[indeks].NamaMerk << "," 
+             << modelBaru << "," 
+             << tahunBaru << "," 
+             << hargaBaru << "\n";
+        file.close();
+        cout << "\n[SUKSES] " << modelBaru << " berhasil ditambahkan ke " << showroom[indeks].NamaMerk << " dan tersimpan di database!" << endl;
+    } else {
+        cout << "\n[Error] Gagal membuka database_mobil.csv!" << endl;
+    }
+    
     cout << "======================================" << endl;
 }
