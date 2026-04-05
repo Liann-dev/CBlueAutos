@@ -2,204 +2,303 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-#include <vector>
-#include <optional>
 #include <iomanip>
 #include "features.h"
+#include "cctype" 
 
 using namespace std;
 
 const string dbMobil = "database_mobil.csv";
+struct DataSortTemp {
+    int id;
+    string merk;
+    string model;
+    int tahun;
+    string kondisi;
+    Mobil* ptrAsli; 
+};
 
-void sinkronisasiKeCSV()
-{
-    ofstream file(dbMobil.c_str());
-    if (!file.is_open())
+void sinkronisasiKeCSV() {
+    int totalData = 0;
+    for (Kategori *currKat = headKategori; currKat != nullptr; currKat = currKat->next) {
+        for (Mobil *temp = currKat->head; temp != nullptr; temp = temp->next) {
+            totalData++;
+        }
+    }
+    if (totalData == 0) {
+        ofstream file(dbMobil.c_str(), ios::trunc);
+        if (file.is_open()) file << "ID,Merk,Model,Tahun,Kondisi\n";
         return;
+    }
 
-    file << "ID,Merk,Model,Tahun,Kondisi\n";
-
-    for (Kategori *currKat = headKategori; currKat != nullptr; currKat = currKat->next)
-    {
-        for (Mobil *temp = currKat->head; temp != nullptr; temp = temp->next)
-        {
-            file << temp->id << ","
-                 << currKat->NamaMerk << ","
-                 << temp->Model << ","
-                 << temp->Tahun << ","
-                 << temp->Kondisi << "\n";
+    DataSortTemp* arr = new DataSortTemp[totalData];
+    int idx = 0;
+    for (Kategori *currKat = headKategori; currKat != nullptr; currKat = currKat->next) {
+        for (Mobil *temp = currKat->head; temp != nullptr; temp = temp->next) {
+            arr[idx].id = temp->id;
+            arr[idx].merk = currKat->NamaMerk;
+            arr[idx].model = temp->Model;
+            arr[idx].tahun = temp->Tahun;
+            arr[idx].kondisi = temp->Kondisi;
+            arr[idx].ptrAsli = temp; 
+            idx++;
         }
     }
-    file.close();
-}
 
-void showTableData()
-{
-    cout << "\n"
-         << setfill('=') << setw(70) << "=" << setfill(' ') << endl;
-    cout << left
-         << setw(5) << "ID"
-         << setw(12) << "MERK"
-         << setw(22) << "MODEL"
-         << setw(8) << "TAHUN"
-         << "KONDISI" << endl;
-    cout << setfill('-') << setw(70) << "-" << setfill(' ') << endl;
-
-    for (Kategori *currKat = headKategori; currKat != nullptr; currKat = currKat->next)
-    {
-        for (Mobil *temp = currKat->head; temp != nullptr; temp = temp->next)
-        {
-            cout << left
-                 << setw(5) << temp->id
-                 << setw(12) << currKat->NamaMerk
-                 << setw(22) << temp->Model
-                 << setw(8) << temp->Tahun
-                 << temp->Kondisi << endl;
+ 
+    for (int i = 0; i < totalData - 1; i++) {
+        for (int j = 0; j < totalData - i - 1; j++) {
+            if (arr[j].id > arr[j + 1].id) {
+                DataSortTemp temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
         }
     }
+    for (int i = 0; i < totalData; i++) {
+        arr[i].id = i + 1;              
+        arr[i].ptrAsli->id = i + 1;     
+    }
+
+    ofstream file(dbMobil.c_str(), ios::trunc);
+    if (file.is_open()) {
+        file << "ID,Merk,Model,Tahun,Kondisi\n";
+        for (int i = 0; i < totalData; i++) {
+            file << arr[i].id << "," << arr[i].merk << "," << arr[i].model << ","
+                 << arr[i].tahun << "," << arr[i].kondisi << "\n";
+        }
+        file.close();
+    }
+    
+    delete[] arr; 
 }
 
 void updateMobilAdmin()
 {
-    int targetId;
-    string kondisiBaru;
-    string modelBaru;
-    string inputTahun;
-    string merkBaru;
-    int tahunBaru;
-    bool ditemukan = false;
+    int totalData = 0;
+    for (Kategori *currKat = headKategori; currKat != nullptr; currKat = currKat->next) {
+        for (Mobil *temp = currKat->head; temp != nullptr; temp = temp->next) {
+            totalData++;
+        }
+    }
 
-    cout << "\n======================================" << endl;
-    cout << "     UPDATE UNIT MOBIL (ADMIN)        " << endl;
-    cout << "======================================" << endl
-         << endl;
-
-    showTableData();
-
-    cout << "\nMasukkan ID Mobil yang ingin diupdate: ";
-    if (!(cin >> targetId))
-    {
-        cin.clear();
-        cin.ignore(10000, '\n');
-        cout << "[Error] Input ID harus berupa angka!\n";
+    if (totalData == 0) {
+        cout << "\n[!] Data kosong. Tidak ada unit yang bisa diupdate.\n";
         return;
     }
 
-    for (Kategori *currKat = headKategori; currKat != nullptr; currKat = currKat->next)
-    {
-        for (Mobil *temp = currKat->head; temp != nullptr; temp = temp->next)
-        {
-            if (temp->id == targetId)
-            {
+    DataSortTemp* arr = new DataSortTemp[totalData];
+    int idx = 0;
+    for (Kategori *currKat = headKategori; currKat != nullptr; currKat = currKat->next) {
+        for (Mobil *temp = currKat->head; temp != nullptr; temp = temp->next) {
+            arr[idx].id = temp->id;
+            arr[idx].merk = currKat->NamaMerk;
+            arr[idx].model = temp->Model;
+            arr[idx].tahun = temp->Tahun;
+            arr[idx].kondisi = temp->Kondisi;
+            idx++;
+        }
+    }
 
-                cout << "\n"
-                     << setfill('-') << setw(80) << "-" << setfill(' ') << endl;
-                cout << left << "UBAH DATA UNIT (ID: " << targetId << ") (KOSONGKAN JIKA TIDAK INGIN DIUBAH)" << endl;
+    for (int i = 0; i < totalData - 1; i++) {
+        for (int j = 0; j < totalData - i - 1; j++) {
+            if (arr[j].id > arr[j + 1].id) {
+                DataSortTemp temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+
+    int itemPerHalaman = 10;
+    int totalHalaman = (totalData + itemPerHalaman - 1) / itemPerHalaman;
+    int halamanSekarang = 1;
+    
+    int targetId = -1;
+    string targetModel = "";
+    string pilihan;
+
+    while (true) {
+        #ifdef _WIN32
+            system("cls");
+        #else
+            system("clear");
+        #endif
+
+        cout << "\n===========================================================================\n";
+        cout << "                         UPDATE UNIT MOBIL (ADMIN)                         \n";
+        cout << "===========================================================================\n";
+        
+        cout << left << setw(6) << "ID" << setw(15) << "MERK" << setw(25) << "MODEL" 
+             << setw(10) << "TAHUN" << "KONDISI" << endl;
+        cout << setfill('-') << setw(75) << "-" << setfill(' ') << endl;
+
+        int startIdx = (halamanSekarang - 1) * itemPerHalaman;
+        int endIdx = startIdx + itemPerHalaman;
+        if (endIdx > totalData) endIdx = totalData;
+
+        for (int i = startIdx; i < endIdx; i++) {
+            string modelTeks = arr[i].model;
+            if (modelTeks.length() > 22) modelTeks = modelTeks.substr(0, 19) + "...";
+            
+            cout << left << setw(6) << arr[i].id << setw(15) << arr[i].merk 
+                 << setw(25) << modelTeks << setw(10) << arr[i].tahun << arr[i].kondisi << endl;
+        }
+        
+        cout << setfill('=') << setw(75) << "=" << setfill(' ') << endl;
+        cout << " Halaman " << halamanSekarang << " dari " << totalHalaman << " | Total Unit Aset: " << totalData << endl;
+        cout << "---------------------------------------------------------------------------\n";
+        cout << "  [N] Next Page   |   [P] Prev Page   |   [X] Batal & Kembali\n";
+        cout << "---------------------------------------------------------------------------\n";
+        cout << "Ketik 'N' / 'P', masukkan ID, atau ketik kata kunci nama Model: ";
+        
+        getline(cin >> ws, pilihan);
+
+        if (pilihan == "X" || pilihan == "x") {
+            delete[] arr; 
+            return; 
+        } else if (pilihan == "n" || pilihan == "N") {
+            if (halamanSekarang < totalHalaman) halamanSekarang++;
+        } else if (pilihan == "p" || pilihan == "P") {
+            if (halamanSekarang > 1) halamanSekarang--;
+        } else {
+            bool isAngka = true;
+            for (char c : pilihan) {
+                if (!isdigit(c)) {
+                    isAngka = false;
+                    break;
+                }
+            }
+
+            if (isAngka) {
+                targetId = stoi(pilihan);
+            } else {
+                targetModel = keHurufKecil(pilihan);
+            }
+            break; 
+        }
+    }
+    delete[] arr;
+
+    // =========================================================
+    // LOGIKA PENCARIAN FLEKSIBEL (PARTIAL MATCH UNTUK STRING)
+    // =========================================================
+    if (targetId == -1 && targetModel != "") {
+        int matchCount = 0;
+        
+        for (Kategori *currKat = headKategori; currKat != nullptr; currKat = currKat->next) {
+            for (Mobil *temp = currKat->head; temp != nullptr; temp = temp->next) {
+                if (keHurufKecil(temp->Model).find(targetModel) != string::npos) {
+                    matchCount++;
+                }
+            }
+        }
+
+        if (matchCount == 0) {
+            cout << "\n[Error] Tidak ada unit dengan nama model yang mengandung '" << pilihan << "'!\n";
+            return;
+        } 
+        else if (matchCount == 1) {
+            // Jika cuma ada 1 yang cocok, langsung ambil ID-nya otomatis!
+            for (Kategori *currKat = headKategori; currKat != nullptr; currKat = currKat->next) {
+                for (Mobil *temp = currKat->head; temp != nullptr; temp = temp->next) {
+                    if (keHurufKecil(temp->Model).find(targetModel) != string::npos) {
+                        targetId = temp->id;
+                    }
+                }
+            }
+        } 
+        else {
+            cout << "\n[Info] Ditemukan " << matchCount << " unit yang mirip dengan kata kunci '" << pilihan << "':\n";
+            cout << left << setw(6) << "ID" << setw(15) << "MERK" << setw(25) << "MODEL" 
+                 << setw(10) << "TAHUN" << "KONDISI" << endl;
+            cout << setfill('-') << setw(75) << "-" << setfill(' ') << endl;
+
+            for (Kategori *currKat = headKategori; currKat != nullptr; currKat = currKat->next) {
+                for (Mobil *temp = currKat->head; temp != nullptr; temp = temp->next) {
+                    if (keHurufKecil(temp->Model).find(targetModel) != string::npos) {
+                        cout << left << setw(6) << temp->id << setw(15) << currKat->NamaMerk 
+                             << setw(25) << temp->Model << setw(10) << temp->Tahun << temp->Kondisi << endl;
+                    }
+                }
+            }
+            cout << setfill('-') << setw(75) << "-" << setfill(' ') << endl;
+            
+            cout << "Pilih angka ID mobil yang mana yang ingin diupdate (Ketik 0 untuk Batal): ";
+            string inputPilihId;
+            cin >> inputPilihId;
+            try {
+                targetId = stoi(inputPilihId);
+                if (targetId == 0) return; 
+            } catch (...) {
+                cout << "[Error] Input tidak valid! Update dibatalkan.\n";
+                return;
+            }
+            cin.ignore(1000, '\n'); 
+        }
+    }
+
+    string kondisiBaru, modelBaru, inputTahun, merkBaru;
+    int tahunBaru;
+    bool ditemukan = false;
+
+    for (Kategori *currKat = headKategori; currKat != nullptr; currKat = currKat->next) {
+        for (Mobil *temp = currKat->head; temp != nullptr; temp = temp->next) {
+            
+            if (temp->id == targetId) {
+                cout << "\n" << setfill('-') << setw(80) << "-" << setfill(' ') << endl;
+                cout << left << "UBAH DATA UNIT (ID: " << temp->id << " | " << temp->Model << ") (Kosongkan jika tidak diubah)" << endl;
                 cout << setfill('-') << setw(80) << "-" << setfill(' ') << endl;
 
-                cout << "\nData Ditemukan:" << endl;
+                cout << "\nData Saat Ini:" << endl;
                 cout << "Merk    : " << currKat->NamaMerk << endl;
                 cout << "Model   : " << temp->Model << endl;
                 cout << "Tahun   : " << temp->Tahun << endl;
-                cout << "Kondisi : " << temp->Kondisi << endl;
+                cout << "Kondisi : " << temp->Kondisi << endl << endl;
 
-                cout << endl
-                     << endl;
-
-                // --- UPDATE Merk ---
                 cout << "Masukkan Merk Baru: ";
-                cin.ignore();
                 getline(cin, merkBaru);
+                if (merkBaru == "") merkBaru = currKat->NamaMerk;
 
-                if (merkBaru == "")
-                {
-                    merkBaru = currKat->NamaMerk;
-                }
-
-                // --- UPDATE MODEL ---
                 cout << "Masukan Model Baru: ";
                 getline(cin, modelBaru);
-                if (modelBaru == "")
-                {
-                    modelBaru = temp->Model;
-                }
+                if (modelBaru == "") modelBaru = temp->Model;
 
-                // --- UPDATE TAHUN ---
                 cout << "Masukan Tahun Pembuatan Baru: ";
                 getline(cin, inputTahun);
-                if (inputTahun == "")
-                {
-                    tahunBaru = temp->Tahun;
-                }
-                else
-                {
-                    try
-                    {
-                        tahunBaru = stoi(inputTahun);
-                    }
-                    catch (...)
-                    {
-                        cout << "[Error] Tahun harus berupa angka valid!\n";
-                        return;
-                    }
+                if (inputTahun == "") tahunBaru = temp->Tahun;
+                else {
+                    try { tahunBaru = stoi(inputTahun); } 
+                    catch (...) { cout << "[Error] Tahun harus berupa angka valid!\n"; return; }
                 }
 
                 bool KondisiValid = false;
                 int pilihanKondisi;
-
-                while (!KondisiValid)
-                {
+                while (!KondisiValid) {
                     cout << "\nPilih Kondisi Mobil:\n";
-                    cout << "1. Brand New\n";
-                    cout << "2. Mint\n";
-                    cout << "3. Excellent\n";
-                    cout << "4. Good\n";
-                    cout << "5. Project Car\n";
+                    cout << "1. Brand New\n2. Mint\n3. Excellent\n4. Good\n5. Project Car\n";
                     cout << "0. Pertahankan Kondisi Lama (" << temp->Kondisi << ")\n";
                     cout << "Masukkan pilihan (0-5): ";
 
                     cin >> pilihanKondisi;
 
-                    if (cin.fail())
-                    {
-                        cin.clear();
-                        cin.ignore(10000, '\n');
+                    if (cin.fail()) {
+                        cin.clear(); cin.ignore(10000, '\n');
                         cout << "[ERROR] Input harus berupa angka!\n";
                         continue;
-                    }
-                    else
-                    {
-                        switch (pilihanKondisi)
-                        {
-                        case 1:
-                            kondisiBaru = "Brand New";
-                            KondisiValid = true;
-                            break;
-                        case 2:
-                            kondisiBaru = "Mint";
-                            KondisiValid = true;
-                            break;
-                        case 3:
-                            kondisiBaru = "Excellent";
-                            KondisiValid = true;
-                            break;
-                        case 4:
-                            kondisiBaru = "Good";
-                            KondisiValid = true;
-                            break;
-                        case 5:
-                            kondisiBaru = "Project Car";
-                            KondisiValid = true;
-                            break;
-                        case 0: // Jika user hanya menekan Enter tanpa memilih kondisi baru
-                            kondisiBaru = temp->Kondisi;
-                            KondisiValid = true;
-                            break;
-                        default:
-                            cout << "[ERROR] Pilihan tidak valid! Silahkan pilih angka 1 sampai 5.\n";
+                    } else {
+                        switch (pilihanKondisi) {
+                            case 1: kondisiBaru = "Brand New"; KondisiValid = true; break;
+                            case 2: kondisiBaru = "Mint"; KondisiValid = true; break;
+                            case 3: kondisiBaru = "Excellent"; KondisiValid = true; break;
+                            case 4: kondisiBaru = "Good"; KondisiValid = true; break;
+                            case 5: kondisiBaru = "Project Car"; KondisiValid = true; break;
+                            case 0: kondisiBaru = temp->Kondisi; KondisiValid = true; break;
+                            default: cout << "[ERROR] Pilihan tidak valid!\n";
                         }
                     }
                 }
+                cin.ignore(1000, '\n'); 
 
                 temp->Kondisi = kondisiBaru;
                 temp->Model = modelBaru;
@@ -207,20 +306,16 @@ void updateMobilAdmin()
                 currKat->NamaMerk = merkBaru;
 
                 ditemukan = true;
-                break;
+                break; 
             }
         }
-        if (ditemukan)
-            break;
+        if (ditemukan) break; 
     }
 
-    if (ditemukan)
-    {
+    if (ditemukan) {
         sinkronisasiKeCSV();
-        cout << "\n[Sukses] Kondisi unit dengan ID " << targetId << " berhasil diperbarui!\n";
-    }
-    else
-    {
-        cout << "\n[Error] Unit dengan ID " << targetId << " tidak ditemukan!\n";
+        cout << "\n[Sukses] Data unit dengan ID " << targetId << " berhasil diperbarui!\n";
+    } else {
+        cout << "\n[Error] Unit dengan ID " << targetId << " tidak ditemukan di sistem!\n";
     }
 }

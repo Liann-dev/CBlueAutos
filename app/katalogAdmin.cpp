@@ -3,67 +3,166 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-#include "features.h"
 
 using namespace std;
 
+struct DataKatalogAdmin {
+    string id;
+    string merk;
+    string model;
+    string tahun;
+    string kondisi;
+};
+void bersihkanTeks(string& str) {
+    if (str.empty()) return;
+    size_t start = str.find_first_not_of(" \t\r\n");
+    size_t end = str.find_last_not_of(" \t\r\n");
+    if (start == string::npos) {
+        str = "";
+    } else {
+        str = str.substr(start, end - start + 1);
+    }
+}
+
+// Fungsi bantuan untuk mengubah string ID menjadi integer dengan aman
+int konversiKeAngka(string teks) {
+    if (teks.empty()) return 0;
+    int hasil = 0;
+    try {
+        hasil = stoi(teks); // Mengubah teks "15" menjadi angka 15
+    } catch (...) {
+        hasil = 0; // Jika error/bukan angka, jadikan 0
+    }
+    return hasil;
+}
+
 void tampilkanKatalogAdmin() {
-    cout << "\n===========================================================================\n";
-    cout << "                           KATALOG MOBIL (ADMIN)                           \n";
-    cout << "===========================================================================\n";
-    
-    // Header Tabel
-    cout << left 
-         << setw(6)  << "ID" 
-         << setw(15) << "MERK" 
-         << setw(25) << "MODEL" 
-         << setw(10) << "TAHUN" 
-         << "KONDISI" << endl;
-         
-    cout << setfill('-') << setw(75) << "-" << setfill(' ') << endl;
-
-    ifstream file("database_mobil.csv");
+    int totalData = 0;
+    ifstream fileHitung("database_mobil.csv");
     string line;
-    bool adaData = false;
+    
+    // 1. Hitung total data
+    if (fileHitung.is_open()) {
+        getline(fileHitung, line); 
+        while (getline(fileHitung, line)) {
+            if (!line.empty()) totalData++; 
+        }
+        fileHitung.close();
+    }
 
-    if (file.is_open()) {
-        // Melewati baris pertama karena itu adalah Header CSV (ID,Merk,Model,Tahun,Kondisi)
-        getline(file, line); 
+    if (totalData == 0) {
+        cout << "\n===========================================================================\n";
+        cout << "                           KATALOG MOBIL (ADMIN)                           \n";
+        cout << "===========================================================================\n";
+        cout << " [!] Katalog masih kosong. Belum ada data di dalam database.\n";
+        cout << "===========================================================================\n";
+        return;
+    }
 
-        // Membaca data baris demi baris dari CSV
-        while (getline(file, line)) {
+    DataKatalogAdmin* listMobil = new DataKatalogAdmin[totalData];
+    
+    // 3. Masukkan data ke array dan bersihkan teks
+    ifstream fileData("database_mobil.csv");
+    int index = 0;
+    if (fileData.is_open()) {
+        getline(fileData, line); 
+        while (getline(fileData, line) && index < totalData) {
             if (line.empty()) continue;
-
+            
             stringstream ss(line);
-            string idStr, merk, model, tahunStr, kondisi;
+            getline(ss, listMobil[index].id, ',');
+            getline(ss, listMobil[index].merk, ',');
+            getline(ss, listMobil[index].model, ',');
+            getline(ss, listMobil[index].tahun, ',');
+            getline(ss, listMobil[index].kondisi, ',');
 
-            getline(ss, idStr, ',');
-            getline(ss, merk, ',');
-            getline(ss, model, ',');
-            getline(ss, tahunStr, ',');
-            getline(ss, kondisi, ',');
+            bersihkanTeks(listMobil[index].id);
+            bersihkanTeks(listMobil[index].merk);
+            bersihkanTeks(listMobil[index].model);
+            bersihkanTeks(listMobil[index].tahun);
+            bersihkanTeks(listMobil[index].kondisi);
 
-            adaData = true;
+            index++;
+        }
+        fileData.close();
+    }
 
-            // Mencegah nama model yang terlalu panjang merusak layout tabel
-            if (model.length() > 22) {
-                model = model.substr(0, 19) + "...";
+    for (int i = 0; i < totalData - 1; i++) {
+        for (int j = 0; j < totalData - i - 1; j++) {
+            int idKiri = konversiKeAngka(listMobil[j].id);
+            int idKanan = konversiKeAngka(listMobil[j + 1].id);
+
+            if (idKiri > idKanan) {
+                // Tukar posisi seluruh data baris tersebut
+                DataKatalogAdmin temp = listMobil[j];
+                listMobil[j] = listMobil[j + 1];
+                listMobil[j + 1] = temp;
+            }
+        }
+    }
+    int itemPerHalaman = 10; 
+    int totalHalaman = (totalData + itemPerHalaman - 1) / itemPerHalaman;
+    int halamanSekarang = 1;
+    char pilihan;
+
+    while (true) {
+        #ifdef _WIN32
+            system("cls");
+        #else
+            system("clear");
+        #endif
+
+        cout << "\n===========================================================================\n";
+        cout << "                           KATALOG MOBIL (ADMIN)                           \n";
+        cout << "===========================================================================\n";
+        
+        cout << left 
+             << setw(6)  << "ID" 
+             << setw(15) << "MERK" 
+             << setw(25) << "MODEL" 
+             << setw(10) << "TAHUN" 
+             << "KONDISI" << endl;
+             
+        cout << setfill('-') << setw(75) << "-" << setfill(' ') << endl;
+
+        int startIdx = (halamanSekarang - 1) * itemPerHalaman;
+        int endIdx = startIdx + itemPerHalaman;
+        if (endIdx > totalData) endIdx = totalData; 
+
+        for (int i = startIdx; i < endIdx; i++) {
+            string modelTeks = listMobil[i].model;
+            if (modelTeks.length() > 22) {
+                modelTeks = modelTeks.substr(0, 19) + "...";
             }
 
-            // Menampilkan Isi Tabel
             cout << left 
-                 << setw(6)  << idStr 
-                 << setw(15) << merk 
-                 << setw(25) << model 
-                 << setw(10) << tahunStr 
-                 << kondisi << endl;
+                 << setw(6)  << listMobil[i].id 
+                 << setw(15) << listMobil[i].merk 
+                 << setw(25) << modelTeks 
+                 << setw(10) << listMobil[i].tahun 
+                 << listMobil[i].kondisi << endl;
         }
-        file.close();
+
+        cout << setfill('=') << setw(75) << "=" << setfill(' ') << endl;
+        
+        cout << " Halaman " << halamanSekarang << " dari " << totalHalaman << " | Total Unit Aset: " << totalData << endl;
+        cout << "---------------------------------------------------------------------------\n";
+        cout << "  [N] Next Page   |   [P] Prev Page   |   [X] Keluar ke Menu Admin\n";
+        cout << "---------------------------------------------------------------------------\n";
+        cout << "Pilihan: ";
+        cin >> pilihan;
+
+        if (pilihan == 'X' || pilihan == 'x') {
+            break; 
+        } else if (pilihan == 'N' || pilihan == 'N') {
+            if (halamanSekarang < totalHalaman) halamanSekarang++;
+        } else if (pilihan == 'p' || pilihan == 'P') {
+            if (halamanSekarang > 1) halamanSekarang--;
+        } else {
+            cout << "Pilihan tidak valid. Inputkan 'N', 'P', atau '0' saja!.\n";
+        } 
     }
 
-    if (!adaData) {
-        cout << " [!] Katalog masih kosong atau gagal membaca file database." << endl;
-    }
-    
-    cout << setfill('=') << setw(75) << "=" << setfill(' ') << endl;
+    // 6. Hapus dari memori
+    delete[] listMobil; 
 }

@@ -34,16 +34,6 @@ Kategori* cariAtauBuatKategori(string merk) {
     return baru;
 }
 
-void tambahUnit(Kategori &kat, string model, int tahun, string kondisi) {
-    Mobil* baru   = new Mobil;
-    baru->Model   = model;
-    baru->Tahun   = tahun;
-    baru->Kondisi = kondisi;
-    baru->next    = kat.head;
-    baru->prev    = nullptr;
-    if (kat.head != nullptr) kat.head->prev = baru;
-    kat.head = baru;
-}
 
 void inisialisasiData() {
     ifstream file(dbMobil.c_str());
@@ -207,15 +197,15 @@ void cetakHalaman(Page* hal, int totalHalaman) {
 
     cout << setfill('-') << setw(70) << "-" << setfill(' ') << endl;
 
-    if (hal->prev) cout << "  << [p] Prev (Hal " << hal->prev->nomorHalaman << ")";
+    if (hal->prev) cout << "  << [P] Prev (Hal " << hal->prev->nomorHalaman << ")";
     else           cout << "  << (Awal)          ";
     
     cout << "    |    ";
     
-    if (hal->next) cout << "[n] Next (Hal " << hal->next->nomorHalaman << ") >>";
+    if (hal->next) cout << "[N] Next (Hal " << hal->next->nomorHalaman << ") >>";
     else           cout << "          (Akhir) >>";
 
-    cout << "\n  [x] Kembali ke Menu" << endl;
+    cout << "\n  [X] Kembali ke Menu" << endl;
     cout << setfill('=') << setw(70) << "=" << setfill(' ') << endl;
 }
 
@@ -236,7 +226,7 @@ void tampilkanKatalog() {
     Page* headPage = bangunHalaman();
 
     if (headPage == nullptr) {
-        cout << "  [!] Tidak ada data mobil dalam database.\n";
+        cout << "  >> Tidak ada data mobil dalam database.\n";
         return;
     }
 
@@ -253,16 +243,16 @@ void tampilkanKatalog() {
         cin  >> input;
         input = tolower(input);
 
-        if (input == 'n') {
+        if (input == 'N') {
             if (current->next) current = current->next;
-            else cout << "  [!] Sudah di halaman terakhir!\n";
-        } else if (input == 'p') {
+            else cout << "  >> Sudah di halaman terakhir!\n";
+        } else if (input == 'P') {
             if (current->prev) current = current->prev;
-            else cout << "  [!] Sudah di halaman pertama!\n";
-        } else if (input == 'x') {
+            else cout << "  >> Sudah di halaman pertama!\n";
+        } else if (input == 'X') {
             break;
         } else {
-            cout << "  [!] Input tidak valid! Gunakan n / p / x\n";
+            cout << "  >> Input tidak valid! Gunakan N / P / X\n";
         }
     }
 
