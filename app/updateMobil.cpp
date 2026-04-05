@@ -3,7 +3,6 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include <optional>
 #include <iomanip>
 #include "features.h"
 
@@ -79,7 +78,8 @@ void updateMobilAdmin()
     string kondisiBaru;
     string modelBaru;
     string merkBaru;
-    optional<int> tahunBaru;
+    string tahunInput;
+    int tahunBaru;
     int y;
     // int index;
     bool ditemukan = false;
@@ -168,25 +168,26 @@ void updateMobilAdmin()
                 // }
 
                 cout << "\nMasukan Tahun pembuatan baru: ";
+                getline(cin, tahunInput);
 
-                if (cin >> y)
+                if (tahunInput == "")
                 {
-                    tahunBaru = y;
+                    tahunBaru = temp->Tahun; // rawan error
                 }
                 else
                 {
-                    tahunBaru = nullopt;
-                }
-
-                if (!tahunBaru)
-                {
-                    tahunBaru = temp->Tahun; // rawan error
+                    stringstream ss(tahunInput);
+                    if (!(ss >> tahunBaru) || !(ss.eof()))
+                    {
+                        cout << "[Error] Tahun harus berupa angka!\n";
+                        return;
+                    }
                 }
 
                 // Update data di memori
                 temp->Kondisi = kondisiBaru;
                 temp->Model = modelBaru;
-                temp->Tahun = *tahunBaru;
+                temp->Tahun = tahunBaru;
                 ditemukan = true;
                 break;
             }
