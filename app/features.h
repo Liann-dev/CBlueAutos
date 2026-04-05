@@ -3,7 +3,8 @@
 
 #include <string>
 using namespace std;
-struct Mobil {
+struct Mobil
+{
     int id;
     string Merk;
     string Model;
@@ -13,14 +14,16 @@ struct Mobil {
     Mobil *prev;
 };
 
-struct Kategori {
+struct Kategori
+{
     string NamaMerk;
     Mobil *head;
-    Kategori *next; 
-    Kategori *prev; 
+    Kategori *next;
+    Kategori *prev;
 };
 
-struct Page {
+struct Page
+{
     Mobil *items[10];
     string merkItems[10];
     int jumlah;
@@ -33,15 +36,14 @@ struct Page {
 // VARIABEL GLOBAL (Agar dikenali semua file)
 // ==========================================
 // Di dalam features.h
-extern Kategori* headKategori;
+extern Kategori *headKategori;
 
 // ==========================================
 // FUNGSI BANTUAN (UTILITY)
 // ==========================================
 string keHurufKecil(string str);
 
-
-Kategori* cariAtauBuatKategori(string merk); 
+Kategori *cariAtauBuatKategori(string merk);
 void inisialisasiData();
 void tambahUnit(Kategori &kat, string model, int tahun, string kondisi);
 void tampilkanKatalog();
@@ -54,5 +56,6 @@ void hapusMobilAdmin();
 void updateMobilAdmin();
 void searchFilterAdmin();
 void sinkronisasiKeCSV();
+void showTableData();
 
 #endif

@@ -8,35 +8,25 @@
 
 using namespace std;
 
-extern Kategori showroom[3];
-const int jumlahMerk = sizeof(showroom) / sizeof(showroom[0]);
 const string dbMobil = "database_mobil.csv";
 
 int getNextMobilId()
 {
     ifstream file(dbMobil.c_str());
     string line;
-    int lastId = 0;
+    int jumlah = 0;
+
     if (!file.is_open())
+    {
         return 1;
+    }
 
     getline(file, line);
     while (getline(file, line))
     {
-        stringstream ss(line);
-        string idStr;
-        if (getline(ss, idStr, ','))
-        {
-            try
-            {
-                lastId = stoi(idStr);
-            }
-            catch (...)
-            {
-            }
-        }
+        jumlah++;
     }
-    return lastId + 1;
+    return jumlah + 1;
 }
 
 void tambahMobilAdmin()
@@ -55,17 +45,20 @@ void tambahMobilAdmin()
     cout << "Nama Model        : ";
     getline(cin, modelBaru);
 
-    string merkKecil = keHurufKecil(merkBaru);
-    string modelKecil = keHurufKecil(modelBaru);
-
-    if (merkKecil == modelKecil)
+    if (merkBaru == modelBaru)
     {
-        cout << "\n[ERROR] Merk dan model tidak boleh sama!" << endl;
+        cout << "\n[ERROR] Merk dan Model tidak boleh sama!\n";
         return tambahMobilAdmin();
     }
 
     cout << "Tahun Rilis       : ";
     cin >> tahunBaru;
+
+    if (merkBaru.empty() || modelBaru.empty() || tahunBaru <= 0)
+    {
+        cout << "\n[ERROR] Semua field harus diisi dengan benar!\n";
+        return tambahMobilAdmin();
+    }
 
     bool kondisiValid = false;
     int pilihanKondisi;
@@ -144,6 +137,7 @@ void tambahMobilAdmin()
         if (perluNewline)
             file << "\n";
 
+        // 1. Simpan ke CSV
         file << idBaru << ","
              << merkBaru << ","
              << modelBaru << ","
@@ -151,14 +145,22 @@ void tambahMobilAdmin()
              << kondisiBaru << "\n";
         file.close();
 
-        for (int i = 0; i < 3; i++)
+        Kategori *kat = cariAtauBuatKategori(merkBaru);
+
+        Mobil *baru = new Mobil;
+        baru->id = idBaru;
+        baru->Merk = merkBaru;
+        baru->Model = modelBaru;
+        baru->Tahun = tahunBaru;
+        baru->Kondisi = kondisiBaru;
+
+        baru->next = kat->head;
+        baru->prev = nullptr;
+        if (kat->head != nullptr)
         {
-            if (keHurufKecil(showroom[i].NamaMerk) == keHurufKecil(merkBaru))
-            {
-                tambahUnit(showroom[i], modelBaru, tahunBaru, kondisiBaru);
-                break;
-            }
+            kat->head->prev = baru;
         }
+        kat->head = baru;
 
         cout << "\n[SUKSES] Unit dengan ID " << idBaru << " berhasil ditambahkan!" << endl;
     }
