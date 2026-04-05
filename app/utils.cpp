@@ -4,7 +4,6 @@
 
 using namespace std;
 
-// Animasi efek mengetik
 void efekNgetik(string teks, int jedaMs) {
     for (char c : teks) {
         cout << c << flush;
@@ -13,14 +12,13 @@ void efekNgetik(string teks, int jedaMs) {
     cout << endl;
 }
 
-// Animasi loading berputar
 void tampilkanLoading(string pesan, int iterasi) {
     const char spinner[] = {'|', '/', '-', '\\'};
     cout << pesan << " ";
     
     for (int i = 0; i < iterasi * 4; ++i) {
         cout << spinner[i % 4] << flush;
-        Sleep(150); // Jeda 150 milidetik
+        Sleep(100);
         cout << "\b" << flush;
     }
     cout << " \n";

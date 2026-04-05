@@ -3,17 +3,23 @@
 #include <algorithm>
 #include <iomanip>
 #include <fstream>
+#include <sstream>
 #include "features.h"
 
 using namespace std;
 
+
 extern Kategori showroom[3]; 
+const int jumlahMerk = sizeof(showroom) / sizeof(showroom[0]);
 const string dbMobil = "database_mobil.csv"; 
+
 int getNextMobilId() {
-    ifstream file("database_mobil.csv");
+    ifstream file(dbMobil.c_str());
     string line;
     int lastId = 0;
-    getline(file, line);
+    if (!file.is_open()) return 1;
+
+    getline(file, line); 
     while (getline(file, line)) {
         stringstream ss(line);
         string idStr;
@@ -24,70 +30,66 @@ int getNextMobilId() {
     return lastId + 1;
 }
 void tambahMobilAdmin() {
-    int indeks;
-    string modelBaru;
+    string merkBaru, modelBaru, kondisiBaru;
     int tahunBaru;
 
     cout << "\n======================================" << endl;
     cout << "     TAMBAH UNIT MOBIL (ADMIN)        " << endl;
     cout << "======================================" << endl;
     
-    cout << "Pilih Merk Unit:" << endl;
-    for (int i = 0; i < 3; i++) {
-        cout << i << ". " << showroom[i].NamaMerk << endl;
-    }
-    cout << "Pilih (0-2): ";
-    
-    if (!(cin >> indeks) || indeks < 0 || indeks > 2) {
-        cin.clear();
-        cin.ignore(10000, '\n');
-        cout << "\n[Error] Indeks merk tidak valid!" << endl;
-        return;
-    }
-
-    string kondisiBaru;
-    
-    cout << "Nama Model  : ";
+    cout << "Masukkan Nama Merk: ";
     cin.ignore(10000, '\n'); 
+    getline(cin, merkBaru); 
+
+    cout << "Nama Model        : ";
     getline(cin, modelBaru);
 
-    cout << "Tahun Rilis : ";
+    cout << "Tahun Rilis       : ";
     cin >> tahunBaru;
 
-    bool perlubarisbaru = false;
-    ifstream checkakhir(dbMobil.c_str (), ios::binary);
-    if (checkakhir.good()) {
-        checkakhir.seekg(0, ios::end);
-        if (checkakhir.tellg() > 0) {
-            checkakhir.seekg(-1, ios::end);
-            char lastChar;
-            checkakhir.get(lastChar);
-            if (lastChar != '\n' && lastChar != '\r') {
-                perlubarisbaru = true;
-            }
-        checkakhir.close();
-        }
-    }
-
-
     cout << "Kondisi (Baru/Bekas): ";
-    cin.ignore();
+    cin.ignore(10000, '\n');
     getline(cin, kondisiBaru);
 
     int idBaru = getNextMobilId();
 
+   
+    bool perluNewline = false;
+    ifstream fileCek(dbMobil.c_str(), ios::binary);
+    if (fileCek.is_open()) {
+        fileCek.seekg(0, ios::end);
+        if (fileCek.tellg() > 0) {
+            fileCek.seekg(-1, ios::cur);
+            char lastChar;
+            fileCek.get(lastChar);
+            if (lastChar != '\n') {
+                perluNewline = true;
+            }
+        }
+        fileCek.close();
+    }
+
     ofstream file(dbMobil.c_str(), ios::app);
     if(file.is_open()) {
+        if (perluNewline) file << "\n"; 
+        
         file << idBaru << "," 
-             << showroom[indeks].NamaMerk << "," 
+             << merkBaru << "," 
              << modelBaru << "," 
              << tahunBaru << "," 
-             << kondisiBaru << "\n";
+             << kondisiBaru << "\n"; 
         file.close();
-        tambahUnit(showroom[indeks], modelBaru, tahunBaru, kondisiBaru);
+        
+
+        for (int i = 0; i < 3; i++) {
+            if (keHurufKecil(showroom[i].NamaMerk) == keHurufKecil(merkBaru)) {
+                tambahUnit(showroom[i], modelBaru, tahunBaru, kondisiBaru);
+                break;
+            }
+        }
+
         cout << "\n[SUKSES] Unit dengan ID " << idBaru << " berhasil ditambahkan!" << endl;
-    }
-    else {
+    } else {
         cout << "\n[ERROR] Gagal membuka file database_mobil.csv!" << endl;
     }
 }

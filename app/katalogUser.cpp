@@ -36,7 +36,7 @@ void inisialisasiData() {
 
     ifstream file(dbMobil.c_str());
     string line;
-    getline(file, line); // Lewati header (ID,Merk,Model,Tahun,Kondisi)
+    getline(file, line); 
 
     while (getline(file, line)) {
         if(line.empty()) continue;
@@ -44,15 +44,15 @@ void inisialisasiData() {
         stringstream ss(line);
         string idStr, merkStr, modelStr, tahunStr, kondisiStr;
 
-        getline(ss, idStr,      ','); // Ambil ID
-        getline(ss, merkStr,    ','); // Ambil Merk
-        getline(ss, modelStr,   ','); // Ambil Model
-        getline(ss, tahunStr,   ','); // Ambil Tahun
-        getline(ss, kondisiStr, ','); // Ambil Kondisi
+        getline(ss, idStr,      ','); 
+        getline(ss, merkStr,    ','); 
+        getline(ss, modelStr,   ','); 
+        getline(ss, tahunStr,   ',');
+        getline(ss, kondisiStr, ','); 
 
         Mobil* baru   = new Mobil;
         baru->id      = stoi(idStr);
-        baru->Merk    = merkStr;          // ← simpan merk langsung ke node
+        baru->Merk    = merkStr;         
         baru->Model   = modelStr;
         baru->Tahun   = stoi(tahunStr);
         baru->Kondisi = kondisiStr;
@@ -94,7 +94,7 @@ Mobil* merge(Mobil* a, Mobil* b) {
 Mobil* mergeSort(Mobil* head) {
     if (!head || !head->next) return head;
 
-    // Cari titik tengah dengan slow-fast pointer
+  
     Mobil* slow = head;
     Mobil* fast = head->next;
     while (fast && fast->next) {
@@ -116,7 +116,7 @@ Mobil* mergeSort(Mobil* head) {
 // PAGINATION - Doubly Linked List of Pages
 // ==========================================
 Page* bangunHalaman() {
-    // 1. Gabungkan semua linked list dari 3 showroom jadi satu
+
     Mobil* allHead = nullptr;
     Mobil* allTail = nullptr;
 
@@ -139,10 +139,8 @@ Page* bangunHalaman() {
         }
     }
 
-    // 2. Sort berdasarkan ID
     allHead = mergeSort(allHead);
 
-    // 3. Bangun pages dari list yang sudah urut
     Page* headPage    = nullptr;
     Page* tailPage    = nullptr;
     Page* halamanSaat = nullptr;
@@ -164,7 +162,6 @@ Page* bangunHalaman() {
             halamanSaat = hal;
         }
 
-        // Langsung ambil merk dari field node — tidak perlu loop pencarian
         halamanSaat->items[halamanSaat->jumlah]     = curr;
         halamanSaat->merkItems[halamanSaat->jumlah] = curr->Merk;
         halamanSaat->jumlah++;
@@ -176,7 +173,6 @@ Page* bangunHalaman() {
 }
 
 void cetakHalaman(Page* hal, int totalHalaman) {
-    // Clear screen — pilih sesuai OS
     #ifdef _WIN32
         system("cls");
     #else
@@ -232,7 +228,7 @@ void tampilkanKatalog() {
         return;
     }
 
-    // Hitung total halaman
+
     int   totalHalaman = 0;
     Page* hitung       = headPage;
     while (hitung != nullptr) { totalHalaman++; hitung = hitung->next; }

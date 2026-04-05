@@ -10,7 +10,7 @@ void efekNgetik(string teks, int jedaMs = 30);
 void tampilkanLoading(string pesan = "Memuat", int iterasi = 3);
 
 int main() {
-    inisialisasiData(); // <-- Tambahkan baris ini tepat di bawah int main()
+    inisialisasiData(); 
 
     User userTerdaftar;
     int mulai = 1;
@@ -24,7 +24,6 @@ int main() {
     for (; mulai == 1; ) {
         int pilihan;
         
-        // Menggunakan efek ngetik agar judul menu lebih menarik
         efekNgetik("\n=== C-BlueAutos ===", 10);
         cout << "1. Login\n";
         cout << "2. Register\n";
@@ -66,6 +65,5 @@ int main() {
             cout << "Pilihan tidak valid.\n";
         }
     }
-
     return 0;
 }
