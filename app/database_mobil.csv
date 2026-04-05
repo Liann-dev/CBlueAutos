@@ -1,2 +1,50 @@
-ID, Merk, Model, Tahun, Kondisi
+ID,Merk,Model,Tahun,Kondisi
+19,Toyota,Supra GR,2022,Baru
+18,Toyota,Hiace,2021,Baru
+17,Toyota,Hilux,2020,Bekas
+16,Toyota,Rush,2021,Bekas
+15,Toyota,Land Cruiser,2023,Baru
+14,Toyota,Vellfire,2022,Baru
+13,Toyota,Alphard,2023,Baru
+12,Toyota,Camry,2022,Baru
+10,Toyota,Vios,2019,Bekas
+9,Toyota,Calya,2020,Bekas
+8,Toyota,Agya,2021,Bekas
+7,Toyota,Raize,2022,Baru
+6,Toyota,Yaris Cross,2023,Baru
+5,Toyota,Fortuner,2021,Bekas
+4,Toyota,Innova Zenix,2023,Baru
+3,Toyota,Avanza,2022,Baru
+35,Honda,City Sedan,2022,Baru
+34,Honda,CR-Z,2016,Bekas
+33,Honda,Stream,2005,Bekas
+32,Honda,Freed,2015,Bekas
+31,Honda,Jazz RS,2018,Bekas
+30,Honda,Civic Type R,2023,Baru
+29,Honda,Mobilio,2019,Bekas
+28,Honda,Odyssey,2020,Bekas
+27,Honda,Accord,2021,Bekas
+26,Honda,WR-V,2023,Baru
+25,Honda,CR-V Turbo,2022,Baru
+24,Honda,Brio RS,2021,Bekas
+23,Honda,BR-V,2022,Baru
+22,Honda,HR-V Turbo,2023,Baru
+21,Honda,City Hatchback,2021,Bekas
+20,Honda,Civic RS,2022,Baru
+2,Honda,RTX,2024,Baru
 1,Honda,Toyota,2008,Baru
+50,Suzuki,Katana,1995,Bekas
+49,Suzuki,Splash,2014,Bekas
+48,Suzuki,Ciaz,2017,Bekas
+47,Suzuki,Karimun Wagon R,2018,Bekas
+46,Suzuki,SX4 S-Cross,2021,Bekas
+45,Suzuki,Swift Sport,2022,Baru
+44,Suzuki,APV Arena,2019,Bekas
+43,Suzuki,Carry Pick Up,2021,Baru
+42,Suzuki,Grand Vitara,2023,Baru
+41,Suzuki,Ignis,2020,Bekas
+40,Suzuki,S-Presso,2022,Baru
+39,Suzuki,Baleno,2021,Bekas
+38,Suzuki,Jimny,2023,Baru
+37,Suzuki,XL7,2022,Baru
+36,Suzuki,Ertiga Hybrid,2023,Baru

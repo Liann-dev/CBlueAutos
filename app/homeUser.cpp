@@ -14,8 +14,9 @@ void menuUtama(string role) {
         cout << "       SHOWROOM MOBIL - USER MENU         " << endl;
         cout << "==========================================" << endl;
         cout << " 1. Lihat Semua Koleksi (Katalog)         " << endl;
-        cout << " 2. Cari & Filter Spesifik                " << endl;
-        cout << " 3. Logout (Kembali ke Login)             " << endl;
+        cout << " 2. Search                                 " << endl;
+        cout << " 3. Filter                                 " << endl;
+        cout << " 4. Logout (Kembali ke Login)             " << endl;
         cout << "==========================================" << endl;
         cout << " Pilih opsi (1-3): ";
         cin >> pilihan;
@@ -27,6 +28,8 @@ void menuUtama(string role) {
             cariMobil();
           
         } else if (pilihan == 3){
+             filterMobil();
+        }else if (pilihan == 4){
             cout << "\nLogging out... Kembali ke menu utama.\n";
             tetapDiHome = false; 
         } else {
