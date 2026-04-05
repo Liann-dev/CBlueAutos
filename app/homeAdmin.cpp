@@ -11,7 +11,9 @@ void menuUtamaAdmin(string role) {
     bool tetapDiHome = true;
 
     while (tetapDiHome) {
-        cout << "\n=== SISTEM MANAJEMEN (ADMIN ONLY) ===" << endl;
+        cout << "\n==========================================" << endl;
+        cout << "       SHOWROOM MOBIL - ADMIN MENU        " << endl;
+        cout << "==========================================" << endl;
         cout << "1. Tambah Stok Mobil Baru" << endl;
         cout << "2. Update Data/Harga Mobil" << endl;
         cout << "3. Hapus Unit (Sold Out)" << endl;
