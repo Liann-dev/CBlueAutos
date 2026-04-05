@@ -3,12 +3,10 @@
 #include <sstream>
 #include <string>
 #include <cctype>
-#include <conio.h> // Penting untuk _getch()
+#include <conio.h> 
 #include "auth.h"
 
 using namespace std;
-
-// Gunakan jalur file yang konsisten dengan struktur folder kamu
 static string dbUser = "database_user.csv"; 
 
 string getHiddenPassword() {
@@ -16,15 +14,15 @@ string getHiddenPassword() {
     char ch;
     while (true) {
         ch = _getch();
-        if (ch == '\r' || ch == '\n') { // Tombol Enter
+        if (ch == '\r' || ch == '\n') { 
             cout << endl;
             break;
-        } else if (ch == '\b') { // Tombol Backspace
+        } else if (ch == '\b') { 
             if (!password.empty()) {
                 password.pop_back();
                 cout << "\b \b";
             }
-        } else if (ch >= 32) { // Karakter yang bisa dicetak
+        } else if (ch >= 32) { 
             password.push_back(ch);
             cout << '*';
         }
