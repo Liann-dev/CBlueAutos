@@ -62,16 +62,9 @@ void showTableData()
             temp = temp->next;
         }
     }
+    int jumlah = sizeof(showroom) / sizeof(showroom[0]);
+    cout << jumlah << endl;
 }
-
-// void showListMerk()
-// {
-//     cout << "\nDaftar Merk Mobil:" << endl;
-//     for (int i = 0; i < 3; i++)
-//     {
-//         cout << '[' << i << ']' << showroom[i].NamaMerk << endl;
-//     }
-// }
 
 void updateMobilAdmin()
 {
@@ -126,18 +119,12 @@ void updateMobilAdmin()
                     << "\n"
                     << setfill('-') << setw(80) << "-" << setfill(' ') << endl;
 
-                cout << "\nMasukkan Kondisi Baru (Baru/Bekas): ";
+                cout << "\nMasukan Merk Baru: ";
                 cin.ignore();
-                getline(cin, kondisiBaru);
-
-                if (kondisiBaru == "")
+                getline(cin, merkBaru);
+                if (merkBaru == "")
                 {
-                    kondisiBaru = temp->Kondisi;
-                }
-                else if (kondisiBaru != "Baru" && kondisiBaru != "Bekas")
-                {
-                    cout << "[Error] Kondisi harus 'Baru' atau 'Bekas'!\n";
-                    return;
+                    merkBaru = showroom[i].NamaMerk;
                 }
 
                 cout << "\nMasukan Model Baru: ";
@@ -148,24 +135,14 @@ void updateMobilAdmin()
                     modelBaru = temp->Model;
                 }
 
-                // TODO: Fitur update merk hold dulu
+                cout << "\nMasukkan Kondisi Baru: ";
+                cin.ignore();
+                getline(cin, kondisiBaru);
 
-                // cout << endl;
-                // showListMerk();
-                // cout << "\nMasukan Merk Baru: ";
-                // if (!(cin >> index) || index < 0 || index > 2)
-                // {
-                //     cin.clear();
-                //     cin.ignore(10000, '\n');
-                //     cout << "\n[Error] Indeks merk tidak valid!" << endl;
-                //     return;
-                // }
-                // merkBaru = showroom[index].NamaMerk;
-
-                // if (merkBaru == "")
-                // {
-                //     merkBaru = showroom[i].NamaMerk;
-                // }
+                if (kondisiBaru == "")
+                {
+                    kondisiBaru = temp->Kondisi;
+                }
 
                 cout << "\nMasukan Tahun pembuatan baru: ";
 
