@@ -241,18 +241,29 @@ void tampilkanKatalog() {
         cetakHalaman(current, totalHalaman);
         cout << "  Input (n/p/x): ";
         cin  >> input;
-        input = tolower(input);
+        
+        // Memaksa apapun inputnya (n kecil atau N besar) menjadi N besar
+        input = toupper(input);
 
         if (input == 'N') {
-            if (current->next) current = current->next;
-            else cout << "  >> Sudah di halaman terakhir!\n";
+            if (current->next) {
+                current = current->next;
+            } else {
+                cout << "  >> Sudah di halaman terakhir!\n";
+                cin.ignore(1000, '\n'); cin.get(); // Jeda agar pesan terbaca
+            }
         } else if (input == 'P') {
-            if (current->prev) current = current->prev;
-            else cout << "  >> Sudah di halaman pertama!\n";
+            if (current->prev) {
+                current = current->prev;
+            } else {
+                cout << "  >> Sudah di halaman pertama!\n";
+                cin.ignore(1000, '\n'); cin.get(); // Jeda agar pesan terbaca
+            }
         } else if (input == 'X') {
             break;
         } else {
             cout << "  >> Input tidak valid! Gunakan N / P / X\n";
+            cin.ignore(1000, '\n'); cin.get(); // Jeda agar pesan terbaca
         }
     }
 
