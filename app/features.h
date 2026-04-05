@@ -54,7 +54,8 @@ void tambahMobilAdmin();
 void tampilkanKatalogAdmin();
 void hapusMobilAdmin();
 void updateMobilAdmin();
-void searchFilterAdmin();
+void cariMobilAdmin();
+void filterMobilAdmin();
 void sinkronisasiKeCSV();
 void showTableData();
 
