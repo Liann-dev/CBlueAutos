@@ -12,14 +12,14 @@ void menuUtamaAdmin(string role) {
 
     while (tetapDiHome) {
         cout << "\n==========================================" << endl;
-        cout << "       SHOWROOM MOBIL - ADMIN MENU        " << endl;
+        cout << "       CBLUEAUTOS - ADMIN MENU        " << endl;
         cout << "==========================================" << endl;
         cout << "1. Tambah Stok Mobil Baru" << endl;
-        cout << "2. Update Data/Harga Mobil" << endl;
-        cout << "3. Hapus Unit (Sold Out)" << endl;
+        cout << "2. Update Data Mobil" << endl;
+        cout << "3. Hapus Stok Mobil" << endl;
         cout << "4. Search Stok" << endl;
         cout << "5. Filter Stok" << endl;
-        cout << "6. Lihat Laporan Inventaris (Katalog)" << endl;
+        cout << "6. Lihat Inventaris (Katalog)" << endl;
         cout << "7. Keluar" << endl;
         cout << " Pilih opsi (1-7): ";
         cin >> pilihan;

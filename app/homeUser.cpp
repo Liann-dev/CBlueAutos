@@ -11,7 +11,7 @@ void menuUtama(string role) {
 
     while (tetapDiHome) {
         cout << "\n==========================================" << endl;
-        cout << "       SHOWROOM MOBIL - USER MENU         " << endl;
+        cout << "       CBLUEAUTOS - USER MENU          " << endl;
         cout << "==========================================" << endl;
         cout << " 1. Lihat Semua Koleksi (Katalog)         " << endl;
         cout << " 2. Search                                 " << endl;
