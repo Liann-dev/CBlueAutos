@@ -1,24 +1,24 @@
 ID,Merk,Model,Tahun,Kondisi
-1,Toyota,2000GT (MF10),1967,Pristine/Museum Quality
-2,Nissan,Skyline GT-R (KPGC10 "Hakosuka"),1971,Fully Restored
+1,Toyota,2000GT (MF10),1967,Mint
+2,Nissan,Skyline GT-R (KPGC10 "Hakosuka"),1971,Mint
 3,Datsun,Fairlady 240Z (S30),1973,Good
 4,Toyota,Sprinter Trueno (AE86),1986,Project Car
 5,Nissan,Skyline GT-R (R32),1989,Excellent
 6,Honda,NSX (NA1),1992,Mint
 7,Mazda,RX-7 (FD3S Spirit R),2002,Mint
 8,Toyota,Supra RZ (JZA80),1997,Excellent
-9,Subaru,Impreza 22B STi,1998,Pristine
+9,Subaru,Impreza 22B STi,1998,Mint
 10,Mitsubishi,Lancer Evolution VI (Tommi Mäkinen Edition),2000,Good
 11,Nissan,Skyline GT-R V-Spec II (R34),2002,Mint
 12,Honda,S2000 (AP1),2001,Good
-13,Mazda,MX-5 Miata (NA),1995,Fair
+13,Mazda,MX-5 Miata (NA),1995,Project Car
 14,Nissan,Silvia Spec-R (S15),1999,Excellent
 15,Mitsubishi,3000GT VR-4 (Z16A),1994,Good
-16,Lexus,LFA,2011,Pristine
+16,Lexus,LFA,2011,Mint
 17,Nissan,GT-R (R35 Nismo),2015,Excellent
-18,Honda,Civic Type R (FK8),2019,Used - Very Good
+18,Honda,Civic Type R (FK8),2019,Excellent
 19,Toyota,GR Yaris (RZ High Performance),2021,Brand New
-20,Subaru,BRZ (ZD8),2022,Used - Excellent
+20,Subaru,BRZ (ZD8),2022,Excellent
 21,Toyota,GR Corolla (Morizo Edition),2023,Brand New
 22,Honda,Civic Type R (FL5),2023,Brand New
 23,Nissan,Fairlady Z (RZ34 Nismo),2024,Brand New
@@ -27,26 +27,25 @@ ID,Merk,Model,Tahun,Kondisi
 26,Honda,Integra Type R (DC2),1998,Mint
 27,Mitsubishi,Lancer Evolution IX MR,2006,Excellent
 28,Subaru,Impreza WRX STI (GDB "Hawkeye"),2006,Good
-29,Mazda,Autozam AZ-1 (PG6SA),1992,Pristine
-30,Suzuki,Cappuccino (EA11R),1991,Fair
+29,Mazda,Autozam AZ-1 (PG6SA),1992,Mint
+30,Suzuki,Cappuccino (EA11R),1991,Project Car
 31,Honda,Beat (PP1),1991,Good
-32,Toyota,Celica GT-Four (ST205),1994,Fully Restored
+32,Toyota,Celica GT-Four (ST205),1994,Excellent
 33,Nissan,Skyline GT-R (R33),1995,Excellent
-34,Toyota,Chaser Tourer V (JZX100),1998,Modified/Good
+34,Toyota,Chaser Tourer V (JZX100),1998,Good
 35,Nissan,Stagea Autech Version 260RS (WGNC34),1998,Excellent
-36,Honda,CR-X SiR (EF8),1989,Restored
+36,Honda,CR-X SiR (EF8),1989,Excellent
 37,Mazda,Eunos Cosmo (JC),1990,Good
-38,Mitsubishi,Galant VR-4 (EC5A),1998,Fair
-39,Subaru,Legacy B4 RSK (BE5),2001,Good2
+38,Mitsubishi,Galant VR-4 (EC5A),1998,Project Car
+39,Subaru,Legacy B4 RSK (BE5),2001,Good
 40,Toyota,Supra 2.5GT Twin Turbo (JZA70),1990,Excellent
 41,Nissan,Fairlady Z (Z32 300ZX),1990,Good
-42,Honda,NSX-R (NA2),2002,Pristine/Museum Quality
+42,Honda,NSX-R (NA2),2002,Mint
 43,Mazda,RX-8 Spirit R (SE3P),2012,Mint
 44,Nissan,Silvia K's (S14 Kouki),1997,Good
-45,Toyota,Altezza RS200 (SXE10),1998,Used - Good
-46,Suzuki,Jimny (JA11),1990,Off-road Modified
+45,Toyota,Altezza RS200 (SXE10),1998,Good
+46,Suzuki,Jimny (JA11),1990,Project Car
 47,Daihatsu,Copen (L880K),2002,Good
 48,Honda,Civic SiR (EG6),1992,Project Car
-49,Toyota,Starlet Glanza V (EP91),1996,Fair
+49,Toyota,Starlet Glanza V (EP91),1996,Project Car
 50,Nissan,Pulsar GTI-R (RNN14),1990,Excellent
-51,Nissan,Mazda R,2009,Baru

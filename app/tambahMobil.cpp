@@ -8,9 +8,6 @@
 
 using namespace std;
 
-
-extern Kategori showroom[3]; 
-const int jumlahMerk = sizeof(showroom) / sizeof(showroom[0]);
 const string dbMobil = "database_mobil.csv"; 
 
 int getNextMobilId() {
@@ -29,6 +26,7 @@ int getNextMobilId() {
     }
     return lastId + 1;
 }
+
 void tambahMobilAdmin() {
     string merkBaru, modelBaru, kondisiBaru;
     int tahunBaru;
@@ -47,13 +45,54 @@ void tambahMobilAdmin() {
     cout << "Tahun Rilis       : ";
     cin >> tahunBaru;
 
-    cout << "Kondisi (Baru/Bekas): ";
-    cin.ignore(10000, '\n');
-    getline(cin, kondisiBaru);
+    bool kondisiValid = false;
+    int pilihanKondisi;
+    
+    while (!kondisiValid) {
+        cout << "\nPilih Kondisi Mobil:\n";
+        cout << "1. Brand New\n";
+        cout << "2. Mint\n";
+        cout << "3. Excellent\n";
+        cout << "4. Good\n";
+        cout << "5. Project Car\n";
+        cout << "Masukkan pilihan (1-5): ";
+        
+        cin >> pilihanKondisi;
+        
+        if (cin.fail()) { // Jika user memasukkan huruf/karakter selain angka
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "[ERROR] Input harus berupa angka (1-5)!\n";
+        } else {
+            switch (pilihanKondisi) {
+                case 1: 
+                    kondisiBaru = "Brand New"; 
+                    kondisiValid = true; 
+                    break;
+                case 2: 
+                    kondisiBaru = "Mint"; 
+                    kondisiValid = true; 
+                    break;
+                case 3: 
+                    kondisiBaru = "Excellent"; 
+                    kondisiValid = true; 
+                    break;
+                case 4: 
+                    kondisiBaru = "Good"; 
+                    kondisiValid = true; 
+                    break;
+                case 5: 
+                    kondisiBaru = "Project Car"; 
+                    kondisiValid = true; 
+                    break;
+                default: 
+                    cout << "[ERROR] Pilihan tidak valid! Silakan pilih angka 1 sampai 5.\n";
+            }
+        }
+    }
 
     int idBaru = getNextMobilId();
 
-   
     bool perluNewline = false;
     ifstream fileCek(dbMobil.c_str(), ios::binary);
     if (fileCek.is_open()) {
@@ -73,6 +112,7 @@ void tambahMobilAdmin() {
     if(file.is_open()) {
         if (perluNewline) file << "\n"; 
         
+        // 1. Simpan ke CSV
         file << idBaru << "," 
              << merkBaru << "," 
              << modelBaru << "," 
@@ -80,13 +120,21 @@ void tambahMobilAdmin() {
              << kondisiBaru << "\n"; 
         file.close();
         
-
-        for (int i = 0; i < 3; i++) {
-            if (keHurufKecil(showroom[i].NamaMerk) == keHurufKecil(merkBaru)) {
-                tambahUnit(showroom[i], modelBaru, tahunBaru, kondisiBaru);
-                break;
-            }
+        Kategori* kat = cariAtauBuatKategori(merkBaru);
+        
+        Mobil* baru   = new Mobil;
+        baru->id      = idBaru;
+        baru->Merk    = merkBaru; 
+        baru->Model   = modelBaru;
+        baru->Tahun   = tahunBaru;
+        baru->Kondisi = kondisiBaru;
+        
+        baru->next = kat->head;
+        baru->prev = nullptr;
+        if (kat->head != nullptr) {
+            kat->head->prev = baru;
         }
+        kat->head = baru;
 
         cout << "\n[SUKSES] Unit dengan ID " << idBaru << " berhasil ditambahkan!" << endl;
     } else {

@@ -5,8 +5,6 @@
 
 using namespace std;
 
-extern Kategori showroom[3];
-
 void hapusMobilAdmin()
 {
     string target;
@@ -30,38 +28,38 @@ void hapusMobilAdmin()
     }
 
     bool ditemukan = false;
-
-    for (int i = 0; i < 3; i++)
+    Kategori* currKat = headKategori;
+    while (currKat != nullptr) 
     {
-        Mobil *temp = showroom[i].head;
-        Mobil *prev = nullptr;
-
+        Mobil *temp = currKat->head;
         while (temp != nullptr)
         {
             if (temp->Model == target)
             {
-
-                if (prev == nullptr)
+                if (temp->prev == nullptr) 
                 {
-                    showroom[i].head = temp->next;
+                    currKat->head = temp->next;
+                    if (currKat->head != nullptr) currKat->head->prev = nullptr;
                 }
                 else
                 {
-
-                    prev->next = temp->next;
+                    temp->prev->next = temp->next;
+                    if (temp->next != nullptr) temp->next->prev = temp->prev;
                 }
+
                 delete temp;
                 ditemukan = true;
                 break;
             }
-            prev = temp;
             temp = temp->next;
         }
+
         if (ditemukan)
         {
-            sinkronisasiKeCSV();
+            sinkronisasiKeCSV(); 
             break;
         }
+        currKat = currKat->next; 
     }
 
     if (ditemukan)

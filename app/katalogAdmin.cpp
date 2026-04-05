@@ -1,34 +1,69 @@
 #include <iostream>
-#include <string>
 #include <iomanip>
+#include <string>
+#include <fstream>
+#include <sstream>
 #include "features.h"
 
 using namespace std;
-extern Kategori showroom[3]; 
-
 
 void tampilkanKatalogAdmin() {
- 
+    cout << "\n===========================================================================\n";
+    cout << "                           KATALOG MOBIL (ADMIN)                           \n";
+    cout << "===========================================================================\n";
+    
+    // Header Tabel
+    cout << left 
+         << setw(6)  << "ID" 
+         << setw(15) << "MERK" 
+         << setw(25) << "MODEL" 
+         << setw(10) << "TAHUN" 
+         << "KONDISI" << endl;
+         
+    cout << setfill('-') << setw(75) << "-" << setfill(' ') << endl;
+
+    ifstream file("database_mobil.csv");
+    string line;
     bool adaData = false;
-    for (int i = 0; i < 3; i++) {
-        if (showroom[i].head != nullptr) adaData = true;
+
+    if (file.is_open()) {
+        // Melewati baris pertama karena itu adalah Header CSV (ID,Merk,Model,Tahun,Kondisi)
+        getline(file, line); 
+
+        // Membaca data baris demi baris dari CSV
+        while (getline(file, line)) {
+            if (line.empty()) continue;
+
+            stringstream ss(line);
+            string idStr, merk, model, tahunStr, kondisi;
+
+            getline(ss, idStr, ',');
+            getline(ss, merk, ',');
+            getline(ss, model, ',');
+            getline(ss, tahunStr, ',');
+            getline(ss, kondisi, ',');
+
+            adaData = true;
+
+            // Mencegah nama model yang terlalu panjang merusak layout tabel
+            if (model.length() > 22) {
+                model = model.substr(0, 19) + "...";
+            }
+
+            // Menampilkan Isi Tabel
+            cout << left 
+                 << setw(6)  << idStr 
+                 << setw(15) << merk 
+                 << setw(25) << model 
+                 << setw(10) << tahunStr 
+                 << kondisi << endl;
+        }
+        file.close();
     }
 
     if (!adaData) {
-        cout << "\n[!] Katalog Kosong. Pastikan inisialisasiData() sudah dipanggil.\n";
-        return;
+        cout << " [!] Katalog masih kosong atau gagal membaca file database." << endl;
     }
-
-    cout << "\n" << left << setw(5) << "ID" << setw(15) << "MERK" << setw(20) << "MODEL" << setw(10) << "THN" << "KONDISI" << endl;
-    for (int i = 0; i < 3; i++) { 
-        Mobil* temp = showroom[i].head; 
-        while (temp != nullptr) { 
-            cout << left << setw(5) << temp->id 
-                 << setw(15) << showroom[i].NamaMerk 
-                 << setw(20) << temp->Model 
-                 << setw(10) << temp->Tahun 
-                 << temp->Kondisi << endl;
-            temp = temp->next;
-        }
-    }
+    
+    cout << setfill('=') << setw(75) << "=" << setfill(' ') << endl;
 }

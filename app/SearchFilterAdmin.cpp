@@ -6,7 +6,6 @@
 
 using namespace std;
 
-extern Kategori showroom[3];
 
 void searchFilterAdmin() {
     string key;
@@ -26,26 +25,27 @@ void searchFilterAdmin() {
     cout << setfill('-') << setw(75) << "-" << setfill(' ') << endl;
 
     int counter = 0;
-    for (int i = 0; i < 3; i++) {
-        string merkKecil = keHurufKecil(showroom[i].NamaMerk);
-        Mobil* temp = showroom[i].head;
+    
+    for (Kategori* currKat = headKategori; currKat != nullptr; currKat = currKat->next) {
+        string merkKecil = keHurufKecil(currKat->NamaMerk);
 
-        while (temp != nullptr) {
+        for (Mobil* temp = currKat->head; temp != nullptr; temp = temp->next) {
             string modelKecil = keHurufKecil(temp->Model);
             string unitKondKecil = keHurufKecil(temp->Kondisi);
 
-            bool cocokKeyword = (keyKecil == "0" || keyKecil == "" || merkKecil.find(keyKecil) != string::npos || modelKecil.find(keyKecil) != string::npos);
+            bool cocokKeyword = (keyKecil == "0" || keyKecil == "" || 
+                                 merkKecil.find(keyKecil) != string::npos || 
+                                 modelKecil.find(keyKecil) != string::npos);
             bool cocokKondisi = (kondKecil == "0" || unitKondKecil == kondKecil);
 
             if (cocokKeyword && cocokKondisi) {
                 counter++;
                 cout << left << setw(5) << temp->id 
-                     << setw(15) << showroom[i].NamaMerk 
+                     << setw(15) << currKat->NamaMerk 
                      << setw(20) << temp->Model 
                      << setw(10) << temp->Tahun 
                      << temp->Kondisi << endl;
             }
-            temp = temp->next;
         }
     }
 

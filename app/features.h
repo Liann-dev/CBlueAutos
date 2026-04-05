@@ -3,10 +3,7 @@
 
 #include <string>
 using namespace std;
-
-// 1. STRUKTUR DATA
-struct Mobil
-{
+struct Mobil {
     int id;
     string Merk;
     string Model;
@@ -16,14 +13,14 @@ struct Mobil
     Mobil *prev;
 };
 
-struct Kategori
-{
+struct Kategori {
     string NamaMerk;
     Mobil *head;
+    Kategori *next; 
+    Kategori *prev; 
 };
 
-struct Page
-{
+struct Page {
     Mobil *items[10];
     string merkItems[10];
     int jumlah;
@@ -32,20 +29,30 @@ struct Page
     Page *prev;
 };
 
-// 2. FUNGSI KHUSUS USER
+// ==========================================
+// VARIABEL GLOBAL (Agar dikenali semua file)
+// ==========================================
+// Di dalam features.h
+extern Kategori* headKategori;
+
+// ==========================================
+// FUNGSI BANTUAN (UTILITY)
+// ==========================================
+string keHurufKecil(string str);
+
+
+Kategori* cariAtauBuatKategori(string merk); 
 void inisialisasiData();
 void tambahUnit(Kategori &kat, string model, int tahun, string kondisi);
 void tampilkanKatalog();
 void cariMobil();
 void filterMobil();
 
-// 3. FUNGSI KHUSUS ADMIN
 void tambahMobilAdmin();
 void tampilkanKatalogAdmin();
 void hapusMobilAdmin();
 void updateMobilAdmin();
 void searchFilterAdmin();
 void sinkronisasiKeCSV();
-string keHurufKecil(string str);
 
 #endif
