@@ -38,6 +38,7 @@ int getNextMobilId()
     }
     return lastId + 1;
 }
+
 void tambahMobilAdmin()
 {
     string merkBaru, modelBaru, kondisiBaru;
@@ -66,14 +67,55 @@ void tambahMobilAdmin()
     cout << "Tahun Rilis       : ";
     cin >> tahunBaru;
 
-    cout << "Kondisi           : ";
-    cin.ignore(10000, '\n');
-    getline(cin, kondisiBaru);
+    bool kondisiValid = false;
+    int pilihanKondisi;
 
-    if (merkBaru.empty() || modelBaru.empty() || kondisiBaru.empty())
+    while (!kondisiValid)
     {
-        cout << "\n[ERROR] Semua field harus diisi!" << endl;
-        return tambahMobilAdmin();
+        cout << "\nPilih Kondisi Mobil:\n";
+        cout << "1. Brand New\n";
+        cout << "2. Mint\n";
+        cout << "3. Excellent\n";
+        cout << "4. Good\n";
+        cout << "5. Project Car\n";
+        cout << "Masukkan pilihan (1-5): ";
+
+        cin >> pilihanKondisi;
+
+        if (cin.fail())
+        { // Jika user memasukkan huruf/karakter selain angka
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "[ERROR] Input harus berupa angka (1-5)!\n";
+        }
+        else
+        {
+            switch (pilihanKondisi)
+            {
+            case 1:
+                kondisiBaru = "Brand New";
+                kondisiValid = true;
+                break;
+            case 2:
+                kondisiBaru = "Mint";
+                kondisiValid = true;
+                break;
+            case 3:
+                kondisiBaru = "Excellent";
+                kondisiValid = true;
+                break;
+            case 4:
+                kondisiBaru = "Good";
+                kondisiValid = true;
+                break;
+            case 5:
+                kondisiBaru = "Project Car";
+                kondisiValid = true;
+                break;
+            default:
+                cout << "[ERROR] Pilihan tidak valid! Silakan pilih angka 1 sampai 5.\n";
+            }
+        }
     }
 
     int idBaru = getNextMobilId();

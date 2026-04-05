@@ -121,7 +121,7 @@ bool loginUser(User &userTerdaftar) {
     for (int sisa = 3; sisa > 0; sisa--) {
         string username, password;
         cout << "\n>>> LOGIN (Sisa percobaan: " << sisa << ") <<<\n";
-        cout << "Username: ";
+        cout << "Username (Tekan Enter untuk kembali): ";
         getline(cin, username);
         if (username == "") return false;
 

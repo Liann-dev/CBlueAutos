@@ -1,8 +1,14 @@
 #include <iostream>
 #include <string>
+#include <algorithm>
+#include <cctype>
 #include <windows.h> 
 
 using namespace std;
+string keHurufKecil(string teks) {
+    transform(teks.begin(), teks.end(), teks.begin(), ::tolower);
+    return teks;
+}
 
 void efekNgetik(string teks, int jedaMs) {
     for (char c : teks) {

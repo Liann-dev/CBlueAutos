@@ -10,7 +10,7 @@
 
 using namespace std;
 
-extern Kategori showroom[3];
+// Menggunakan pointer dinamis
 
 vector<string> ambilOpsiDinamis(int indeksKolom) {
     set<string> dataUnik;
@@ -76,9 +76,9 @@ void filterMobil() {
                 isFilterTahun = true;
             }
         } 
-        else if (pilihanFilter == 2 || pilihanFilter == 3) {
-            int kolom = (pilihanFilter == 2) ? 1 : 4;
-            string label = (pilihanFilter == 2) ? "MERK" : "KONDISI";
+        else if (pilihanFilter == 2) {
+            int kolom = 1;
+            string label = "MERK";
             
             vector<string> opsi = ambilOpsiDinamis(kolom);
             if (opsi.empty()) {
@@ -103,6 +103,31 @@ void filterMobil() {
             if (pil > 1 && pil <= (int)opsi.size() + 1) {
                 kriteriaPilihan = opsi[pil - 2];
             }
+        }
+        else if (pilihanFilter == 3) {
+            cout << "\n>>> FILTER KONDISI" << endl;
+            cout << "  [1] Tampilkan Semua" << endl;
+            cout << "  [2] Brand New" << endl;
+            cout << "  [3] Mint" << endl;
+            cout << "  [4] Excellent" << endl;
+            cout << "  [5] Good" << endl;
+            cout << "  [6] Project Car" << endl;
+            cout << "  [0] Kembali" << endl;
+            
+            int pil;
+            cout << "Pilihan: ";
+            cin >> pil;
+            
+            if (pil == 0) continue;
+            lanjutProses = true;
+            indeksKolomTabel = 4;
+            
+            if (pil == 2) kriteriaPilihan = "Brand New";
+            else if (pil == 3) kriteriaPilihan = "Mint";
+            else if (pil == 4) kriteriaPilihan = "Excellent";
+            else if (pil == 5) kriteriaPilihan = "Good";
+            else if (pil == 6) kriteriaPilihan = "Project Car";
+            else kriteriaPilihan = ""; // Tampilkan Semua
         }
 
         if (lanjutProses) {

@@ -7,12 +7,33 @@
 #include "features.h"
 
 using namespace std;
-Kategori showroom[3];
-const string dbMobil = "database_mobil.csv";
 
-// ==========================================
-// TAMBAH UNIT
-// ==========================================
+Kategori* headKategori = nullptr;
+const string dbMobil = "database_mobil.csv";
+Kategori* cariAtauBuatKategori(string merk) {
+    Kategori* temp = headKategori;
+    Kategori* tail = nullptr;
+
+    while (temp != nullptr) {
+        if (temp->NamaMerk == merk) return temp;
+        tail = temp;
+        temp = temp->next;
+    }
+
+    Kategori* baru = new Kategori;
+    baru->NamaMerk = merk;
+    baru->head = nullptr;
+    baru->next = nullptr;
+    baru->prev = tail;
+
+    if (tail != nullptr) {
+        tail->next = baru;
+    } else {
+        headKategori = baru;
+    }
+    return baru;
+}
+
 void tambahUnit(Kategori &kat, string model, int tahun, string kondisi) {
     Mobil* baru   = new Mobil;
     baru->Model   = model;
@@ -24,17 +45,10 @@ void tambahUnit(Kategori &kat, string model, int tahun, string kondisi) {
     kat.head = baru;
 }
 
-// ==========================================
-// INISIALISASI DATA DARI CSV
-// ==========================================
 void inisialisasiData() {
-    showroom[0].NamaMerk = "Toyota"; 
-    showroom[1].NamaMerk = "Honda";
-    showroom[2].NamaMerk = "Suzuki";
-    
-    for(int i = 0; i < 3; i++) showroom[i].head = nullptr;
-
     ifstream file(dbMobil.c_str());
+    if (!file.is_open()) return;
+
     string line;
     getline(file, line); 
 
@@ -59,21 +73,15 @@ void inisialisasiData() {
         baru->next    = nullptr;
         baru->prev    = nullptr;
         
-        for(int i = 0; i < 3; i++) {
-            if(showroom[i].NamaMerk == merkStr) {
-                baru->next = showroom[i].head;
-                if (showroom[i].head != nullptr) showroom[i].head->prev = baru;
-                showroom[i].head = baru;
-                break;
-            }
-        }
+        // Cari atau buat kategori secara dinamis
+        Kategori* kat = cariAtauBuatKategori(merkStr);
+        baru->next = kat->head;
+        if (kat->head != nullptr) kat->head->prev = baru;
+        kat->head = baru;
     }
     file.close();
 }
 
-// ==========================================
-// MERGE SORT - Doubly Linked List by ID
-// ==========================================
 Mobil* merge(Mobil* a, Mobil* b) {
     if (!a) return b;
     if (!b) return a;
@@ -94,7 +102,6 @@ Mobil* merge(Mobil* a, Mobil* b) {
 Mobil* mergeSort(Mobil* head) {
     if (!head || !head->next) return head;
 
-  
     Mobil* slow = head;
     Mobil* fast = head->next;
     while (fast && fast->next) {
@@ -112,61 +119,59 @@ Mobil* mergeSort(Mobil* head) {
     return merge(left, right);
 }
 
-// ==========================================
-// PAGINATION - Doubly Linked List of Pages
-// ==========================================
-Page* bangunHalaman() {
 
+Page* bangunHalaman() {
     Mobil* allHead = nullptr;
     Mobil* allTail = nullptr;
 
-    for (int i = 0; i < 3; i++) {
-        Mobil* temp = showroom[i].head;
+    Kategori* currKat = headKategori;
+    while (currKat != nullptr) {
+        Mobil* temp = currKat->head;
         while (temp != nullptr) {
-            Mobil* nextNode = temp->next;
-
-            temp->next = nullptr;
-            temp->prev = nullptr;
+            Mobil* baru = new Mobil(*temp); 
+            baru->next = nullptr;
+            baru->prev = nullptr;
 
             if (allHead == nullptr) {
-                allHead = allTail = temp;
+                allHead = allTail = baru;
             } else {
-                allTail->next = temp;
-                temp->prev    = allTail;
-                allTail       = temp;
+                allTail->next = baru;
+                baru->prev    = allTail;
+                allTail       = baru;
             }
-            temp = nextNode;
+            temp = temp->next;
         }
+        currKat = currKat->next; 
     }
 
+    if (allHead == nullptr) return nullptr;
+
+    
     allHead = mergeSort(allHead);
 
     Page* headPage    = nullptr;
     Page* tailPage    = nullptr;
-    Page* halamanSaat = nullptr;
     int   nomorHal    = 1;
-
     Mobil* curr = allHead;
+
     while (curr != nullptr) {
-        if (halamanSaat == nullptr || halamanSaat->jumlah == 10) {
-            Page* hal         = new Page;
-            hal->jumlah       = 0;
-            hal->nomorHalaman = nomorHal++;
-            hal->next         = nullptr;
-            hal->prev         = tailPage;
+        Page* hal         = new Page;
+        hal->jumlah       = 0;
+        hal->nomorHalaman = nomorHal++;
+        hal->next         = nullptr;
+        hal->prev         = tailPage;
 
-            if (tailPage != nullptr) tailPage->next = hal;
-            else headPage = hal;
+        if (tailPage != nullptr) tailPage->next = hal;
+        else headPage = hal;
+        tailPage = hal;
 
-            tailPage    = hal;
-            halamanSaat = hal;
+
+        for (int i = 0; i < 10 && curr != nullptr; i++) {
+            hal->items[i]     = curr;
+            hal->merkItems[i] = curr->Merk; 
+            hal->jumlah++;
+            curr = curr->next;
         }
-
-        halamanSaat->items[halamanSaat->jumlah]     = curr;
-        halamanSaat->merkItems[halamanSaat->jumlah] = curr->Merk;
-        halamanSaat->jumlah++;
-
-        curr = curr->next;
     }
 
     return headPage;
@@ -202,13 +207,15 @@ void cetakHalaman(Page* hal, int totalHalaman) {
 
     cout << setfill('-') << setw(70) << "-" << setfill(' ') << endl;
 
-    if (hal->prev) cout << "  << Hal " << hal->prev->nomorHalaman;
-    else           cout << "  << (awal)  ";
-    cout << "                        ";
-    if (hal->next) cout << "Hal " << hal->next->nomorHalaman << " >>";
-    else           cout << "  (akhir) >>";
+    if (hal->prev) cout << "  << [p] Prev (Hal " << hal->prev->nomorHalaman << ")";
+    else           cout << "  << (Awal)          ";
+    
+    cout << "    |    ";
+    
+    if (hal->next) cout << "[n] Next (Hal " << hal->next->nomorHalaman << ") >>";
+    else           cout << "          (Akhir) >>";
 
-    cout << "\n  [n] Next   [p] Prev   [x] Kembali ke Menu" << endl;
+    cout << "\n  [x] Kembali ke Menu" << endl;
     cout << setfill('=') << setw(70) << "=" << setfill(' ') << endl;
 }
 
@@ -216,6 +223,11 @@ void hapusHalaman(Page* head) {
     while (head != nullptr) {
         Page* tmp = head;
         head      = head->next;
+        
+        for(int i = 0; i < tmp->jumlah; i++) {
+            delete tmp->items[i];
+        }
+        
         delete tmp;
     }
 }
@@ -224,10 +236,9 @@ void tampilkanKatalog() {
     Page* headPage = bangunHalaman();
 
     if (headPage == nullptr) {
-        cout << "  Tidak ada data mobil.\n";
+        cout << "  [!] Tidak ada data mobil dalam database.\n";
         return;
     }
-
 
     int   totalHalaman = 0;
     Page* hitung       = headPage;
@@ -238,7 +249,7 @@ void tampilkanKatalog() {
 
     while (true) {
         cetakHalaman(current, totalHalaman);
-        cout << "  Input: ";
+        cout << "  Input (n/p/x): ";
         cin  >> input;
         input = tolower(input);
 

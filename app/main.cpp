@@ -5,7 +5,6 @@
 #include "features.h"
 
 using namespace std;
-
 void efekNgetik(string teks, int jedaMs = 30);
 void tampilkanLoading(string pesan = "Memuat", int iterasi = 3);
 
@@ -66,4 +65,4 @@ int main() {
         }
     }
     return 0;
-}
+} 

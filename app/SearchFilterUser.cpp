@@ -6,13 +6,6 @@
 
 using namespace std;
 
-extern Kategori showroom[3];
-
-string keHurufKecil(string teks) {
-    transform(teks.begin(), teks.end(), teks.begin(), ::tolower);
-    return teks;
-}
-
 void cariMobil() {
     string key;
 
@@ -38,23 +31,24 @@ void cariMobil() {
     cout << setfill('-') << setw(70) << "-" << setfill(' ') << endl;
 
     int counter = 0;
-    for (int i = 0; i < 3; i++) {
-        string merkKecil = keHurufKecil(showroom[i].NamaMerk);
-        Mobil* temp = showroom[i].head;
 
-        while (temp != nullptr) {
+    // Iterasi dinamis menggunakan FOR untuk Kategori (Merk)
+    for (Kategori* currKat = headKategori; currKat != nullptr; currKat = currKat->next) {
+        
+        // Iterasi menggunakan FOR untuk Mobil di dalam Kategori tersebut
+        for (Mobil* temp = currKat->head; temp != nullptr; temp = temp->next) {
             string modelKecil = keHurufKecil(temp->Model);
 
+            // Logika pencarian tetap dipertahankan
             if (keyKecil == "0" || keyKecil == "" || modelKecil.find(keyKecil) != string::npos) {
                 counter++;
                 cout << left
                      << setw(5)  << temp->id
-                     << setw(12) << showroom[i].NamaMerk
+                     << setw(12) << currKat->NamaMerk 
                      << setw(22) << temp->Model
                      << setw(8)  << temp->Tahun
                      << temp->Kondisi << endl;
             }
-            temp = temp->next;
         }
     }
 

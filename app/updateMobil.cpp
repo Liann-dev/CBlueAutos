@@ -9,28 +9,25 @@
 
 using namespace std;
 
-extern Kategori showroom[3];
 const string dbMobil = "database_mobil.csv";
 
-// Fungsi pembantu untuk menulis ulang seluruh database dari linked list ke CSV
 void sinkronisasiKeCSV()
 {
     ofstream file(dbMobil.c_str());
     if (!file.is_open())
         return;
 
-    file << "ID,Merk,Model,Tahun,Kondisi\n"; // Header
-    for (int i = 0; i < 3; i++)
+    file << "ID,Merk,Model,Tahun,Kondisi\n";
+
+    for (Kategori *currKat = headKategori; currKat != nullptr; currKat = currKat->next)
     {
-        Mobil *temp = showroom[i].head;
-        while (temp != nullptr)
+        for (Mobil *temp = currKat->head; temp != nullptr; temp = temp->next)
         {
             file << temp->id << ","
-                 << showroom[i].NamaMerk << ","
+                 << currKat->NamaMerk << ","
                  << temp->Model << ","
                  << temp->Tahun << ","
                  << temp->Kondisi << "\n";
-            temp = temp->next;
         }
     }
     file.close();
@@ -39,7 +36,7 @@ void sinkronisasiKeCSV()
 void showTableData()
 {
     cout << "\n"
-         << setfill('=') << setw(70) << "=" << setfill(' ') << endl; // gunakan setfill menggunakan library iomanip
+         << setfill('=') << setw(70) << "=" << setfill(' ') << endl;
     cout << left
          << setw(5) << "ID"
          << setw(12) << "MERK"
@@ -48,22 +45,18 @@ void showTableData()
          << "KONDISI" << endl;
     cout << setfill('-') << setw(70) << "-" << setfill(' ') << endl;
 
-    for (int i = 0; i < 3; i++)
+    for (Kategori *currKat = headKategori; currKat != nullptr; currKat = currKat->next)
     {
-        Mobil *temp = showroom[i].head;
-        while (temp != nullptr)
+        for (Mobil *temp = currKat->head; temp != nullptr; temp = temp->next)
         {
             cout << left
                  << setw(5) << temp->id
-                 << setw(12) << showroom[i].NamaMerk
+                 << setw(12) << currKat->NamaMerk
                  << setw(22) << temp->Model
                  << setw(8) << temp->Tahun
                  << temp->Kondisi << endl;
-            temp = temp->next;
         }
     }
-    int jumlah = sizeof(showroom) / sizeof(showroom[0]);
-    cout << jumlah << endl;
 }
 
 void updateMobilAdmin()
@@ -71,22 +64,18 @@ void updateMobilAdmin()
     int targetId;
     string kondisiBaru;
     string modelBaru;
-    string merkBaru;
-    optional<int> tahunBaru;
-    int y;
-    // int index;
+    string inputTahun;
+    int tahunBaru;
     bool ditemukan = false;
 
     cout << "\n======================================" << endl;
     cout << "     UPDATE UNIT MOBIL (ADMIN)        " << endl;
     cout << "======================================" << endl
-         << endl
-         << endl
          << endl;
 
     showTableData();
 
-    cout << "Masukkan ID Mobil yang ingin diupdate: ";
+    cout << "\nMasukkan ID Mobil yang ingin diupdate: ";
     if (!(cin >> targetId))
     {
         cin.clear();
@@ -95,47 +84,25 @@ void updateMobilAdmin()
         return;
     }
 
-    // Mencari mobil berdasarkan ID di dalam linked list showroom
-    for (int i = 0; i < 3; i++)
+    for (Kategori *currKat = headKategori; currKat != nullptr; currKat = currKat->next)
     {
-        Mobil *temp = showroom[i].head;
-        while (temp != nullptr)
+        for (Mobil *temp = currKat->head; temp != nullptr; temp = temp->next)
         {
             if (temp->id == targetId)
             {
                 cout << "\nData Ditemukan:" << endl;
-                cout << "Merk    : " << showroom[i].NamaMerk << endl;
+                cout << "Merk    : " << currKat->NamaMerk << endl;
                 cout << "Model   : " << temp->Model << endl;
+                cout << "Tahun   : " << temp->Tahun << endl;
                 cout << "Kondisi : " << temp->Kondisi << endl;
 
                 cout << "\n"
                      << setfill('-') << setw(80) << "-" << setfill(' ') << endl;
-                cout << left << setw(25) << "UBAH DATA UNIT (ID: " << targetId << ") (kOSONGKAN JIKA TIDAK INGIN DIUBAH)" << endl;
-                cout << left << setw(5) << showroom[i].NamaMerk
-                     << setw(22) << temp->Model
-                     << setw(8) << temp->Tahun
-                     << temp->Kondisi << endl;
-                cout
-                    << "\n"
-                    << setfill('-') << setw(80) << "-" << setfill(' ') << endl;
+                cout << left << "UBAH DATA UNIT (ID: " << targetId << ") (KOSONGKAN JIKA TIDAK INGIN DIUBAH)" << endl;
+                cout << setfill('-') << setw(80) << "-" << setfill(' ') << endl;
 
-                cout << "\nMasukan Merk Baru: ";
-                cin.ignore();
-                getline(cin, merkBaru);
-                if (merkBaru == "")
-                {
-                    merkBaru = showroom[i].NamaMerk;
-                }
-
-                cout << "\nMasukan Model Baru: ";
-                cin;
-                getline(cin, modelBaru);
-                if (modelBaru == "")
-                {
-                    modelBaru = temp->Model;
-                }
-
-                cout << "\nMasukkan Kondisi Baru: ";
+                // --- UPDATE KONDISI ---
+                cout << "Masukkan Kondisi Baru (Baru/Bekas): ";
                 cin.ignore();
                 getline(cin, kondisiBaru);
 
@@ -143,31 +110,47 @@ void updateMobilAdmin()
                 {
                     kondisiBaru = temp->Kondisi;
                 }
-
-                cout << "\nMasukan Tahun pembuatan baru: ";
-
-                if (cin >> y)
+                else if (kondisiBaru != "Baru" && kondisiBaru != "Bekas")
                 {
-                    tahunBaru = y;
+                    cout << "[Error] Kondisi harus 'Baru' atau 'Bekas'!\n";
+                    return;
+                }
+
+                // --- UPDATE MODEL ---
+                cout << "Masukan Model Baru: ";
+                getline(cin, modelBaru);
+                if (modelBaru == "")
+                {
+                    modelBaru = temp->Model;
+                }
+
+                // --- UPDATE TAHUN ---
+                cout << "Masukan Tahun Pembuatan Baru: ";
+                getline(cin, inputTahun);
+                if (inputTahun == "")
+                {
+                    tahunBaru = temp->Tahun;
                 }
                 else
                 {
-                    tahunBaru = nullopt;
+                    try
+                    {
+                        tahunBaru = stoi(inputTahun);
+                    }
+                    catch (...)
+                    {
+                        cout << "[Error] Tahun harus berupa angka valid!\n";
+                        return;
+                    }
                 }
 
-                if (!tahunBaru)
-                {
-                    tahunBaru = temp->Tahun; // rawan error
-                }
-
-                // Update data di memori
                 temp->Kondisi = kondisiBaru;
                 temp->Model = modelBaru;
-                temp->Tahun = *tahunBaru;
+                temp->Tahun = tahunBaru;
+
                 ditemukan = true;
                 break;
             }
-            temp = temp->next;
         }
         if (ditemukan)
             break;
@@ -175,12 +158,11 @@ void updateMobilAdmin()
 
     if (ditemukan)
     {
-        // Simpan perubahan permanen ke file CSV
         sinkronisasiKeCSV();
-        cout << "[Sukses] Kondisi unit dengan ID " << targetId << " berhasil diperbarui!\n";
+        cout << "\n[Sukses] Kondisi unit dengan ID " << targetId << " berhasil diperbarui!\n";
     }
     else
     {
-        cout << "[Error] Unit dengan ID " << targetId << " tidak ditemukan!\n";
+        cout << "\n[Error] Unit dengan ID " << targetId << " tidak ditemukan!\n";
     }
 }
