@@ -1,49 +1,161 @@
-ID,Merk,Model,Tahun,Kondisi
-1,Toyota,2000GT (MF10),1967,Mint
-2,Nissan,Skyline GT-R (KPGC10 "Hakosuka"),1971,Mint
-3,Datsun,Fairlady 240Z (S30),1973,Good
-4,Toyota,Sprinter Trueno (AE86),1986,Project Car
-5,Nissan,Skyline GT-R (R32),1989,Excellent
-6,Honda,NSX (NA1),1992,Mint
-7,Mazda,RX-7 (FD3S Spirit R),2002,Mint
-8,Toyota,Supra RZ (JZA80),1997,Excellent
-9,Subaru,Impreza 22B STi,1998,Mint
-10,Honda,S2000 (AP1),2001,Good
-11,Mazda,MX-5 Miata (NA),1995,Project Car
-12,Nissan,Silvia Spec-R (S15),1999,Excellent
-13,Mitsubishi,3000GT VR-4 (Z16A),1994,Good
-14,Lexus,LFA,2011,Mint
-15,Nissan,GT-R (R35 Nismo),2015,Excellent
-16,Honda,Civic Type R (FK8),2019,Excellent
-17,Toyota,GR Yaris (RZ High Performance),2021,Brand New
-18,Subaru,BRZ (ZD8),2022,Excellent
-19,Toyota,GR Corolla (Morizo Edition),2023,Brand New
-20,Honda,Civic Type R (FL5),2023,Brand New
-21,Nissan,Fairlady Z (RZ34 Nismo),2024,Brand New
-22,Nissan,180SX Type X (RPS13),1996,Excellent
-23,Toyota,MR2 GT-S (SW20),1993,Good
-24,Honda,Integra Type R (DC2),1998,Mint
-25,Mitsubishi,Lancer Evolution IX MR,2006,Excellent
-26,Subaru,Impreza WRX STI (GDB "Hawkeye"),2006,Good
-27,Mazda,Autozam AZ-1 (PG6SA),1992,Mint
-28,Suzuki,Cappuccino (EA11R),1991,Project Car
-29,Honda,Beat (PP1),1991,Good
-30,Toyota,Celica GT-Four (ST205),1994,Excellent
-31,Nissan,Skyline GT-R (R33),1995,Excellent
-32,Toyota,Chaser Tourer V (JZX100),1998,Good
-33,Nissan,Stagea Autech Version 260RS (WGNC34),1998,Excellent
-34,Honda,CR-X SiR (EF8),1989,Excellent
-35,Mazda,Eunos Cosmo (JC),1990,Good
-36,Mitsubishi,Galant VR-4 (EC5A),1998,Project Car
-37,Subaru,Legacy B4 RSK (BE5),2001,Good
-38,Toyota,Supra 2.5GT Twin Turbo (JZA70),1990,Excellent
-39,Nissan,Fairlady Z (Z32 300ZX),1990,Good
-40,Honda,NSX-R (NA2),2002,Mint
-41,Mazda,RX-8 Spirit R (SE3P),2012,Mint
-42,Nissan,Silvia K's (S14 Kouki),1997,Good
-43,Toyota,Altezza RS200 (SXE10),1998,Good
-44,Suzuki,Jimny (JA11),1990,Project Car
-45,Daihatsu,Copen (L880K),2002,Good
-46,Honda,Civic SiR (EG6),1992,Project Car
-47,Nissan,SKyline R399,2001,Good
-48,Nissan,Skyline,2001,Mint
+ID,Merk,Model,Tahun,Kondisi,Benua,Transmisi,Tipe
+1,Toyota,Yaris,2022,Brand New,Asia,Auto,Hatchback
+2,Toyota,Corolla,2020,Mint,Asia,Manual,Sedan
+3,Toyota,Innova Zenix,2023,Brand New,Asia,Auto,MPV
+4,Toyota,Fortuner,2018,Excellent,Asia,Auto,SUV
+5,Toyota,Supra MK5,2021,Mint,Asia,Auto,Sport
+6,Honda,Brio,2019,Good,Asia,Manual,Hatchback
+7,Honda,Civic,2022,Brand New,Asia,Auto,Sedan
+8,Honda,Freed,2015,Project Car,Asia,Auto,MPV
+9,Honda,CR-V,2021,Excellent,Asia,Auto,SUV
+10,Honda,NSX,1995,Project Car,Asia,Manual,Sport
+11,Nissan,March,2014,Good,Asia,Manual,Hatchback
+12,Nissan,Teana,2016,Good,Asia,Auto,Sedan
+13,Nissan,Serena,2019,Mint,Asia,Auto,MPV
+14,Nissan,X-Trail,2020,Excellent,Asia,Auto,SUV
+15,Nissan,GT-R R35,2022,Brand New,Asia,Auto,Sport
+16,Mazda,Mazda2,2018,Excellent,Asia,Auto,Hatchback
+17,Mazda,Mazda3,2021,Mint,Asia,Auto,Sedan
+18,Mazda,Biante,2017,Good,Asia,Auto,MPV
+19,Mazda,CX-5,2022,Brand New,Asia,Auto,SUV
+20,Mazda,RX-7,2002,Project Car,Asia,Manual,Sport
+21,Suzuki,Baleno,2019,Good,Asia,Manual,Hatchback
+22,Suzuki,Ciaz,2018,Excellent,Asia,Auto,Sedan
+23,Suzuki,Ertiga,2023,Brand New,Asia,Auto,MPV
+24,Suzuki,XL7,2021,Mint,Asia,Auto,SUV
+25,Suzuki,Swift Sport,2020,Excellent,Asia,Manual,Sport
+26,Mitsubishi,Mirage,2016,Good,Asia,Auto,Hatchback
+27,Mitsubishi,Lancer Evo X,2008,Project Car,Asia,Manual,Sedan
+28,Mitsubishi,Xpander,2022,Brand New,Asia,Auto,MPV
+29,Mitsubishi,Pajero Sport,2021,Mint,Asia,Auto,SUV
+30,Mitsubishi,3000GT,1998,Project Car,Asia,Manual,Sport
+31,Hyundai,i20,2020,Excellent,Asia,Auto,Hatchback
+32,Hyundai,Sonata,2019,Good,Asia,Auto,Sedan
+33,Hyundai,Stargazer,2023,Brand New,Asia,Auto,MPV
+34,Hyundai,Palisade,2022,Mint,Asia,Auto,SUV
+35,Hyundai,Veloster N,2021,Excellent,Asia,Manual,Sport
+36,Kia,Rio,2017,Good,Asia,Auto,Hatchback
+37,Kia,Optima,2018,Excellent,Asia,Auto,Sedan
+38,Kia,Carnival,2022,Brand New,Asia,Auto,MPV
+39,Kia,Sorento,2021,Mint,Asia,Auto,SUV
+40,Kia,Stinger,2020,Excellent,Asia,Auto,Sport
+41,Subaru,Impreza,2019,Good,Asia,Manual,Hatchback
+42,Subaru,Legacy,2020,Excellent,Asia,Auto,Sedan
+43,Subaru,Exiga,2015,Project Car,Asia,Auto,MPV
+44,Subaru,Forester,2022,Brand New,Asia,Auto,SUV
+45,Subaru,BRZ,2023,Brand New,Asia,Manual,Sport
+46,Lexus,CT200h,2016,Good,Asia,Auto,Hatchback
+47,Lexus,ES300,2018,Excellent,Asia,Auto,Sedan
+48,Lexus,LM350,2022,Mint,Asia,Auto,MPV
+49,Lexus,RX300,2021,Mint,Asia,Auto,SUV
+50,Lexus,LFA,2012,Project Car,Asia,Auto,Sport
+51,Ford,Fiesta,2018,Good,Amerika,Manual,Hatchback
+52,Ford,Fusion,2019,Excellent,Amerika,Auto,Sedan
+53,Ford,Galaxy,2017,Good,Amerika,Auto,MPV
+54,Ford,Explorer,2022,Brand New,Amerika,Auto,SUV
+55,Ford,Mustang GT,2023,Brand New,Amerika,Manual,Sport
+56,Chevrolet,Spark,2019,Good,Amerika,Auto,Hatchback
+57,Chevrolet,Malibu,2020,Mint,Amerika,Auto,Sedan
+58,Chevrolet,Orlando,2016,Project Car,Amerika,Auto,MPV
+59,Chevrolet,Tahoe,2021,Excellent,Amerika,Auto,SUV
+60,Chevrolet,Corvette Z06,2022,Mint,Amerika,Auto,Sport
+61,Dodge,Caliber,2015,Good,Amerika,Auto,Hatchback
+62,Dodge,Charger,2021,Mint,Amerika,Auto,Sedan
+63,Dodge,Grand Caravan,2019,Excellent,Amerika,Auto,MPV
+64,Dodge,Durango,2022,Brand New,Amerika,Auto,SUV
+65,Dodge,Challenger SRT,2023,Brand New,Amerika,Manual,Sport
+66,Jeep,Compass,2018,Good,Amerika,Auto,Hatchback
+67,Chrysler,300,2020,Excellent,Amerika,Auto,Sedan
+68,Chrysler,Pacifica,2022,Mint,Amerika,Auto,MPV
+69,Jeep,Grand Cherokee,2021,Excellent,Amerika,Auto,SUV
+70,Jeep,Wrangler Rubicon,2023,Brand New,Amerika,Auto,Sport
+71,Tesla,Model S,2022,Brand New,Amerika,Auto,Sedan
+72,Tesla,Model 3,2021,Mint,Amerika,Auto,Sedan
+73,Tesla,Model X,2020,Excellent,Amerika,Auto,MPV
+74,Tesla,Model Y,2023,Brand New,Amerika,Auto,SUV
+75,Tesla,Roadster,2011,Project Car,Amerika,Auto,Sport
+76,Cadillac,CTS,2018,Good,Amerika,Auto,Sedan
+77,Cadillac,CT5,2021,Mint,Amerika,Auto,Sedan
+78,Cadillac,XT6,2022,Brand New,Amerika,Auto,Sedan
+79,Cadillac,Escalade,2023,Brand New,Amerika,Auto,SUV
+80,Cadillac,CT4-V,2022,Excellent,Amerika,Auto,Sport
+81,GMC,Acadia,2019,Good,Amerika,Auto,SUV
+82,GMC,Yukon,2021,Mint,Amerika,Auto,SUV
+83,GMC,Terrain,2020,Excellent,Amerika,Auto,SUV
+84,Buick,Encore,2018,Good,Amerika,Auto,SUV
+85,Buick,Enclave,2022,Brand New,Amerika,Auto,SUV
+86,Lincoln,Regal,2017,Project Car,Amerika,Auto,Sedan
+87,Lincoln,Continental,2020,Excellent,Amerika,Auto,Sedan
+88,Lincoln,Navigator,2023,Brand New,Amerika,Auto,SUV
+89,Lincoln,Aviator,2021,Mint,Amerika,Auto,SUV
+90,Ford,Focus RS,2018,Excellent,Amerika,Manual,Sport
+91,Chevrolet,Sonic,2017,Good,Amerika,Manual,Hatchback
+92,Chevrolet,Impala,2019,Excellent,Amerika,Auto,Sedan
+93,Chrysler,Voyager,2020,Mint,Amerika,Auto,MPV
+94,Jeep,Renegade,2022,Brand New,Amerika,Auto,SUV
+95,Dodge,Viper,2016,Project Car,Amerika,Manual,Sport
+96,Ford,Puma,2019,Good,Amerika,Manual,Hatchback
+97,Tesla,Cybertruck,2024,Brand New,Amerika,Auto,SUV
+98,Chevrolet,Suburban,2021,Mint,Amerika,Auto,SUV
+99,Cadillac,ATS-V,2018,Excellent,Amerika,Auto,Sport
+100,Ford,GT,2020,Mint,Amerika,Auto,Sport
+101,BMW,118i,2019,Good,Eropa,Auto,Hatchback
+102,BMW,320i,2021,Mint,Eropa,Auto,Sedan
+103,BMW,218i Active Tourer,2018,Excellent,Eropa,Auto,MPV
+104,BMW,X5,2022,Brand New,Eropa,Auto,SUV
+105,BMW,M4,2023,Brand New,Eropa,Auto,Sport
+106,Mercedes-Benz,A200,2020,Excellent,Eropa,Auto,Hatchback
+107,Mercedes-Benz,C300,2021,Mint,Eropa,Auto,Sedan
+108,Mercedes-Benz,V250,2019,Good,Eropa,Auto,MPV
+109,Mercedes-Benz,GLE400,2022,Brand New,Eropa,Auto,SUV
+110,Mercedes-Benz,AMG GT,2020,Excellent,Eropa,Auto,Sport
+111,Audi,A1,2018,Good,Eropa,Auto,Hatchback
+112,Audi,A4,2021,Mint,Eropa,Auto,Sedan
+113,Audi,Q2,2019,Excellent,Eropa,Auto,MPV
+114,Audi,Q7,2023,Brand New,Eropa,Auto,SUV
+115,Audi,R8,2022,Mint,Eropa,Auto,Sport
+116,Volkswagen,Golf GTI,2021,Excellent,Eropa,Auto,Hatchback
+117,Volkswagen,Passat,2019,Good,Eropa,Auto,Sedan
+118,Volkswagen,Touran,2017,Project Car,Eropa,Auto,MPV
+119,Volkswagen,Tiguan,2022,Brand New,Eropa,Auto,SUV
+120,Volkswagen,Scirocco R,2016,Project Car,Eropa,Auto,Sport
+121,Volvo,V40,2018,Good,Eropa,Auto,Hatchback
+122,Volvo,S60,2021,Mint,Eropa,Auto,Sedan
+123,Volvo,V90,2020,Excellent,Eropa,Auto,MPV
+124,Volvo,XC90,2023,Brand New,Eropa,Auto,SUV
+125,Volvo,Polestar 1,2022,Mint,Eropa,Auto,Sport
+126,Porsche,Macan,2021,Excellent,Eropa,Auto,Hatchback
+127,Porsche,Panamera,2020,Mint,Eropa,Auto,Sedan
+128,Porsche,Cayenne,2022,Brand New,Eropa,Auto,SUV
+129,Porsche,911 Carrera,2023,Brand New,Eropa,Auto,Sport
+130,Porsche,718 Cayman,2019,Good,Eropa,Auto,Sport
+131,Peugeot,208,2020,Excellent,Eropa,Auto,Hatchback
+132,Peugeot,508,2021,Mint,Eropa,Auto,Sedan
+133,Peugeot,5008,2019,Good,Eropa,Auto,MPV
+134,Peugeot,3008,2022,Brand New,Eropa,Auto,SUV
+135,Peugeot,RCZ,2015,Project Car,Eropa,Manual,Sport
+136,Renault,Clio,2018,Good,Eropa,Manual,Hatchback
+137,Renault,Megane,2020,Excellent,Eropa,Auto,Sedan
+138,Renault,Espace,2017,Project Car,Eropa,Auto,MPV
+139,Renault,Koleos,2021,Mint,Eropa,Auto,SUV
+140,Renault,Alpine A110,2022,Brand New,Eropa,Auto,Sport
+141,Ferrari,GTC4Lusso,2019,Excellent,Eropa,Auto,Hatchback
+142,Ferrari,Roma,2021,Mint,Eropa,Auto,Sedan
+143,Ferrari,Purosangue,2023,Brand New,Eropa,Auto,SUV
+144,Ferrari,488 GTB,2018,Good,Eropa,Auto,Sport
+145,Ferrari,SF90 Stradale,2024,Brand New,Eropa,Auto,Sport
+146,Lamborghini,Urus,2023,Brand New,Eropa,Auto,SUV
+147,Lamborghini,Huracan,2021,Mint,Eropa,Auto,Sport
+148,Lamborghini,Aventador,2019,Excellent,Eropa,Auto,Sport
+149,Maserati,Ghibli,2020,Good,Eropa,Auto,Sedan
+150,Maserati,Levante,2022,Mint,Eropa,Auto,SUV
+151,Esemka,Garuda 1,2020,Mint,Asia,Manual,SUV
+152,Esemka,Garuda 2,2022,Excellent,Asia,Auto,SUV
+153,Esemka,Bima EV,2023,Brand New,Asia,Auto,MPV
+154,Esemka,Bima 1.2,2018,Project Car,Asia,Manual,MPV
+155,Esemka,Bima 1.3,2021,Mint,Asia,Manual,MPV
+156,Pindad,Maung,2022,Excellent,Asia,Manual,SUV
+157,Pindad,Maung 4x4,2023,Brand New,Asia,Auto,SUV
+158,Pindad,MV2,2021,Good,Asia,Manual,SUV
+159,Pindad,MV3 Garuda,2024,Brand New,Asia,Auto,SUV
+160,Pindad,Maung EV,2024,Brand New,Asia,Auto,SUV
