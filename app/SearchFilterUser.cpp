@@ -8,9 +8,6 @@ using namespace std;
 
 extern string keHurufKecil(string teks);
 
-// ==========================================
-// STRUKTUR DATA RIWAYAT (Linked List)
-// ==========================================
 struct RiwayatPencarian {
     string kata;
     RiwayatPencarian *next;
@@ -19,7 +16,6 @@ struct RiwayatPencarian {
 RiwayatPencarian *topRiwayatPencarian = nullptr;
 
 void simpanRiwayatPencarian(string kata) {
-    // Sedikit perbaikan: Jangan simpan ke riwayat jika kata kosong atau sekadar "0"
     if (kata == "" || kata == "0") { 
         return;
     }
@@ -52,9 +48,6 @@ void hapusRiwayatPencarian() {
     }
 }
 
-// ==========================================
-// FUNGSI UTAMA PENCARIAN (Sudah digabung)
-// ==========================================
 void cariMobil() {
     string inputBuffer;
 
@@ -75,7 +68,6 @@ void cariMobil() {
         cout << "----------------------------------------\n";
         cout << "Pilihan: ";
 
-        // Membaca input menu menggunakan getline agar bebas bug Enter
         getline(cin, inputBuffer);
         if (inputBuffer.empty()) continue;
 
@@ -83,12 +75,11 @@ void cariMobil() {
         try {
             pilihanMenu = stoi(inputBuffer);
         } catch (...) {
-            continue; // Kalau ngetik huruf, refresh menu
+            continue;
         }
 
-        // --- EKSEKUSI MENU ---
         if (pilihanMenu == 0) {
-            return; // Keluar sepenuhnya dari fitur ini
+            return;
         } 
         else if (pilihanMenu == 2) {
             tampilkanRiwayatPencarian();
@@ -107,24 +98,20 @@ void cariMobil() {
             cout << "\nMasukkan Model ('0' untuk semua, atau tekan Enter untuk batal): ";
             getline(cin, inputBuffer);
 
-            // Batal mencari jika cuma tekan Enter
             if (inputBuffer.empty()) {
                 continue; 
             }
 
-            // Simpan kata ke Linked List Riwayat
             simpanRiwayatPencarian(inputBuffer);
 
             string keyKecil = keHurufKecil(inputBuffer);
 
-            // Bersihkan layar sebelum mencetak tabel
             #ifdef _WIN32
                 system("cls");
             #else
                 system("clear");
             #endif
 
-            // Cetak Header Tabel Lebar (105 karakter)
             cout << "\n" << setfill('=') << setw(105) << "=" << setfill(' ') << endl;
             cout << left << " " << setw(5) << "ID" << setw(15) << "MERK" << setw(20) << "MODEL" 
                  << setw(8) << "TAHUN" << setw(15) << "KONDISI" << setw(12) << "TIPE" 
@@ -133,7 +120,6 @@ void cariMobil() {
 
             int counter = 0;
 
-            // Proses Pencarian
             for (Kategori* currKat = headKategori; currKat != nullptr; currKat = currKat->next) {
                 for (Mobil* temp = currKat->head; temp != nullptr; temp = temp->next) {
                     string modelKecil = keHurufKecil(temp->Model);
@@ -151,7 +137,6 @@ void cariMobil() {
                 }
             }
 
-            // Cetak Footer Tabel
             if (counter > 0) {
                 cout << setfill('=') << setw(105) << "=" << setfill(' ') << endl;
                 cout << "Berhasil menemukan " << counter << " unit." << endl;
