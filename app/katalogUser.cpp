@@ -9,6 +9,13 @@
 using namespace std;
 
 Kategori* headKategori = nullptr;
+TreeNodeAngka* rootTahun = nullptr;
+TreeNodeTeks* rootMerk = nullptr;
+TreeNodeTeks* rootKondisi = nullptr;
+TreeNodeTeks* rootBenua = nullptr;
+TreeNodeTeks* rootTransmisi = nullptr;
+TreeNodeTeks* rootTipe = nullptr;
+
 const string dbMobil = "database_mobil.csv";
 Kategori* cariAtauBuatKategori(string merk) {
     Kategori* temp = headKategori;
@@ -33,26 +40,87 @@ Kategori* cariAtauBuatKategori(string merk) {
     }
     return baru;
 }
+// 1. Fungsi Insert untuk Pohon Angka (Tahun)
+void insertTreeTahun(TreeNodeAngka*& node, Mobil* mobilBaru) {
+    if (node == nullptr) {
+        node = new TreeNodeAngka;
+        node->keyTahun = mobilBaru->Tahun;
+        
+        ListMobilNode* listBaru = new ListMobilNode;
+        listBaru->dataMobil = mobilBaru;
+        listBaru->next = nullptr;
+        
+        node->headMobil = listBaru;
+        node->left = nullptr;
+        node->right = nullptr;
+        return;
+    }
 
+    if (mobilBaru->Tahun < node->keyTahun) {
+        insertTreeTahun(node->left, mobilBaru);
+    } else if (mobilBaru->Tahun > node->keyTahun) {
+        insertTreeTahun(node->right, mobilBaru);
+    } else {
+        // Jika tahun sama, tambahkan ke Linked List di node ini (Insert First)
+        ListMobilNode* listBaru = new ListMobilNode;
+        listBaru->dataMobil = mobilBaru;
+        listBaru->next = node->headMobil;
+        node->headMobil = listBaru;
+    }
+}
+
+void insertTreeTeks(TreeNodeTeks*& node, Mobil* mobilBaru, string nilaiKey) {
+    string keyKecil = keHurufKecil(nilaiKey);
+
+    if (node == nullptr) {
+        node = new TreeNodeTeks;
+        node->keyTeks = keyKecil; 
+        
+        ListMobilNode* listBaru = new ListMobilNode;
+        listBaru->dataMobil = mobilBaru;
+        listBaru->next = nullptr;
+        
+        node->headMobil = listBaru;
+        node->left = nullptr;
+        node->right = nullptr;
+        return;
+    }
+
+    if (keyKecil < node->keyTeks) {
+        insertTreeTeks(node->left, mobilBaru, nilaiKey);
+    } else if (keyKecil > node->keyTeks) {
+        insertTreeTeks(node->right, mobilBaru, nilaiKey);
+    } else {
+        // Jika kriteria sama
+        ListMobilNode* listBaru = new ListMobilNode;
+        listBaru->dataMobil = mobilBaru;
+        listBaru->next = node->headMobil;
+        node->headMobil = listBaru;
+    }
+}
 
 void inisialisasiData() {
     ifstream file(dbMobil.c_str());
     if (!file.is_open()) return;
 
     string line;
-    getline(file, line); 
+    getline(file, line); // Skip header CSV
 
     while (getline(file, line)) {
         if(line.empty()) continue;
         
         stringstream ss(line);
-        string idStr, merkStr, modelStr, tahunStr, kondisiStr;
+        string idStr, merkStr, modelStr, tahunStr, kondisiStr, benuaStr, transmisiStr, tipeStr;
 
+        // Baca 8 kolom dari CSV
         getline(ss, idStr,      ','); 
         getline(ss, merkStr,    ','); 
         getline(ss, modelStr,   ','); 
         getline(ss, tahunStr,   ',');
         getline(ss, kondisiStr, ','); 
+        getline(ss, benuaStr,   ','); // BARU
+        getline(ss, transmisiStr, ','); // BARU
+        getline(ss, tipeStr,    ','); // BARU
 
         Mobil* baru   = new Mobil;
         baru->id      = stoi(idStr);
@@ -60,14 +128,25 @@ void inisialisasiData() {
         baru->Model   = modelStr;
         baru->Tahun   = stoi(tahunStr);
         baru->Kondisi = kondisiStr;
+        baru->Benua   = benuaStr;       // BARU
+        baru->Transmisi = transmisiStr; // BARU
+        baru->Tipe    = tipeStr;        // BARU
         baru->next    = nullptr;
         baru->prev    = nullptr;
         
-        // Cari atau buat kategori secara dinamis
+        // 1. Masukkan ke Linked List utama (Kategori)
         Kategori* kat = cariAtauBuatKategori(merkStr);
         baru->next = kat->head;
         if (kat->head != nullptr) kat->head->prev = baru;
         kat->head = baru;
+
+        // 2. SEBARKAN KE 6 POHON INDEX!
+        insertTreeTahun(rootTahun, baru);
+        insertTreeTeks(rootMerk, baru, baru->Merk);
+        insertTreeTeks(rootKondisi, baru, baru->Kondisi);
+        insertTreeTeks(rootBenua, baru, baru->Benua);
+        insertTreeTeks(rootTransmisi, baru, baru->Transmisi);
+        insertTreeTeks(rootTipe, baru, baru->Tipe);
     }
     file.close();
 }
