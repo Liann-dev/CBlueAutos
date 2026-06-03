@@ -8,6 +8,8 @@ struct User {
     std::string username;
     std::string password;
     std::string role;
+    bool status;
+    std::string login_count;
 };
 
 void registerUser();

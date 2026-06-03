@@ -48,7 +48,7 @@ int main() {
                 if (userTerdaftar.role == "admin") {
                     menuUtamaAdmin(userTerdaftar.role);
                 } else if (userTerdaftar.role == "user") {
-                    menuUtama(userTerdaftar.role);
+                    menuUtama(userTerdaftar.role, userTerdaftar.login_count);
                 } else {
                     cout << "Role tidak dikenali. Kembali ke menu utama.\n";
                 }

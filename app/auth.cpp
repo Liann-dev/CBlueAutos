@@ -188,6 +188,7 @@ bool loginUser(User &userTerdaftar) {
                 userTerdaftar.id = stoi(id);
                 userTerdaftar.username = fUser;
                 userTerdaftar.role = fRole;
+                userTerdaftar.login_count = fLoginCount;
             }
 
             dataBaru += id + "," +
