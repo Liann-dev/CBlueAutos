@@ -72,7 +72,10 @@ void tambahUnit(Kategori &kat, string model, int tahun, string kondisi);
 void tampilkanKatalog();
 void cariMobil();
 void filterMobil();
-
+void show_splash();
+void show_onboarding();
+void loading_admin_transition();
+void loading_exit_admin();
 void tambahMobilAdmin();
 void tampilkanKatalogAdmin();
 void hapusMobilAdmin();
