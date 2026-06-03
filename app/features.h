@@ -3,15 +3,17 @@
 
 #include <string>
 using namespace std;
-struct Mobil
-{
+struct Mobil {
     int id;
     string Merk;
     string Model;
     int Tahun;
     string Kondisi;
-    Mobil *next;
-    Mobil *prev;
+    string Benua;       
+    string Transmisi; 
+    string Tipe;        
+    Mobil* prev;
+    Mobil* next;
 };
 
 struct Kategori
@@ -20,6 +22,25 @@ struct Kategori
     Mobil *head;
     Kategori *next;
     Kategori *prev;
+};
+
+struct ListMobilNode {
+    Mobil* dataMobil;
+    ListMobilNode* next;
+};
+
+struct TreeNodeAngka {
+    int keyTahun;
+    ListMobilNode* headMobil; 
+    TreeNodeAngka* left;
+    TreeNodeAngka* right;
+};
+
+struct TreeNodeTeks {
+    string keyTeks; 
+    ListMobilNode* headMobil; 
+    TreeNodeTeks* left;
+    TreeNodeTeks* right;
 };
 
 struct Page
@@ -32,11 +53,13 @@ struct Page
     Page *prev;
 };
 
-// ==========================================
-// VARIABEL GLOBAL (Agar dikenali semua file)
-// ==========================================
-// Di dalam features.h
 extern Kategori *headKategori;
+extern TreeNodeAngka *rootTahun;        
+extern TreeNodeTeks *rootMerk;          
+extern TreeNodeTeks *rootKondisi;       
+extern TreeNodeTeks *rootBenua;         
+extern TreeNodeTeks *rootTransmisi;     
+extern TreeNodeTeks *rootTipe;          
 
 // ==========================================
 // FUNGSI BANTUAN (UTILITY)
@@ -49,7 +72,10 @@ void tambahUnit(Kategori &kat, string model, int tahun, string kondisi);
 void tampilkanKatalog();
 void cariMobil();
 void filterMobil();
-
+void show_splash();
+void show_onboarding();
+void loading_admin_transition();
+void loading_exit_admin();
 void tambahMobilAdmin();
 void tampilkanKatalogAdmin();
 void hapusMobilAdmin();
@@ -58,5 +84,6 @@ void cariMobilAdmin();
 void filterMobilAdmin();
 void sinkronisasiKeCSV();
 void showTableData();
-
+void insertTreeTahun(TreeNodeAngka*& root, Mobil* mobilBaru);
+void insertTreeTeks(TreeNodeTeks*& root, Mobil* mobilBaru, string nilaiKey);
 #endif
