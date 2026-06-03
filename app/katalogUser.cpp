@@ -10,6 +10,7 @@ using namespace std;
 
 Kategori* headKategori = nullptr;
 const string dbMobil = "database_mobil.csv";
+
 Kategori* cariAtauBuatKategori(string merk) {
     Kategori* temp = headKategori;
     Kategori* tail = nullptr;
@@ -63,7 +64,6 @@ void inisialisasiData() {
         baru->next    = nullptr;
         baru->prev    = nullptr;
         
-        // Cari atau buat kategori secara dinamis
         Kategori* kat = cariAtauBuatKategori(merkStr);
         baru->next = kat->head;
         if (kat->head != nullptr) kat->head->prev = baru;
@@ -136,7 +136,6 @@ Page* bangunHalaman() {
 
     if (allHead == nullptr) return nullptr;
 
-    
     allHead = mergeSort(allHead);
 
     Page* headPage    = nullptr;
@@ -155,7 +154,6 @@ Page* bangunHalaman() {
         else headPage = hal;
         tailPage = hal;
 
-
         for (int i = 0; i < 10 && curr != nullptr; i++) {
             hal->items[i]     = curr;
             hal->merkItems[i] = curr->Merk; 
@@ -168,45 +166,45 @@ Page* bangunHalaman() {
 }
 
 void cetakHalaman(Page* hal, int totalHalaman) {
-    #ifdef _WIN32
+      #ifdef _WIN32
         system("cls");
     #else
         system("clear");
     #endif
 
-    cout << "\n" << setfill('=') << setw(70) << "=" << setfill(' ') << endl;
-    cout << "  KATALOG MOBIL  |  Halaman " << hal->nomorHalaman
-         << " dari " << totalHalaman << endl;
-    cout << setfill('=') << setw(70) << "=" << setfill(' ') << endl;
+    cout << "\n===========================================================================\n";
+    cout << "                             KATALOG MOBIL                                \n";
+    cout << "===========================================================================\n";
+
     cout << left
-         << setw(5)  << "ID"
-         << setw(12) << "MERK"
-         << setw(22) << "MODEL"
-         << setw(8)  << "TAHUN"
+         << setw(6)  << "ID"
+         << setw(15) << "MERK"
+         << setw(25) << "MODEL"
+         << setw(10) << "TAHUN"
          << "KONDISI" << endl;
-    cout << setfill('-') << setw(70) << "-" << setfill(' ') << endl;
+
+    cout << setfill('-') << setw(75) << "-" << setfill(' ') << endl;
 
     for (int i = 0; i < hal->jumlah; i++) {
+        string modelTeks = hal->items[i]->Model;
+        if (modelTeks.length() > 22) {
+            modelTeks = modelTeks.substr(0, 19) + "...";
+        }
         cout << left
-             << setw(5)  << hal->items[i]->id
-             << setw(12) << hal->merkItems[i]
-             << setw(22) << hal->items[i]->Model
-             << setw(8)  << hal->items[i]->Tahun
+             << setw(6)  << hal->items[i]->id
+             << setw(15) << hal->merkItems[i]
+             << setw(25) << modelTeks
+             << setw(10) << hal->items[i]->Tahun
              << hal->items[i]->Kondisi << endl;
     }
 
-    cout << setfill('-') << setw(70) << "-" << setfill(' ') << endl;
+    cout << setfill('=') << setw(75) << "=" << setfill(' ') << endl;
 
-    if (hal->prev) cout << "  << [P] Prev (Hal " << hal->prev->nomorHalaman << ")";
-    else           cout << "  << (Awal)          ";
-    
-    cout << "    |    ";
-    
-    if (hal->next) cout << "[N] Next (Hal " << hal->next->nomorHalaman << ") >>";
-    else           cout << "          (Akhir) >>";
-
-    cout << "\n  [X] Kembali ke Menu" << endl;
-    cout << setfill('=') << setw(70) << "=" << setfill(' ') << endl;
+    cout << " Halaman " << hal->nomorHalaman << " dari " << totalHalaman << endl;
+    cout << "---------------------------------------------------------------------------\n";
+    cout << "  [N] Next Page   |   [P] Prev Page   |   [X] Kembali ke Menu\n";
+    cout << "---------------------------------------------------------------------------\n";
+    cout << "Pilihan: ";
 }
 
 void hapusHalaman(Page* head) {
@@ -239,10 +237,8 @@ void tampilkanKatalog() {
 
     while (true) {
         cetakHalaman(current, totalHalaman);
-        cout << "  Input (n/p/x): ";
         cin  >> input;
         
-        // Memaksa apapun inputnya (n kecil atau N besar) menjadi N besar
         input = toupper(input);
 
         if (input == 'N') {
@@ -250,20 +246,20 @@ void tampilkanKatalog() {
                 current = current->next;
             } else {
                 cout << "  >> Sudah di halaman terakhir!\n";
-                cin.ignore(1000, '\n'); cin.get(); // Jeda agar pesan terbaca
+                cin.ignore(1000, '\n'); cin.get();
             }
         } else if (input == 'P') {
             if (current->prev) {
                 current = current->prev;
             } else {
                 cout << "  >> Sudah di halaman pertama!\n";
-                cin.ignore(1000, '\n'); cin.get(); // Jeda agar pesan terbaca
+                cin.ignore(1000, '\n'); cin.get();
             }
         } else if (input == 'X') {
             break;
         } else {
             cout << "  >> Input tidak valid! Gunakan N / P / X\n";
-            cin.ignore(1000, '\n'); cin.get(); // Jeda agar pesan terbaca
+            cin.ignore(1000, '\n'); cin.get();
         }
     }
 

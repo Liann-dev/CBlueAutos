@@ -154,7 +154,7 @@ void tampilkanKatalogAdmin() {
 
         if (pilihan == 'X' || pilihan == 'x') {
             break; 
-        } else if (pilihan == 'N' || pilihan == 'N') {
+        } else if (pilihan == 'n' || pilihan == 'N') {
             if (halamanSekarang < totalHalaman) halamanSekarang++;
         } else if (pilihan == 'p' || pilihan == 'P') {
             if (halamanSekarang > 1) halamanSekarang--;
