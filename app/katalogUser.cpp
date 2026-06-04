@@ -129,9 +129,9 @@ void inisialisasiData() {
         baru->Model   = modelStr;
         baru->Tahun   = stoi(tahunStr);
         baru->Kondisi = kondisiStr;
-        baru->Benua   = benuaStr;       // BARU
-        baru->Transmisi = transmisiStr; // BARU
-        baru->Tipe    = tipeStr;        // BARU
+        baru->Tipe    = tipeStr; 
+        baru->Transmisi = transmisiStr; 
+        baru->Benua   = benuaStr; // BARU
         baru->next    = nullptr;
         baru->prev    = nullptr;
         
@@ -145,9 +145,9 @@ void inisialisasiData() {
         insertTreeTahun(rootTahun, baru);
         insertTreeTeks(rootMerk, baru, baru->Merk);
         insertTreeTeks(rootKondisi, baru, baru->Kondisi);
-        insertTreeTeks(rootBenua, baru, baru->Benua);
+        insertTreeTeks(rootBenua, baru, baru->Tipe);
         insertTreeTeks(rootTransmisi, baru, baru->Transmisi);
-        insertTreeTeks(rootTipe, baru, baru->Tipe);
+        insertTreeTeks(rootTipe, baru, baru->Benua);
     }
     file.close();
 }
@@ -252,18 +252,21 @@ void cetakHalaman(Page* hal, int totalHalaman) {
         system("clear");
     #endif
 
-    cout << "\n===========================================================================\n";
+    cout << "\n=====================================================================================\n";
     cout << "                             KATALOG MOBIL                                \n";
-    cout << "===========================================================================\n";
+    cout << "=======================================================================================\n";
 
     cout << left
          << setw(6)  << "ID"
          << setw(15) << "MERK"
          << setw(25) << "MODEL"
          << setw(10) << "TAHUN"
-         << "KONDISI" << endl;
+         << setw(15) << "KONDISI"
+         << setw(10) << "TIPE"
+         << setw(12) << "TRANSMISI"
+         << "BENUA" << endl;
 
-    cout << setfill('-') << setw(75) << "-" << setfill(' ') << endl;
+    cout << setfill('-') << setw(106) << "-" << setfill(' ') << endl;
 
     for (int i = 0; i < hal->jumlah; i++) {
         string modelTeks = hal->items[i]->Model;
@@ -275,10 +278,13 @@ void cetakHalaman(Page* hal, int totalHalaman) {
              << setw(15) << hal->merkItems[i]
              << setw(25) << modelTeks
              << setw(10) << hal->items[i]->Tahun
-             << hal->items[i]->Kondisi << endl;
+             << setw(15) << hal->items[i]->Kondisi
+             << setw(10) << hal->items[i]->Tipe
+             << setw(12) << hal->items[i]->Transmisi
+             << hal->items[i]->Benua << endl;
     }
 
-    cout << setfill('=') << setw(75) << "=" << setfill(' ') << endl;
+    cout << setfill('=') << setw(106) << "=" << setfill(' ') << endl;
 
     cout << " Halaman " << hal->nomorHalaman << " dari " << totalHalaman << endl;
     cout << "---------------------------------------------------------------------------\n";
