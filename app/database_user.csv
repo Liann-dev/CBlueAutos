@@ -6,4 +6,7 @@ id,username,password,role,status,login_count
 5,capek,capek1234,user,false,2
 6,udin,udin1234,user,false,2
 7,kirto,kirto1234,user,false,2
-8,lian,lian1234,user,false,2
+8,lian,lian1234,user,false,3
+9,admin,admin123,admin,false,8
+10,Lian,Lian12345,user,false,5
+11,Lian12,lian1234,user,true,1

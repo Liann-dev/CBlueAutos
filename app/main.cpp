@@ -7,7 +7,6 @@
 
 using namespace std;
 
-// Deklarasi efek ngetik jika masih ada di utils.cpp
 void efekNgetik(string teks, int jedaMs = 30);
 
 int main() {
@@ -41,14 +40,12 @@ int main() {
         cout << "-------------------\n";
         cout << "Pilih menu: ";
 
-        // Validasi input anti-bug
         if (!(cin >> pilihan)) {
             cin.clear();
             cin.ignore(10000, '\n');
             continue;
         }
         
-        // Bersihkan sisa Enter (\n) agar getline di menu selanjutnya tidak bocor
         if (cin.peek() == '\n' || cin.peek() == '\r') {
             cin.ignore();
         }
@@ -58,25 +55,19 @@ int main() {
 
             if (loginBerhasil) {
                 if (userTerdaftar.role == "admin") {
-                    // --- TRANSISI MASUK ADMIN ---
                     loading_admin_transition(); 
-                    
-                    menuUtamaAdmin(userTerdaftar.role); // Masuk ke dalam menu Admin
-                    
-                    // --- TRANSISI KELUAR ADMIN (Terpicu saat admin memilih Logout) ---
+                    menuUtamaAdmin(userTerdaftar.role);
                     loading_exit_admin(); 
 
                 } else if (userTerdaftar.role == "user") {
-                    // Bisa pakai animasi loading standar jika ada, atau langsung masuk
                     cout << "\nMemasuki Garasi Utama...\n";
                     
-                    menuUtama(userTerdaftar.role, userTerdaftar.login_count); // Masuk ke dalam menu User
+                    menuUtama(userTerdaftar.role, userTerdaftar.login_count); 
                 } else {
                     cout << "Role tidak dikenali. Kembali ke menu utama.\n";
                     cin.get();
                 }
             } 
-            // Jika login gagal, fungsi loginUser sudah menangani pesannya
         } 
         else if (pilihan == 2) {
             registerUser();

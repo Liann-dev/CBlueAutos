@@ -116,8 +116,6 @@ void filterMobil() {
         #endif
 
         cout << "\n========================================" << endl;
-
-        cout << "\n========================================" << endl;
         cout << "           FILTER KATALOG MOBIL         " << endl;
         cout << "========================================" << endl;
         cout << "  [1] Berdasarkan Tahun" << endl;
