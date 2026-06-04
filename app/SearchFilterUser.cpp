@@ -19,7 +19,6 @@ struct RiwayatPencarian {
 RiwayatPencarian *topRiwayatPencarian = nullptr;
 
 void simpanRiwayatPencarian(string kata) {
-    // Sedikit perbaikan: Jangan simpan ke riwayat jika kata kosong atau sekadar "0"
     if (kata == "" || kata == "0") { 
         return;
     }
