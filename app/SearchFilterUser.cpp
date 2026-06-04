@@ -64,24 +64,23 @@ void cariMobil() {
         cout << " 1. Cari Mobil\n";
         cout << " 2. Lihat Riwayat Pencarian\n";
         cout << " 3. Hapus Riwayat Pencarian\n";
-        cout << " 0. Kembali ke Beranda\n";
         cout << "----------------------------------------\n";
-        cout << "Pilihan: ";
+        cout << "Pilihan (Tekan Enter untuk kembali): ";
 
         getline(cin, inputBuffer);
-        if (inputBuffer.empty()) continue;
+        
+        if (inputBuffer.empty()) {
+            break; 
+        }
 
         int pilihanMenu = -1;
         try {
-            pilihanMenu = stoi(inputBuffer);
+            pilihanMenu = stoi(inputBuffer); 
         } catch (...) {
-            continue;
+            pilihanMenu = -1; 
         }
 
-        if (pilihanMenu == 0) {
-            return;
-        } 
-        else if (pilihanMenu == 2) {
+        if (pilihanMenu == 2) {
             tampilkanRiwayatPencarian();
             cout << "\nTekan Enter untuk kembali...";
             getline(cin, inputBuffer);
