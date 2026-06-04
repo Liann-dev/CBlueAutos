@@ -42,7 +42,7 @@ void tampilkanPreferensiTag(int id_user) {
     }
 
     string input;
-    cout << "\nChoices (min 3, pisah spasi): ";
+    cout << "\nChoices (max 3, pisah spasi): ";
     getline(cin, input);
 
     while (true) {
@@ -65,12 +65,16 @@ void tampilkanPreferensiTag(int id_user) {
             continue;
         }
 
+        cout << "Jumlah Tag: " << jumlahTag << endl;
+
+
         cout << "\n" << "Preferensi yang dipilih adalah:\n";
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < jumlahTag; i++) {
             cout << inputs[i] << ". " << styles[inputs[i] - 1] << endl;
         }
 
-        for (int i = 0; i < 3; i++) {
+
+        for (int i = 0; i < jumlahTag; i++) {
             tags[i] = styles[inputs[i] - 1];
         }
 

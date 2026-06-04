@@ -517,7 +517,7 @@ for(int i = 0; i < 5 && i < jumlahMobil; i++)
                  << dataMobil[j].tahun
                  << "|\n";
 
-            cout << "| ⚙️ "
+            cout << "| ⚙️  "
                  << left << setw(33)
                  << dataMobil[j].transmisi
                  << "|\n";
