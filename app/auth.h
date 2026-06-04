@@ -14,6 +14,6 @@ struct User {
 
 void registerUser();
 bool loginUser(User &userTerdaftar);
-std::string inputPassword(); // Fungsi baru untuk sensor
+std::string inputPassword(); 
 
 #endif

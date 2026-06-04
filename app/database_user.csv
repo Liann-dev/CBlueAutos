@@ -1,9 +1,12 @@
 id,username,password,role,status,login_count
-1,wawan,wawan123,user,false,3
+1,wawan,wawan123,user,false,10
 2,dhiya,dhiya123,user,false,2
 3,kika,kika1234,user,false,2
 4,lena,lena1234,user,false,2
 5,capek,capek1234,user,false,2
 6,udin,udin1234,user,false,2
-7,kirto,kirto1234,user,false,2
-8,lian,lian1234,user,false,2
+7,kirto,kirto1234,user,true,1
+8,lian,lian1234,user,false,4
+9,rifa,rifa1234,user,false,26
+10,cipek,cipek123,user,true,1
+11,riawnda,riawnda123,user,true,1
