@@ -10,7 +10,8 @@
 using namespace std;
 const int LEBAR_LAYAR = 80;
 string keHurufKecil(string teks) {
-    transform(teks.begin(), teks.end(), teks.begin(), ::tolower);
+    transform(teks.begin(), teks.end(), teks.begin(),
+              [](unsigned char c) -> char { return static_cast<char>(std::tolower(c)); });
     return teks;
 }
 
@@ -72,7 +73,7 @@ void show_splash() {
     cout << "\033[?25l"; // Sembunyikan kursor
     
     for (int i = 0; i <= total_loading; ++i) {
-        this_thread::sleep_for(chrono::milliseconds(50)); 
+        Sleep(50);
         int percent = (i * 100) / total_loading;
         
         // Logika pembuatan loading bar bergaya [=====>    ]
@@ -171,7 +172,7 @@ void loading_admin_transition() {
     cout << "\033[?25l"; 
     
     for (int i = 0; i <= total_loading; ++i) {
-        this_thread::sleep_for(chrono::milliseconds(40)); 
+        Sleep(40);
         int percent = (i * 100) / total_loading;
         
         string bar_isi = "";
@@ -188,7 +189,7 @@ void loading_admin_transition() {
 
     cout << "\033[?25h"; 
     cout << "\n\n";
-    this_thread::sleep_for(chrono::milliseconds(400));
+    Sleep(400);
 }
 
 // =========================================================
@@ -214,7 +215,7 @@ void loading_exit_admin() {
     cout << "\033[?25l"; 
     
     for (int i = 0; i <= total_loading; ++i) {
-        this_thread::sleep_for(chrono::milliseconds(25)); 
+        Sleep(25);
         int percent = (i * 100) / total_loading;
         
         string bar_isi = "";
@@ -231,5 +232,5 @@ void loading_exit_admin() {
 
     cout << "\033[?25h"; 
     cout << "\n\n";
-    this_thread::sleep_for(chrono::milliseconds(300));
+    Sleep(300);
 }
