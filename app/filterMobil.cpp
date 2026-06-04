@@ -7,8 +7,9 @@ using namespace std;
 
 ListMobilNode* cariDiTreeTeks(TreeNodeTeks* node, string targetTeks) {
     if (node == nullptr) return nullptr;
-    if (targetTeks == node->keyTeks) return node->headMobil;
-    if (targetTeks < node->keyTeks) return cariDiTreeTeks(node->left, targetTeks);
+    string keyNodeKecil = keHurufKecil(node->keyTeks);
+    if (targetTeks == keyNodeKecil) return node->headMobil;
+    if (targetTeks < keyNodeKecil) return cariDiTreeTeks(node->left, targetTeks);
     return cariDiTreeTeks(node->right, targetTeks);
 }
 
@@ -79,26 +80,34 @@ void cetakHasilFilter(ListMobilNode* head) {
         return;
     }
 
-    cout << "\n" << setfill('=') << setw(95) << "=" << setfill(' ') << endl;
+    // Mengubah lebar garis tabel menjadi 105 agar muat untuk semua kolom
+    cout << "\n" << setfill('=') << setw(105) << "=" << setfill(' ') << endl;
+    
+    // Menambahkan kolom TRANSMISI (dengan batas 12) dan BENUA di paling ujung
     cout << left << " " << setw(5) << "ID" << setw(15) << "MERK" << setw(20) << "MODEL" 
-         << setw(8) << "TAHUN" << setw(15) << "KONDISI" << setw(15) << "TIPE" << "TRANSMISI" << endl;
-    cout << setfill('-') << setw(95) << "-" << setfill(' ') << endl;
+         << setw(8) << "TAHUN" << setw(15) << "KONDISI" << setw(12) << "TIPE" 
+         << setw(12) << "TRANSMISI" << "BENUA" << endl;
+         
+    cout << setfill('-') << setw(105) << "-" << setfill(' ') << endl;
 
     int counter = 0;
     ListMobilNode* temp = head;
     while (temp != nullptr) {
         counter++;
         Mobil* m = temp->dataMobil;
+        
+        // Memotong nama model jika terlalu panjang agar tabel tidak rusak
         string modelTeks = m->Model;
         if (modelTeks.length() > 18) modelTeks = modelTeks.substr(0, 15) + "...";
         
+        // Menambahkan m->Transmisi dan m->Benua ke dalam baris output
         cout << left << " " << setw(5) << m->id << setw(15) << m->Merk 
              << setw(20) << modelTeks << setw(8) << m->Tahun << setw(15) << m->Kondisi 
-             << setw(15) << m->Tipe << m->Transmisi << endl;
+             << setw(12) << m->Tipe << setw(12) << m->Transmisi << m->Benua << endl;
         
         temp = temp->next;
     }
-    cout << setfill('=') << setw(95) << "=" << setfill(' ') << endl;
+    cout << setfill('=') << setw(105) << "=" << setfill(' ') << endl;
     cout << " Berhasil menemukan " << counter << " unit.\n";
 }
 
@@ -190,9 +199,15 @@ void filterMobil() {
 
             if (pilihanFilter == 2) nodeKetemu = cariDiTreeTeks(rootMerk, kataKunci);
             else if (pilihanFilter == 3) nodeKetemu = cariDiTreeTeks(rootKondisi, kataKunci);
-            else if (pilihanFilter == 4) nodeKetemu = cariDiTreeTeks(rootBenua, kataKunci);
-            else if (pilihanFilter == 5) nodeKetemu = cariDiTreeTeks(rootTransmisi, kataKunci);
-            else if (pilihanFilter == 6) nodeKetemu = cariDiTreeTeks(rootTipe, kataKunci);
+            else if (pilihanFilter == 4) nodeKetemu = cariDiTreeTeks(rootBenua, kataKunci); 
+            else if (pilihanFilter == 5) nodeKetemu = cariDiTreeTeks(rootTransmisi, kataKunci); 
+            else if (pilihanFilter == 6) nodeKetemu = cariDiTreeTeks(rootTipe, kataKunci); 
+            else if (nodeKetemu == nullptr) {
+            cout << "\n[!] Debug: Data tidak ditemukan di Tree untuk kata kunci: " << kataKunci << endl;
+            cout << "Tekan Enter untuk lanjut...";
+            getline(cin, inputBuffer);
+            continue;
+            }
 
             hasilPencarian = salinList(nodeKetemu);
         } else {

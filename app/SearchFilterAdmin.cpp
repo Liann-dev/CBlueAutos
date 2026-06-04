@@ -10,9 +10,6 @@
 
 using namespace std;
 
-// ======================
-// SEARCH ADMIN
-// ======================
 void cariMobilAdmin() {
     string key;
 

@@ -1,5 +1,5 @@
 id,username,password,role,status,login_count
-1,wawan,wawan123,user,false,3
+1,wawan,wawan123,user,false,10
 2,dhiya,dhiya123,user,false,2
 3,kika,kika1234,user,false,2
 4,lena,lena1234,user,false,2
@@ -10,3 +10,6 @@ id,username,password,role,status,login_count
 9,admin,admin123,admin,false,8
 10,Lian,Lian12345,user,false,5
 11,Lian12,lian1234,user,true,1
+8,lian,lian1234,user,false,4
+9,admin,admin1234,admin,false,6
+10,fahri,fahri1234,user,false,10
