@@ -2,13 +2,15 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <fstream>
 #include <iomanip>
 #include "homeUser.h"
 #include "features.h"
 
 using namespace std;
+string namaFile = "database_prefensi.csv";
 
-void tampilkanPreferensiTag() {
+void tampilkanPreferensiTag(int id_user) {
 
     cout << "\n=======================================================================\n";
     cout << "               WELCOME! LET'S BUILD YOUR DREAM GARAGE\n";
@@ -46,9 +48,14 @@ void tampilkanPreferensiTag() {
     while (true) {
         stringstream ss(input);
         int angka;
+        int inputs[3];
         int jumlahTag = 0;
+        string tags[3];
 
         while (ss >> angka) {
+            if (jumlahTag < 3 ) {
+                inputs[jumlahTag] = angka;
+            }
             jumlahTag++;
         }
 
@@ -58,17 +65,68 @@ void tampilkanPreferensiTag() {
             continue;
         }
 
+        cout << "\n" << "Preferensi yang dipilih adalah:\n";
+        for (int i = 0; i < 3; i++) {
+            cout << inputs[i] << ". " << styles[inputs[i] - 1] << endl;
+        }
+
+        for (int i = 0; i < 3; i++) {
+            tags[i] = styles[inputs[i] - 1];
+        }
+
+        integrasiDatabase(id_user, tags);
         break;
+
+
+
     }
+    
 
     cout << "\nPreferensi berhasil disimpan!\n";
 }
 
+// integrasi dengan database
+void integrasiDatabase(int idUser, string referensi[3])
+{
 
-void menuUtama(string role, string login_count) {
+    // Membaca file untuk mencari id terakhir
+    ifstream fileBaca(namaFile);
+    string line;
+    int lastId = 0;
+
+    // Lewati header
+    getline(fileBaca, line);
+
+    while (getline(fileBaca, line))
+    {
+        if (!line.empty())
+        {
+            lastId++;
+        }
+    }
+
+    fileBaca.close();
+
+    int id = lastId + 1;
+
+    // Append data baru
+    ofstream fileTulis(namaFile, ios::app);
+
+    fileTulis << id << ","
+              << idUser << ","
+              << referensi[0] << "|"
+              << referensi[1] << "|"
+              << referensi[2] << "\n";
+
+    fileTulis.close();
+}
+
+
+
+void menuUtama(string role, string login_count, int id_user) {
 
     if (login_count == "1") {
-        tampilkanPreferensiTag();
+        tampilkanPreferensiTag(id_user);
     }
 
     int pilihan;

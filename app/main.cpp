@@ -70,7 +70,7 @@ int main() {
                     // Bisa pakai animasi loading standar jika ada, atau langsung masuk
                     cout << "\nMemasuki Garasi Utama...\n";
                     
-                    menuUtama(userTerdaftar.role, userTerdaftar.login_count); // Masuk ke dalam menu User
+                    menuUtama(userTerdaftar.role, userTerdaftar.login_count, userTerdaftar.id); // Masuk ke dalam menu User
                 } else {
                     cout << "Role tidak dikenali. Kembali ke menu utama.\n";
                     cin.get();
