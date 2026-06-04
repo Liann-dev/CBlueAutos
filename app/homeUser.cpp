@@ -4,18 +4,45 @@
 #include <vector>
 #include <fstream>
 #include <iomanip>
+#include <thread>  
+#include <chrono>  
 #include "homeUser.h"
 #include "features.h"
 
 using namespace std;
 string namaFile = "database_prefensi.csv";
 
+extern void tampilkanDetailMobil(int idTarget); 
+
+void integrasiDatabase(int idUser, string referensi[3]) {
+    ifstream fileBaca(namaFile);
+    string line;
+    int lastId = 0;
+
+    getline(fileBaca, line);
+    while (getline(fileBaca, line)) {
+        if (!line.empty()) lastId++;
+    }
+    fileBaca.close();
+
+    int id = lastId + 1;
+    ofstream fileTulis(namaFile, ios::app);
+    fileTulis << id << "," << idUser << ","
+              << referensi[0] << "|" << referensi[1] << "|" << referensi[2] << "\n";
+    fileTulis.close();
+}
+
 void tampilkanPreferensiTag(int id_user) {
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
 
     cout << "\n=======================================================================\n";
     cout << "               WELCOME! LET'S BUILD YOUR DREAM GARAGE\n";
     cout << "=======================================================================\n";
-    cout << "Select at least 3 tags that best describe your automotive taste\n";
+    cout << "Select 1 to 3 tags that best describe your automotive taste\n";
     cout << "so we can recommend the perfect cars for you!\n\n";
 
     vector<string> styles = {
@@ -42,7 +69,7 @@ void tampilkanPreferensiTag(int id_user) {
     }
 
     string input;
-    cout << "\nChoices (max 3, pisah spasi): ";
+    cout << "\nChoices (Pilih 1 hingga 3 angka, pisahkan spasi, contoh: 1 5): ";
     getline(cin, input);
 
     while (true) {
@@ -50,123 +77,122 @@ void tampilkanPreferensiTag(int id_user) {
         int angka;
         int inputs[3];
         int jumlahTag = 0;
-        string tags[3];
+        bool valid = true;
 
         while (ss >> angka) {
-            if (jumlahTag < 3 ) {
+            if (angka < 1 || angka > total) {
+                valid = false;
+                break;
+            }
+            if (jumlahTag < 3) {
                 inputs[jumlahTag] = angka;
             }
             jumlahTag++;
         }
 
-        if (jumlahTag > 3) {
-            cout << "\nMaksimal hanya 3 tag! Coba lagi: ";
+        if (!valid || jumlahTag == 0 || jumlahTag > 3) {
+            cout << "\n[!] Input tidak valid! Anda harus memilih 1 hingga maksimal 3 angka (1-" << total << ").\n";
+            cout << "Coba lagi: ";
             getline(cin, input);
             continue;
         }
 
-        cout << "Jumlah Tag: " << jumlahTag << endl;
-
-
-        cout << "\n" << "Preferensi yang dipilih adalah:\n";
-        for (int i = 0; i < jumlahTag; i++) {
-            cout << inputs[i] << ". " << styles[inputs[i] - 1] << endl;
-        }
-
-
+        string tags[3] = {"", "", ""}; 
         for (int i = 0; i < jumlahTag; i++) {
             tags[i] = styles[inputs[i] - 1];
         }
 
         integrasiDatabase(id_user, tags);
         break;
-
-
-
     }
-    
-
-    cout << "\nPreferensi berhasil disimpan!\n";
 }
-
-// integrasi dengan database
-void integrasiDatabase(int idUser, string referensi[3])
-{
-
-    // Membaca file untuk mencari id terakhir
-    ifstream fileBaca(namaFile);
-    string line;
-    int lastId = 0;
-
-    // Lewati header
-    getline(fileBaca, line);
-
-    while (getline(fileBaca, line))
-    {
-        if (!line.empty())
-        {
-            lastId++;
-        }
-    }
-
-    fileBaca.close();
-
-    int id = lastId + 1;
-
-    // Append data baru
-    ofstream fileTulis(namaFile, ios::app);
-
-    fileTulis << id << ","
-              << idUser << ","
-              << referensi[0] << "|"
-              << referensi[1] << "|"
-              << referensi[2] << "\n";
-
-    fileTulis.close();
-}
-
-
 
 void menuUtama(string role, string login_count, int id_user) {
+    string inputBuffer;
 
     if (login_count == "1") {
         tampilkanPreferensiTag(id_user);
+        
+        cout << "\n[+] Preferensi Anda berhasil disimpan!\n";
+        cout << "\nMenyiapkan profil dan preferensi Anda...\n";
+        this_thread::sleep_for(chrono::seconds(1));
+        
+        #ifdef _WIN32
+            system("cls");
+        #else
+            system("clear");
+        #endif
+        
+        cout << "\n\n";
+        string padding = "                    ";
+        cout << padding << "Membangun Garasi Impian Anda...\n";
+        cout << "\033[?25l"; 
+        for(int i = 0; i <= 25; i++) {
+            cout << "\r" << padding << "[" << string(i, '=') << string(25-i, ' ') << "] " << (i*4) << "%";
+            cout.flush();
+            this_thread::sleep_for(chrono::milliseconds(50));
+        }
+        cout << "\033[?25h\n\n"; 
     }
 
-    int pilihan;
     bool tetapDiHome = true;
 
-    recomendation(id_user);
-
     while (tetapDiHome) {
+        #ifdef _WIN32
+            system("cls");
+        #else
+            system("clear");
+        #endif
 
-        cout << "\n==========================================\n";
-        cout << "       CBLUEAUTOS - USER MENU\n";
-        cout << "==========================================\n";
-        cout << " 1. Lihat Semua Koleksi (Katalog)\n";
-        cout << " 2. Search\n";
-        cout << " 3. Filter\n";
-        cout << " 4. Logout\n";
-        cout << "==========================================\n";
-        cout << " Pilih opsi (1-4): ";
+        recomendation(id_user);
+        cout << "========================================================================\n";
+        cout << "       CBLUEAUTOS - DASHBOARD UTAMA\n";
+        cout << "========================================================================\n";
+        cout << " [K] Lihat Semua Koleksi (Katalog)\n";
+        cout << " [S] Search Mobil\n";
+        cout << " [F] Filter Mobil\n";
+        cout << " [L] Logout\n";
+        cout << "========================================================================\n";
+        cout << " Ketik ID Mobil untuk melihat spesifikasi detail, atau pilih menu (K/S/F/L): ";
 
-        cin >> pilihan;
+        getline(cin, inputBuffer);
+        if (inputBuffer.empty()) continue;
 
-        if (pilihan == 1){
-            tampilkanKatalog();
+        bool isAngka = true;
+        for(char c : inputBuffer) {
+            if(!isdigit(c) && c != ' ') {
+                isAngka = false;
+                break;
+            }
         }
-        else if (pilihan == 2){
-            cariMobil();
-        }
-        else if (pilihan == 3){
-            filterMobil();
-        }
-        else if (pilihan == 4){
-            cout << "\nLogout...\n";
-            tetapDiHome = false;
-        }
-        else {
-            cout << "Pilihan tidak valid.\n";
+
+        if (isAngka) {
+            int idPilihan = -1;
+            try {
+                idPilihan = stoi(inputBuffer);
+                tampilkanDetailMobil(idPilihan); 
+            } catch (...) {
+                continue;
+            }
+        } else {
+            char menu = toupper(inputBuffer[0]);
+            if (menu == 'K') {
+                tampilkanKatalog();
+            }
+            else if (menu == 'S') {
+                cariMobil();
+            }
+            else if (menu == 'F') {
+                filterMobil();
+            }
+            else if (menu == 'L') {
+                cout << "\nMenyimpan sesi...\nLogout berhasil!\n";
+                tetapDiHome = false;
+            }
+            else {
+                cout << "[!] Pilihan tidak valid. Tekan Enter untuk mengulang...";
+                getline(cin, inputBuffer);
+            }
         }
     }
 }

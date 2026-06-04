@@ -58,10 +58,6 @@ void cariMobilAdmin() {
 }
 
 
-// ======================
-// FILTER ADMIN
-// ======================
-
 // ambil opsi unik dari CSV (kayak user)
 vector<string> ambilOpsiAdmin(int kolom) {
     set<string> unik;
