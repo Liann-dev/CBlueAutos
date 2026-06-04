@@ -132,6 +132,8 @@ void menuUtama(string role, string login_count, int id_user) {
     int pilihan;
     bool tetapDiHome = true;
 
+    recomendation(id_user);
+
     while (tetapDiHome) {
 
         cout << "\n==========================================\n";
