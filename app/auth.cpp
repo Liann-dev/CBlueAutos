@@ -109,43 +109,110 @@ void registerUser() {
 
     ofstream file(dbUser.c_str(), ios::app);
     if (file.is_open()) {
-        file << userIdSelanjutnya() << "," << username << "," << password << ",user\n";
+        file << userIdSelanjutnya()
+            << "," << username
+            << "," << password
+            << ",user,true,0\n";
+            
         file.close();
         cout << ">> Register berhasil!\n";
     }
 }
 
 bool loginUser(User &userTerdaftar) {
-    for (int sisa = 3; sisa > 0; sisa--) {
+     for (int sisa = 3; sisa > 0; sisa--) {
+
         string username, password;
+
         cout << "\n>>> LOGIN (Sisa percobaan: " << sisa << ") <<<\n";
         cout << "Username (Tekan Enter untuk kembali): ";
         getline(cin, username);
-        if (username == "") return false;
+
+        if (username.empty())
+            return false;
 
         cout << "Password: ";
         password = getHiddenPassword();
 
         ifstream file(dbUser.c_str());
+
+        if (!file.is_open()) {
+            cout << "Gagal membuka database user.\n";
+            return false;
+        }
+
         string line;
+        string dataBaru = "";
+        bool loginBerhasil = false;
+
+        // simpan header
+        getline(file, line);
+        dataBaru += line + "\n";
+
         while (getline(file, line)) {
+
+            if (line.empty())
+                continue;
+
             stringstream ss(line);
-            string id, fUser, fPass, fRole;
+
+            string id;
+            string fUser;
+            string fPass;
+            string fRole;
+            string fStatus;
+            string fLoginCount;
+
             getline(ss, id, ',');
             getline(ss, fUser, ',');
             getline(ss, fPass, ',');
             getline(ss, fRole, ',');
+            getline(ss, fStatus, ',');
+            getline(ss, fLoginCount, ',');
 
             if (fUser == username && fPass == password) {
+
+                loginBerhasil = true;
+
+                int loginCount = stoi(fLoginCount);
+
+                loginCount++;
+
+                if (loginCount > 1)
+                    fStatus = "false";
+                else
+                    fStatus = "true";
+
+                fLoginCount = to_string(loginCount);
+
                 userTerdaftar.id = stoi(id);
                 userTerdaftar.username = fUser;
                 userTerdaftar.role = fRole;
-                file.close();
-                return true;
+                userTerdaftar.login_count = fLoginCount;
             }
+
+            dataBaru += id + "," +
+                        fUser + "," +
+                        fPass + "," +
+                        fRole + "," +
+                        fStatus + "," +
+                        fLoginCount + "\n";
         }
+
         file.close();
+
+        if (loginBerhasil) {
+
+            ofstream simpan(dbUser.c_str());
+
+            simpan << dataBaru;
+            simpan.close();
+
+            return true;
+        }
+
         cout << ">> Username atau password salah.\n";
     }
+
     return false;
 }
