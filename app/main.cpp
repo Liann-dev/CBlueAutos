@@ -13,17 +13,15 @@ int main() {
     #ifdef _WIN32
         SetConsoleOutputCP(CP_UTF8);
     #endif
-    // 1. Load data dari CSV ke dalam Tree & Linked List
+
     inisialisasiData(); 
 
     User userTerdaftar;
     int mulai = 1;
 
-    // 2. Tampilkan Splash Screen dan Onboarding HANYA saat aplikasi pertama kali dibuka
     show_splash();
     show_onboarding();
 
-    // 3. Masuk ke Looping Menu Utama (Login/Register)
     for (; mulai == 1; ) {
         int pilihan;
         
@@ -62,7 +60,7 @@ int main() {
                 } else if (userTerdaftar.role == "user") {
                     cout << "\nMemasuki Garasi Utama...\n";
                     
-                    menuUtama(userTerdaftar.role, userTerdaftar.login_count, userTerdaftar.id); // Masuk ke dalam menu User
+                    menuUtama(userTerdaftar.role, userTerdaftar.login_count, userTerdaftar.id); 
                 } else {
                     cout << "Role tidak dikenali. Kembali ke menu utama.\n";
                     cin.get();

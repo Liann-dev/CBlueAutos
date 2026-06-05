@@ -112,9 +112,6 @@ void cetakHasilFilter(ListMobilNode* head) {
 }
 
 void filterMobil() {
-    if (cin.peek() == '\n' || cin.peek() == '\r') {
-        cin.ignore();
-    }
     string inputBuffer;
 
     while (true) {

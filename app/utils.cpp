@@ -44,15 +44,11 @@ void cetakTengah(string teks) {
     }
 }
 
-// FUNGSI BANTUAN: Penahan Layar (Pause)
 void tungguEnter() {
     string buffer;
     getline(cin, buffer);
 }
 
-// =========================================================
-// 1. ANIMASI LOADING SPLASH SCREEN
-// =========================================================
 void show_splash() {
     #ifdef _WIN32
         system("cls");
@@ -66,7 +62,7 @@ void show_splash() {
     cout << "\n";
     cetakTengah("Memuat Sistem...");
 
-    int total_loading = 30; // Diperpanjang sedikit agar animasinya lebih halus
+    int total_loading = 30; 
     int padding_kiri_angka = (LEBAR_LAYAR - 34) / 2;
     string padding_kiri = string(padding_kiri_angka, ' ');
 
@@ -76,12 +72,11 @@ void show_splash() {
         Sleep(50);
         int percent = (i * 100) / total_loading;
         
-        // Logika pembuatan loading bar bergaya [=====>    ]
         string bar_isi = "";
         if (i > 0) {
-            bar_isi = string(i - 1, '='); // Isi dengan sama dengan
-            if (i < total_loading) bar_isi += ">"; // Ujungnya panah
-            else bar_isi += "="; // Kalau sudah 100%, panah hilang
+            bar_isi = string(i - 1, '='); 
+            if (i < total_loading) bar_isi += ">"; 
+            else bar_isi += "="; 
         }
         string bar_kosong(total_loading - i, ' ');
         
@@ -89,15 +84,11 @@ void show_splash() {
         cout.flush();
     }
 
-    cout << "\033[?25h"; // Munculkan kursor kembali
+    cout << "\033[?25h"; 
     cout << "\n\n";
 }
 
-// =========================================================
-// 2. HALAMAN ONBOARDING (Pengenalan Aplikasi)
-// =========================================================
 void show_onboarding() {
-    // Halaman 1
     #ifdef _WIN32
         system("cls");
     #else
@@ -114,7 +105,6 @@ void show_onboarding() {
     cetakTengah(">> Tekan ENTER untuk lanjut...");
     tungguEnter();
 
-    // Halaman 2
     #ifdef _WIN32
         system("cls");
     #else
@@ -131,7 +121,6 @@ void show_onboarding() {
     cetakTengah(">> Tekan ENTER untuk lanjut...");
     tungguEnter();
 
-    // Halaman 3
     #ifdef _WIN32
         system("cls");
     #else
@@ -149,9 +138,6 @@ void show_onboarding() {
     tungguEnter();
 }
 
-// =========================================================
-// 3. TRANSISI MASUK DASHBOARD ADMIN
-// =========================================================
 void loading_admin_transition() {
     #ifdef _WIN32
         system("cls");
@@ -192,9 +178,7 @@ void loading_admin_transition() {
     Sleep(400);
 }
 
-// =========================================================
-// 4. TRANSISI KELUAR DASHBOARD ADMIN
-// =========================================================
+
 void loading_exit_admin() {
     #ifdef _WIN32
         system("cls");
