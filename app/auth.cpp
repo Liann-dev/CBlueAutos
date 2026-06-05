@@ -104,7 +104,7 @@ void registerUser() {
     cout << "======================================================\n";
     cout << " SYARAT USERNAME:\n";
     cout << " - Panjang 3-20 karakter.\n";
-    cout << " - Gunakan huruf, angka, underscore (_), titik (.), atau strip (-).\n";
+    cout << " - Pastikan Gunakan huruf, angka, underscore (_), titik (.), atau strip (-).\n";
     cout << " - TANPA spasi. Simbol tidak di awal, akhir, atau berurutan.\n";
     cout << "======================================================\n\n";
 
