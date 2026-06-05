@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <thread>  
 #include <chrono>  
+#include <windows.h>
 #include <cctype>
 #include "homeUser.h"
 #include "features.h"
@@ -116,7 +117,7 @@ void menuUtama(string role, string login_count, int id_user) {
         
         cout << "\n[+] Preferensi Anda berhasil disimpan!\n";
         cout << "\nMenyiapkan profil dan preferensi Anda...\n";
-        this_thread::sleep_for(chrono::seconds(1));
+        Sleep(1000);
         
         #ifdef _WIN32
             system("cls");
@@ -131,7 +132,7 @@ void menuUtama(string role, string login_count, int id_user) {
         for(int i = 0; i <= 25; i++) {
             cout << "\r" << padding << "[" << string(i, '=') << string(25-i, ' ') << "] " << (i*4) << "%";
             cout.flush();
-            this_thread::sleep_for(chrono::milliseconds(50));
+            Sleep(50);
         }
         cout << "\033[?25h\n\n"; 
     }
