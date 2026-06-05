@@ -66,9 +66,6 @@ void deleteTreeAdmin(TreeAdmin* &pohon) {
 
 void cariMobilAdmin() {
     string inputBuffer;
-    if (cin.peek() == '\n' || cin.peek() == '\r') {
-        cin.ignore();
-    }
 
     while (true) {
         #ifdef _WIN32
@@ -226,9 +223,6 @@ void traversalFilterAdmin(TreeAdmin* pohon, int pilihanFilter, int pilihanTahun,
 
 void filterMobilAdmin() {
     string inputBuffer;
-    if (cin.peek() == '\n' || cin.peek() == '\r') {
-        cin.ignore();
-    }
     while (true) {
         #ifdef _WIN32
             system("cls");

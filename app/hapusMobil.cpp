@@ -5,14 +5,17 @@
 
 using namespace std;
 
-// Memakai struct bantuan untuk Array dinamis
 struct DataSortTempHapus {
     int id;
     string merk;
     string model;
     int tahun;
     string kondisi;
+    string benua;     
+    string transmisi; 
+    string tipe;      
 };
+
 void hapusMobilAdmin()
 {
     int totalData = 0;
@@ -36,6 +39,9 @@ void hapusMobilAdmin()
             arr[idx].model = temp->Model;
             arr[idx].tahun = temp->Tahun;
             arr[idx].kondisi = temp->Kondisi;
+            arr[idx].benua = temp->Benua;
+            arr[idx].transmisi = temp->Transmisi;
+            arr[idx].tipe = temp->Tipe;
             idx++;
         }
     }
@@ -57,7 +63,6 @@ void hapusMobilAdmin()
     int targetId = -1;
     string pilihan;
 
-    // SISTEM PAGINATION + INPUT ID SEKALIGUS
     while (true) {
         #ifdef _WIN32
             system("cls");
@@ -65,13 +70,15 @@ void hapusMobilAdmin()
             system("clear");
         #endif
 
-        cout << "\n===========================================================================\n";
-        cout << "                         HAPUS UNIT MOBIL (ADMIN)                          \n";
-        cout << "===========================================================================\n";
+        cout << "\n=========================================================================================================\n";
+        cout << "                                       HAPUS UNIT MOBIL (ADMIN)                                          \n";
+        cout << "=========================================================================================================\n";
         
-        cout << left << setw(6) << "ID" << setw(15) << "MERK" << setw(25) << "MODEL" 
-             << setw(10) << "TAHUN" << "KONDISI" << endl;
-        cout << setfill('-') << setw(75) << "-" << setfill(' ') << endl;
+        // --- PERBAIKAN HEADER TABEL (8 KOLOM) ---
+        cout << left << " " << setw(5) << "ID" << setw(15) << "MERK" << setw(20) << "MODEL" 
+             << setw(8) << "TAHUN" << setw(15) << "KONDISI" << setw(12) << "TIPE" 
+             << setw(12) << "TRANSMISI" << "BENUA" << endl;
+        cout << setfill('-') << setw(105) << "-" << setfill(' ') << endl;
 
         int startIdx = (halamanSekarang - 1) * itemPerHalaman;
         int endIdx = startIdx + itemPerHalaman;
@@ -79,17 +86,19 @@ void hapusMobilAdmin()
 
         for (int i = startIdx; i < endIdx; i++) {
             string modelTeks = arr[i].model;
-            if (modelTeks.length() > 22) modelTeks = modelTeks.substr(0, 19) + "...";
+            if (modelTeks.length() > 18) modelTeks = modelTeks.substr(0, 15) + "...";
             
-            cout << left << setw(6) << arr[i].id << setw(15) << arr[i].merk 
-                 << setw(25) << modelTeks << setw(10) << arr[i].tahun << arr[i].kondisi << endl;
+            // --- PERBAIKAN ISI TABEL (8 KOLOM) ---
+            cout << left << " " << setw(5) << arr[i].id << setw(15) << arr[i].merk 
+                 << setw(20) << modelTeks << setw(8) << arr[i].tahun << setw(15) << arr[i].kondisi 
+                 << setw(12) << arr[i].tipe << setw(12) << arr[i].transmisi << arr[i].benua << endl;
         }
         
-        cout << setfill('=') << setw(75) << "=" << setfill(' ') << endl;
+        cout << setfill('=') << setw(105) << "=" << setfill(' ') << endl;
         cout << " Halaman " << halamanSekarang << " dari " << totalHalaman << " | Total Unit Aset: " << totalData << endl;
-        cout << "---------------------------------------------------------------------------\n";
+        cout << "---------------------------------------------------------------------------------------------------------\n";
         cout << "  [N] Next Page   |   [P] Prev Page   |   [X] Batal & Kembali\n";
-        cout << "---------------------------------------------------------------------------\n";
+        cout << "---------------------------------------------------------------------------------------------------------\n";
         cout << "Ketik 'N' / 'P' atau masukkan angka ID untuk dihapus: ";
         cin >> pilihan;
 
@@ -110,19 +119,16 @@ void hapusMobilAdmin()
         }
     }
     
-    delete[] arr; // Bebaskan memori array
+    delete[] arr; 
 
-    // --- PROSES HAPUS DIMULAI ---
     bool ditemukan = false;
 
-    // Pencarian langsung di dalam Linked List memori
     for (Kategori *currKat = headKategori; currKat != nullptr; currKat = currKat->next) {
         Mobil *temp = currKat->head;
         Mobil *prev = nullptr;
 
         while (temp != nullptr) {
             if (temp->id == targetId) {
-                // Proses hapus di Doubly Linked List
                 if (prev == nullptr) {
                     currKat->head = temp->next;
                     if (currKat->head != nullptr) {
@@ -148,11 +154,20 @@ void hapusMobilAdmin()
         
         if (ditemukan) {
             sinkronisasiKeCSV(); 
+            
+            cout << "Tekan Enter untuk kembali...";
+            string pauseBuffer;
+            cin.ignore(1000, '\n');
+            getline(cin, pauseBuffer);
             break;
         }
     }
 
     if (!ditemukan) {
         cout << "\n[Error] Unit dengan ID " << targetId << " tidak ditemukan!\n";
+        cout << "Tekan Enter untuk kembali...";
+        string pauseBuffer;
+        cin.ignore(1000, '\n');
+        getline(cin, pauseBuffer);
     }
 }
