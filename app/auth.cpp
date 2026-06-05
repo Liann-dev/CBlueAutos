@@ -104,7 +104,7 @@ void registerUser() {
     cout << "======================================================\n";
     cout << " SYARAT USERNAME:\n";
     cout << " - Panjang 3-20 karakter.\n";
-    cout << " - Gunakan huruf, angka, underscore (_), titik (.), atau strip (-).\n";
+    cout << " - Pastikan Gunakan huruf, angka, underscore (_), titik (.), atau strip (-).\n";
     cout << " - TANPA spasi. Simbol tidak di awal, akhir, atau berurutan.\n";
     cout << "======================================================\n\n";
 
@@ -177,24 +177,33 @@ void registerUser() {
 }
 
 bool loginUser(User &userTerdaftar) {
-     for (int sisa = 3; sisa > 0; sisa--) {
+    for (int sisa = 3; sisa > 0; sisa--) {
+        #ifdef _WIN32
+            system("cls");
+        #else
+            system("clear");
+        #endif
 
         string username, password;
 
-        cout << "\n>>> LOGIN (Sisa percobaan: " << sisa << ") <<<\n";
-        cout << "Username (Tekan Enter untuk kembali): ";
+        cout << "\n======================================================\n";
+        cout << "                     LOGIN AKUN                       \n";
+        cout << "======================================================\n";
+        cout << " [INFO] Sisa percobaan login Anda: " << sisa << " kali\n";
+        cout << "------------------------------------------------------\n";
+        
+        cout << "Masukkan Username anda (Tekan Enter untuk batal): ";
         getline(cin, username);
 
-        if (username.empty())
-            return false;
+        if (username.empty()) return false;
 
-        cout << "Password: ";
+        cout << "Masukkkan Password anda: ";
         password = getHiddenPassword();
 
         ifstream file(dbUser.c_str());
 
         if (!file.is_open()) {
-            cout << "Gagal membuka database user.\n";
+            cout << "\n>> [!] Gagal membuka database user.\n";
             return false;
         }
 
@@ -207,18 +216,10 @@ bool loginUser(User &userTerdaftar) {
         dataBaru += line + "\n";
 
         while (getline(file, line)) {
-
-            if (line.empty())
-                continue;
+            if (line.empty()) continue;
 
             stringstream ss(line);
-
-            string id;
-            string fUser;
-            string fPass;
-            string fRole;
-            string fStatus;
-            string fLoginCount;
+            string id, fUser, fPass, fRole, fStatus, fLoginCount;
 
             getline(ss, id, ',');
             getline(ss, fUser, ',');
@@ -227,14 +228,16 @@ bool loginUser(User &userTerdaftar) {
             getline(ss, fStatus, ',');
             getline(ss, fLoginCount, ',');
 
+            // Cek kecocokan kredensial
             if (fUser == username && fPass == password) {
-
                 loginBerhasil = true;
 
-                int loginCount = stoi(fLoginCount);
+                int loginCount = 0;
+                try { loginCount = stoi(fLoginCount); } catch (...) {}
 
                 loginCount++;
 
+                // Menandai jika ini bukan login pertama kali
                 if (loginCount > 1)
                     fStatus = "false";
                 else
@@ -248,27 +251,33 @@ bool loginUser(User &userTerdaftar) {
                 userTerdaftar.login_count = fLoginCount;
             }
 
-            dataBaru += id + "," +
-                        fUser + "," +
-                        fPass + "," +
-                        fRole + "," +
-                        fStatus + "," +
-                        fLoginCount + "\n";
+            dataBaru += id + "," + fUser + "," + fPass + "," + fRole + "," + fStatus + "," + fLoginCount + "\n";
         }
 
         file.close();
 
         if (loginBerhasil) {
-
             ofstream simpan(dbUser.c_str());
-
             simpan << dataBaru;
             simpan.close();
 
+            cout << "\n>> [SUKSES] Login berhasil! Selamat datang, " << userTerdaftar.username << ".\n";
             return true;
         }
 
-        cout << ">> Username atau password salah.\n";
+        // Jika Login Gagal
+        cout << "\n>> [ERROR] Username atau password salah!\n";
+        
+        if (sisa > 1) {
+            cout << "Tekan Enter untuk mencoba lagi...";
+            string pauseBuffer;
+            getline(cin, pauseBuffer);
+        } else {
+            cout << ">> [!] Anda telah gagal login 3 kali. Keamanan diaktifkan.\n";
+            cout << "Kembali ke menu utama... Tekan Enter untuk lanjut.";
+            string pauseBuffer;
+            getline(cin, pauseBuffer);
+        }
     }
 
     return false;
