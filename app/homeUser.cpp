@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <thread>  
 #include <chrono>  
+#include <cctype>
 #include "homeUser.h"
 #include "features.h"
 
@@ -165,14 +166,11 @@ void menuUtama(string role, string login_count, int id_user) {
                 break;
             }
         }
-
         if (isAngka) {
             int idPilihan = -1;
-            try {
-                idPilihan = stoi(inputBuffer);
+            stringstream ss(inputBuffer);
+            if (ss >> idPilihan) { 
                 tampilkanDetailMobil(idPilihan); 
-            } catch (...) {
-                continue;
             }
         } else {
             char menu = toupper(inputBuffer[0]);
