@@ -3,6 +3,7 @@
 
 #include <string>
 using namespace std;
+
 struct Mobil {
     int id;
     string Merk;
@@ -70,8 +71,6 @@ Kategori *cariAtauBuatKategori(string merk);
 void inisialisasiData();
 void tambahUnit(Kategori &kat, string model, int tahun, string kondisi);
 void tampilkanKatalog();
-void cariMobil();
-void filterMobil();
 void show_splash();
 void show_onboarding();
 void loading_admin_transition();
@@ -80,10 +79,13 @@ void tambahMobilAdmin();
 void tampilkanKatalogAdmin();
 void hapusMobilAdmin();
 void updateMobilAdmin();
-void cariMobilAdmin();
-void filterMobilAdmin();
 void sinkronisasiKeCSV();
 void showTableData();
 void insertTreeTahun(TreeNodeAngka*& root, Mobil* mobilBaru);
 void insertTreeTeks(TreeNodeTeks*& root, Mobil* mobilBaru, string nilaiKey);
+void cariMobil(bool isAdmin);    
+void filterMobil(bool isAdmin);  
+void recomendation(int idUser);
+void tampilkanDetailMobil(int idTarget);
+
 #endif

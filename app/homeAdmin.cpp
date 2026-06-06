@@ -36,10 +36,8 @@ void menuUtamaAdmin(string role) {
 
         int pilihan = -1;
         
-        // --- LOGIKA PENGGANTI TRY-CATCH ---
-        // Cek apakah input hanya 1 karakter dan berupa angka
         if (inputBuffer.length() == 1 && isdigit(inputBuffer[0])) {
-            pilihan = inputBuffer[0] - '0'; // Mengubah karakter '1'-'7' menjadi angka integer 1-7
+            pilihan = inputBuffer[0] - '0'; 
         }
         
         if (pilihan == 1){
@@ -51,11 +49,11 @@ void menuUtamaAdmin(string role) {
         } else if (pilihan == 3){
             hapusMobilAdmin();
 
-        } else if (pilihan == 4){
-            cariMobilAdmin();   
+        } else if (pilihan == 4){   
+            cariMobil(true);   
 
         } else if (pilihan == 5){
-            filterMobilAdmin(); 
+            filterMobil(true); 
 
         } else if (pilihan == 6){
             tampilkanKatalogAdmin();

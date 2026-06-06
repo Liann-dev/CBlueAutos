@@ -14,8 +14,6 @@
 using namespace std;
 string namaFile = "database_prefensi.csv";
 
-extern void tampilkanDetailMobil(int idTarget); 
-
 void integrasiDatabase(int idUser, string referensi[3]) {
     ifstream fileBaca(namaFile);
     string line;
@@ -116,7 +114,7 @@ void menuUtama(string role, string login_count, int id_user) {
         tampilkanPreferensiTag(id_user);
         
         cout << "\n[+] Preferensi Anda berhasil disimpan!\n";
-        cout << "\nMenyiapkan profil dan preferensi Anda...\n";
+        cout << "\nMenyiapkan profil and preferensi Anda...\n";
         Sleep(1000);
         
         #ifdef _WIN32
@@ -179,10 +177,10 @@ void menuUtama(string role, string login_count, int id_user) {
                 tampilkanKatalog();
             }
             else if (menu == 'S') {
-                cariMobil();
+                cariMobil(false); 
             }
             else if (menu == 'F') {
-                filterMobil();
+                filterMobil(false); 
             }
             else if (menu == 'L') {
                 cout << "\nMenyimpan sesi...\nLogout berhasil!\n";
