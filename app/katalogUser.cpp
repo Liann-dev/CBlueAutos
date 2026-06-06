@@ -9,7 +9,15 @@
 using namespace std;
 
 Kategori* headKategori = nullptr;
+TreeNodeAngka* rootTahun = nullptr;
+TreeNodeTeks* rootMerk = nullptr;
+TreeNodeTeks* rootKondisi = nullptr;
+TreeNodeTeks* rootBenua = nullptr;
+TreeNodeTeks* rootTransmisi = nullptr;
+TreeNodeTeks* rootTipe = nullptr;
+
 const string dbMobil = "database_mobil.csv";
+
 Kategori* cariAtauBuatKategori(string merk) {
     Kategori* temp = headKategori;
     Kategori* tail = nullptr;
@@ -33,7 +41,64 @@ Kategori* cariAtauBuatKategori(string merk) {
     }
     return baru;
 }
+// 1. Fungsi Insert untuk Pohon Angka (Tahun)
+void insertTreeTahun(TreeNodeAngka*& node, Mobil* mobilBaru) {
+    if (node == nullptr) {
+        node = new TreeNodeAngka;
+        node->keyTahun = mobilBaru->Tahun;
+        
+        ListMobilNode* listBaru = new ListMobilNode;
+        listBaru->dataMobil = mobilBaru;
+        listBaru->next = nullptr;
+        
+        node->headMobil = listBaru;
+        node->left = nullptr;
+        node->right = nullptr;
+        return;
+    }
 
+    if (mobilBaru->Tahun < node->keyTahun) {
+        insertTreeTahun(node->left, mobilBaru);
+    } else if (mobilBaru->Tahun > node->keyTahun) {
+        insertTreeTahun(node->right, mobilBaru);
+    } else {
+        // Jika tahun sama, tambahkan ke Linked List di node ini (Insert First)
+        ListMobilNode* listBaru = new ListMobilNode;
+        listBaru->dataMobil = mobilBaru;
+        listBaru->next = node->headMobil;
+        node->headMobil = listBaru;
+    }
+}
+
+void insertTreeTeks(TreeNodeTeks*& node, Mobil* mobilBaru, string nilaiKey) {
+    string keyKecil = keHurufKecil(nilaiKey);
+
+    if (node == nullptr) {
+        node = new TreeNodeTeks;
+        node->keyTeks = keyKecil; 
+        
+        ListMobilNode* listBaru = new ListMobilNode;
+        listBaru->dataMobil = mobilBaru;
+        listBaru->next = nullptr;
+        
+        node->headMobil = listBaru;
+        node->left = nullptr;
+        node->right = nullptr;
+        return;
+    }
+
+    if (keyKecil < node->keyTeks) {
+        insertTreeTeks(node->left, mobilBaru, nilaiKey);
+    } else if (keyKecil > node->keyTeks) {
+        insertTreeTeks(node->right, mobilBaru, nilaiKey);
+    } else {
+        // Jika kriteria sama
+        ListMobilNode* listBaru = new ListMobilNode;
+        listBaru->dataMobil = mobilBaru;
+        listBaru->next = node->headMobil;
+        node->headMobil = listBaru;
+    }
+}
 
 void inisialisasiData() {
     ifstream file(dbMobil.c_str());
@@ -46,13 +111,16 @@ void inisialisasiData() {
         if(line.empty()) continue;
         
         stringstream ss(line);
-        string idStr, merkStr, modelStr, tahunStr, kondisiStr;
+        string idStr, merkStr, modelStr, tahunStr, kondisiStr, benuaStr, transmisiStr, tipeStr;
 
         getline(ss, idStr,      ','); 
         getline(ss, merkStr,    ','); 
         getline(ss, modelStr,   ','); 
         getline(ss, tahunStr,   ',');
         getline(ss, kondisiStr, ','); 
+        getline(ss, benuaStr,   ','); 
+        getline(ss, transmisiStr, ','); 
+        getline(ss, tipeStr,    ','); 
 
         Mobil* baru   = new Mobil;
         baru->id      = stoi(idStr);
@@ -60,14 +128,23 @@ void inisialisasiData() {
         baru->Model   = modelStr;
         baru->Tahun   = stoi(tahunStr);
         baru->Kondisi = kondisiStr;
+        baru->Tipe    = tipeStr; 
+        baru->Transmisi = transmisiStr; 
+        baru->Benua   = benuaStr; 
         baru->next    = nullptr;
         baru->prev    = nullptr;
         
-        // Cari atau buat kategori secara dinamis
         Kategori* kat = cariAtauBuatKategori(merkStr);
         baru->next = kat->head;
         if (kat->head != nullptr) kat->head->prev = baru;
         kat->head = baru;
+
+        insertTreeTahun(rootTahun, baru);
+        insertTreeTeks(rootMerk, baru, baru->Merk);
+        insertTreeTeks(rootKondisi, baru, baru->Kondisi);
+        insertTreeTeks(rootBenua, baru, baru->Benua);
+        insertTreeTeks(rootTransmisi, baru, baru->Transmisi);
+        insertTreeTeks(rootTipe, baru, baru->Tipe);
     }
     file.close();
 }
@@ -136,7 +213,6 @@ Page* bangunHalaman() {
 
     if (allHead == nullptr) return nullptr;
 
-    
     allHead = mergeSort(allHead);
 
     Page* headPage    = nullptr;
@@ -155,7 +231,6 @@ Page* bangunHalaman() {
         else headPage = hal;
         tailPage = hal;
 
-
         for (int i = 0; i < 10 && curr != nullptr; i++) {
             hal->items[i]     = curr;
             hal->merkItems[i] = curr->Merk; 
@@ -168,45 +243,51 @@ Page* bangunHalaman() {
 }
 
 void cetakHalaman(Page* hal, int totalHalaman) {
-    #ifdef _WIN32
+      #ifdef _WIN32
         system("cls");
     #else
         system("clear");
     #endif
 
-    cout << "\n" << setfill('=') << setw(70) << "=" << setfill(' ') << endl;
-    cout << "  KATALOG MOBIL  |  Halaman " << hal->nomorHalaman
-         << " dari " << totalHalaman << endl;
-    cout << setfill('=') << setw(70) << "=" << setfill(' ') << endl;
+    cout << "\n=========================================================================================================================\n";
+    cout << "                             KATALOG MOBIL                                \n";
+    cout << "===========================================================================================================================\n";
+
     cout << left
-         << setw(5)  << "ID"
-         << setw(12) << "MERK"
-         << setw(22) << "MODEL"
-         << setw(8)  << "TAHUN"
-         << "KONDISI" << endl;
-    cout << setfill('-') << setw(70) << "-" << setfill(' ') << endl;
+         << setw(6)  << "ID"
+         << setw(15) << "MERK"
+         << setw(25) << "MODEL"
+         << setw(10) << "TAHUN"
+         << setw(15) << "KONDISI"
+         << setw(10) << "TIPE"
+         << setw(12) << "TRANSMISI"
+         << setw (6)  << "BENUA" << endl;
+
+    cout << setfill('-') << setw(106) << "-" << setfill(' ') << endl;
 
     for (int i = 0; i < hal->jumlah; i++) {
+        string modelTeks = hal->items[i]->Model;
+        if (modelTeks.length() > 22) {
+            modelTeks = modelTeks.substr(0, 19) + "...";
+        }
         cout << left
-             << setw(5)  << hal->items[i]->id
-             << setw(12) << hal->merkItems[i]
-             << setw(22) << hal->items[i]->Model
-             << setw(8)  << hal->items[i]->Tahun
-             << hal->items[i]->Kondisi << endl;
+             << setw(6)  << hal->items[i]->id
+             << setw(15) << hal->merkItems[i]
+             << setw(25) << modelTeks
+             << setw(10) << hal->items[i]->Tahun
+             << setw(15) << hal->items[i]->Kondisi
+             << setw(10) << hal->items[i]->Tipe
+             << setw(12) << hal->items[i]->Transmisi
+             << hal->items[i]->Benua << endl;
     }
 
-    cout << setfill('-') << setw(70) << "-" << setfill(' ') << endl;
+    cout << setfill('=') << setw(106) << "=" << setfill(' ') << endl;
 
-    if (hal->prev) cout << "  << [P] Prev (Hal " << hal->prev->nomorHalaman << ")";
-    else           cout << "  << (Awal)          ";
-    
-    cout << "    |    ";
-    
-    if (hal->next) cout << "[N] Next (Hal " << hal->next->nomorHalaman << ") >>";
-    else           cout << "          (Akhir) >>";
-
-    cout << "\n  [X] Kembali ke Menu" << endl;
-    cout << setfill('=') << setw(70) << "=" << setfill(' ') << endl;
+    cout << " Halaman " << hal->nomorHalaman << " dari " << totalHalaman << endl;
+    cout << "---------------------------------------------------------------------------\n";
+    cout << "  [N] Next Page   |   [P] Prev Page   |   [X] Kembali ke Menu\n";
+    cout << "---------------------------------------------------------------------------\n";
+    cout << "Pilihan: ";
 }
 
 void hapusHalaman(Page* head) {
@@ -239,10 +320,8 @@ void tampilkanKatalog() {
 
     while (true) {
         cetakHalaman(current, totalHalaman);
-        cout << "  Input (n/p/x): ";
         cin  >> input;
         
-        // Memaksa apapun inputnya (n kecil atau N besar) menjadi N besar
         input = toupper(input);
 
         if (input == 'N') {
@@ -250,20 +329,20 @@ void tampilkanKatalog() {
                 current = current->next;
             } else {
                 cout << "  >> Sudah di halaman terakhir!\n";
-                cin.ignore(1000, '\n'); cin.get(); // Jeda agar pesan terbaca
+                cin.ignore(1000, '\n'); cin.get();
             }
         } else if (input == 'P') {
             if (current->prev) {
                 current = current->prev;
             } else {
                 cout << "  >> Sudah di halaman pertama!\n";
-                cin.ignore(1000, '\n'); cin.get(); // Jeda agar pesan terbaca
+                cin.ignore(1000, '\n'); cin.get();
             }
         } else if (input == 'X') {
             break;
         } else {
             cout << "  >> Input tidak valid! Gunakan N / P / X\n";
-            cin.ignore(1000, '\n'); cin.get(); // Jeda agar pesan terbaca
+            cin.ignore(1000, '\n'); cin.get();
         }
     }
 

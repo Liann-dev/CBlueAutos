@@ -12,6 +12,9 @@ struct DataKatalogAdmin {
     string model;
     string tahun;
     string kondisi;
+    string benua;
+    string transmisi;
+    string tipe;
 };
 void bersihkanTeks(string& str) {
     if (str.empty()) return;
@@ -75,12 +78,18 @@ void tampilkanKatalogAdmin() {
             getline(ss, listMobil[index].model, ',');
             getline(ss, listMobil[index].tahun, ',');
             getline(ss, listMobil[index].kondisi, ',');
+            getline(ss, listMobil[index].benua, ',');
+            getline(ss, listMobil[index].transmisi, ',');
+            getline(ss, listMobil[index].tipe, ',');
 
             bersihkanTeks(listMobil[index].id);
             bersihkanTeks(listMobil[index].merk);
             bersihkanTeks(listMobil[index].model);
             bersihkanTeks(listMobil[index].tahun);
             bersihkanTeks(listMobil[index].kondisi);
+            bersihkanTeks(listMobil[index].benua);
+            bersihkanTeks(listMobil[index].transmisi);
+            bersihkanTeks(listMobil[index].tipe);
 
             index++;
         }
@@ -121,9 +130,12 @@ void tampilkanKatalogAdmin() {
              << setw(15) << "MERK" 
              << setw(25) << "MODEL" 
              << setw(10) << "TAHUN" 
-             << "KONDISI" << endl;
+             << setw(15) << "TAHUN" 
+             << setw(10) << "TIPE" 
+             << setw(12) << "TRANSMISI" 
+             << "BENUA" << endl;
              
-        cout << setfill('-') << setw(75) << "-" << setfill(' ') << endl;
+        cout << setfill('-') << setw(106) << "-" << setfill(' ') << endl;
 
         int startIdx = (halamanSekarang - 1) * itemPerHalaman;
         int endIdx = startIdx + itemPerHalaman;
@@ -140,10 +152,13 @@ void tampilkanKatalogAdmin() {
                  << setw(15) << listMobil[i].merk 
                  << setw(25) << modelTeks 
                  << setw(10) << listMobil[i].tahun 
-                 << listMobil[i].kondisi << endl;
+                 << setw(15) << listMobil[i].kondisi
+                 << setw(10) << listMobil[i].tipe
+                 << setw(12) << listMobil[i].transmisi
+                 << listMobil[i].benua << endl;
         }
 
-        cout << setfill('=') << setw(75) << "=" << setfill(' ') << endl;
+        cout << setfill('=') << setw(106) << "=" << setfill(' ') << endl;
         
         cout << " Halaman " << halamanSekarang << " dari " << totalHalaman << " | Total Unit Aset: " << totalData << endl;
         cout << "---------------------------------------------------------------------------\n";
@@ -154,7 +169,7 @@ void tampilkanKatalogAdmin() {
 
         if (pilihan == 'X' || pilihan == 'x') {
             break; 
-        } else if (pilihan == 'N' || pilihan == 'N') {
+        } else if (pilihan == 'n' || pilihan == 'N') {
             if (halamanSekarang < totalHalaman) halamanSekarang++;
         } else if (pilihan == 'p' || pilihan == 'P') {
             if (halamanSekarang > 1) halamanSekarang--;

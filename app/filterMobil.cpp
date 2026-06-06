@@ -1,181 +1,222 @@
 #include <iostream>
 #include <string>
-#include <algorithm>
 #include <iomanip>
-#include <vector>
-#include <set>
-#include <fstream>
-#include <sstream>
 #include "features.h"
 
 using namespace std;
 
-// Menggunakan pointer dinamis
+ListMobilNode* cariDiTreeTeks(TreeNodeTeks* node, string targetTeks) {
+    if (node == nullptr) return nullptr;
+    string keyNodeKecil = keHurufKecil(node->keyTeks);
+    if (targetTeks == keyNodeKecil) return node->headMobil;
+    if (targetTeks < keyNodeKecil) return cariDiTreeTeks(node->left, targetTeks);
+    return cariDiTreeTeks(node->right, targetTeks);
+}
 
-vector<string> ambilOpsiDinamis(int indeksKolom) {
-    set<string> dataUnik;
-    ifstream file("database_mobil.csv");
-    string line;
+void kumpulkanTahun(TreeNodeAngka* node, int tipeTahun, ListMobilNode*& hasil) {
+    if (node == nullptr) return;
 
-    if (!file.is_open()) return {};
+    kumpulkanTahun(node->left, tipeTahun, hasil);
 
-    getline(file, line); 
-    while (getline(file, line)) {
-        stringstream ss(line);
-        string segmen;
-        int kolomSekarang = 0;
-        
-        while (getline(ss, segmen, ',')) {
-            if (kolomSekarang == indeksKolom && !segmen.empty()) {
-                dataUnik.insert(segmen);
-            }
-            kolomSekarang++;
+    bool lolos = false;
+    if (tipeTahun == 1 && node->keyTahun >= 2000) lolos = true; 
+    else if (tipeTahun == 2 && node->keyTahun < 2000) lolos = true; 
+
+    if (lolos) {
+        ListMobilNode* temp = node->headMobil;
+        while (temp != nullptr) {
+            ListMobilNode* baru = new ListMobilNode;
+            baru->dataMobil = temp->dataMobil;
+            baru->next = hasil;
+            hasil = baru;
+            temp = temp->next;
         }
     }
-    file.close();
-    return vector<string>(dataUnik.begin(), dataUnik.end());
+
+    kumpulkanTahun(node->right, tipeTahun, hasil);
+}
+
+ListMobilNode* salinList(ListMobilNode* asli) {
+    ListMobilNode* hasil = nullptr;
+    ListMobilNode* curr = asli;
+    while (curr != nullptr) {
+        ListMobilNode* baru = new ListMobilNode;
+        baru->dataMobil = curr->dataMobil;
+        baru->next = hasil;
+        hasil = baru;
+        curr = curr->next;
+    }
+    return hasil;
+}
+
+void urutkanListMobil(ListMobilNode* head) {
+    if (!head || !head->next) return;
+    bool ditukar;
+    do {
+        ditukar = false;
+        ListMobilNode* curr = head;
+        while (curr->next != nullptr) {
+            if (curr->dataMobil->id > curr->next->dataMobil->id) {
+                Mobil* temp = curr->dataMobil;
+                curr->dataMobil = curr->next->dataMobil;
+                curr->next->dataMobil = temp;
+                ditukar = true;
+            }
+            curr = curr->next;
+        }
+    } while (ditukar);
+}
+
+void hapusListBantuan(ListMobilNode* head) {
+    while (head != nullptr) {
+        ListMobilNode* temp = head;
+        head = head->next;
+        delete temp;
+    }
+}
+void cetakHasilFilter(ListMobilNode* head) {
+    if (head == nullptr) {
+        cout << "\n[!] Tidak ada mobil yang sesuai dengan filter tersebut.\n";
+        return;
+    }
+
+    // Mengubah lebar garis tabel menjadi 105 agar muat untuk semua kolom
+    cout << "\n" << setfill('=') << setw(105) << "=" << setfill(' ') << endl;
+    
+    // Menambahkan kolom TRANSMISI (dengan batas 12) dan BENUA di paling ujung
+    cout << left << " " << setw(5) << "ID" << setw(15) << "MERK" << setw(20) << "MODEL" 
+         << setw(8) << "TAHUN" << setw(15) << "KONDISI" << setw(12) << "TIPE" 
+         << setw(12) << "TRANSMISI" << "BENUA" << endl;
+         
+    cout << setfill('-') << setw(105) << "-" << setfill(' ') << endl;
+
+    int counter = 0;
+    ListMobilNode* temp = head;
+    while (temp != nullptr) {
+        counter++;
+        Mobil* m = temp->dataMobil;
+        
+        // Memotong nama model jika terlalu panjang agar tabel tidak rusak
+        string modelTeks = m->Model;
+        if (modelTeks.length() > 18) modelTeks = modelTeks.substr(0, 15) + "...";
+        
+        // Menambahkan m->Transmisi dan m->Benua ke dalam baris output
+        cout << left << " " << setw(5) << m->id << setw(15) << m->Merk 
+             << setw(20) << modelTeks << setw(8) << m->Tahun << setw(15) << m->Kondisi 
+             << setw(12) << m->Tipe << setw(12) << m->Transmisi << m->Benua << endl;
+        
+        temp = temp->next;
+    }
+    cout << setfill('=') << setw(105) << "=" << setfill(' ') << endl;
+    cout << " Berhasil menemukan " << counter << " unit.\n";
 }
 
 void filterMobil() {
+    string inputBuffer;
+
     while (true) {
-        int pilihanFilter;
+        #ifdef _WIN32
+            system("cls");
+        #else
+            system("clear");
+        #endif
+
         cout << "\n========================================" << endl;
         cout << "           FILTER KATALOG MOBIL         " << endl;
         cout << "========================================" << endl;
         cout << "  [1] Berdasarkan Tahun" << endl;
         cout << "  [2] Berdasarkan Merk" << endl;
         cout << "  [3] Berdasarkan Kondisi" << endl;
-        cout << "  [0] Keluar ke Beranda" << endl;
+        cout << "  [4] Berdasarkan Benua" << endl;
+        cout << "  [5] Berdasarkan Transmisi" << endl;
+        cout << "  [6] Berdasarkan Tipe" << endl;
         cout << "----------------------------------------" << endl;
-        cout << "Pilihan: ";
+        cout << "Pilihan (Tekan Enter untuk kembali): ";
         
-        if (!(cin >> pilihanFilter)) {
-            cin.clear();
-            cin.ignore(1000, '\n');
+        getline(cin, inputBuffer);
+        
+        if (inputBuffer.empty()) {
+            break; 
+        }
+
+        int pilihanFilter = -1;
+        try {
+            pilihanFilter = stoi(inputBuffer); 
+        } catch (...) {
+            continue; 
+        }
+
+        ListMobilNode* hasilPencarian = nullptr; 
+
+        if (pilihanFilter == 1) {
+            cout << "\n>>> FILTER TAHUN\n";
+            cout << "  [1] Mobil Modern (Tahun >= 2000)\n";
+            cout << "  [2] Mobil Klasik (Tahun < 2000)\n";
+            cout << "Pilihan (Tekan Enter untuk batal): ";
+            
+            getline(cin, inputBuffer);
+            if (inputBuffer.empty()) continue;
+
+            int tipeTahun = -1;
+            try {
+                tipeTahun = stoi(inputBuffer);
+            } catch (...) {
+                continue;
+            }
+            
+            if (tipeTahun == 1 || tipeTahun == 2) {
+                kumpulkanTahun(rootTahun, tipeTahun, hasilPencarian);
+            } else {
+                continue; 
+            }
+        } 
+        else if (pilihanFilter >= 2 && pilihanFilter <= 6) {
+            if (pilihanFilter == 2) {
+                cout << "\n>>> FILTER MERK\n";
+                cout << "Masukkan nama Merk (contoh: Toyota, Esemka, BMW, Etc..) atau Enter untuk batal: ";
+            } else if (pilihanFilter == 3) {
+                cout << "\n>>> FILTER KONDISI\n";
+                cout << "Masukkan Kondisi (contoh: Brand New, Mint, Project Car, Excellent, Good) atau Enter untuk batal: ";
+            } else if (pilihanFilter == 4) {
+                cout << "\n>>> FILTER BENUA\n";
+                cout << "Masukkan nama Benua (contoh: Asia, Amerika, Eropa) atau Enter untuk batal: ";
+            } else if (pilihanFilter == 5) {
+                cout << "\n>>> FILTER TRANSMISI\n";
+                cout << "Masukkan jenis Transmisi (contoh: Auto, Manual) atau Enter untuk batal: ";
+            } else if (pilihanFilter == 6) {
+                cout << "\n>>> FILTER TIPE\n";
+                cout << "Masukkan Tipe bodi (contoh: SUV, Sedan, Hatchback, MPV, Sport) atau Enter untuk batal: ";
+            }
+            
+            getline(cin, inputBuffer);
+            if (inputBuffer.empty()) continue; 
+
+            string kataKunci = keHurufKecil(inputBuffer);
+            ListMobilNode* nodeKetemu = nullptr;
+
+            if (pilihanFilter == 2) nodeKetemu = cariDiTreeTeks(rootMerk, kataKunci);
+            else if (pilihanFilter == 3) nodeKetemu = cariDiTreeTeks(rootKondisi, kataKunci);
+            else if (pilihanFilter == 4) nodeKetemu = cariDiTreeTeks(rootBenua, kataKunci); 
+            else if (pilihanFilter == 5) nodeKetemu = cariDiTreeTeks(rootTransmisi, kataKunci); 
+            else if (pilihanFilter == 6) nodeKetemu = cariDiTreeTeks(rootTipe, kataKunci); 
+            else if (nodeKetemu == nullptr) {
+            cout << "\n[!] Debug: Data tidak ditemukan di Tree untuk kata kunci: " << kataKunci << endl;
+            cout << "Tekan Enter untuk lanjut...";
+            getline(cin, inputBuffer);
+            continue;
+            }
+
+            hasilPencarian = salinList(nodeKetemu);
+        } else {
             continue;
         }
 
-        if (pilihanFilter == 0) break;
-
-        string kriteriaPilihan = "";
-        int    pilihanTahun    = 0;
-        int    indeksKolomTabel = -1;
-        bool   isFilterTahun   = false;
-        bool   lanjutProses    = false;
-
-        if (pilihanFilter == 1) {
-            cout << "\n>>> FILTER TAHUN" << endl;
-            cout << "  [1] Semua" << endl;
-            cout << "  [2] Mobil Baru (Tahun >= 2000)" << endl;
-            cout << "  [3] Mobil Lama (Tahun < 2000)" << endl;
-            cout << "  [0] Kembali" << endl;
-            cout << "Pilihan: ";
-            cin >> pilihanTahun;
-            if (pilihanTahun != 0) {
-                lanjutProses = true;
-                isFilterTahun = true;
-            }
-        } 
-        else if (pilihanFilter == 2) {
-            int kolom = 1;
-            string label = "MERK";
-            
-            vector<string> opsi = ambilOpsiDinamis(kolom);
-            if (opsi.empty()) {
-                cout << "[!] Data " << label << " tidak ditemukan di database." << endl;
-                continue;
-            }
-
-            cout << "\n>>> FILTER " << label << endl;
-            cout << "  [1] Tampilkan Semua" << endl;
-            for (size_t i = 0; i < opsi.size(); i++) {
-                cout << "  [" << i + 2 << "] " << opsi[i] << endl;
-            }
-            cout << "  [0] Kembali" << endl;
-            
-            int pil;
-            cout << "Pilihan: ";
-            cin >> pil;
-            
-            if (pil == 0) continue;
-            lanjutProses = true;
-            indeksKolomTabel = kolom;
-            if (pil > 1 && pil <= (int)opsi.size() + 1) {
-                kriteriaPilihan = opsi[pil - 2];
-            }
-        }
-        else if (pilihanFilter == 3) {
-            cout << "\n>>> FILTER KONDISI" << endl;
-            cout << "  [1] Tampilkan Semua" << endl;
-            cout << "  [2] Brand New" << endl;
-            cout << "  [3] Mint" << endl;
-            cout << "  [4] Excellent" << endl;
-            cout << "  [5] Good" << endl;
-            cout << "  [6] Project Car" << endl;
-            cout << "  [0] Kembali" << endl;
-            
-            int pil;
-            cout << "Pilihan: ";
-            cin >> pil;
-            
-            if (pil == 0) continue;
-            lanjutProses = true;
-            indeksKolomTabel = 4;
-            
-            if (pil == 2) kriteriaPilihan = "Brand New";
-            else if (pil == 3) kriteriaPilihan = "Mint";
-            else if (pil == 4) kriteriaPilihan = "Excellent";
-            else if (pil == 5) kriteriaPilihan = "Good";
-            else if (pil == 6) kriteriaPilihan = "Project Car";
-            else kriteriaPilihan = ""; // Tampilkan Semua
-        }
-
-        if (lanjutProses) {
-            #ifdef _WIN32
-                system("cls");
-            #else
-                system("clear");
-            #endif
-
-            cout << "\n" << setfill('=') << setw(78) << "=" << setfill(' ') << endl;
-            cout << left << " " << setw(6) << "ID" << setw(15) << "MERK" << setw(25) << "MODEL" << setw(10) << "TAHUN" << "KONDISI" << endl;
-            cout << setfill('-') << setw(78) << "-" << setfill(' ') << endl;
-
-            int counter = 0;
-            ifstream file("database_mobil.csv");
-            string line;
-            getline(file, line);
-
-            while (getline(file, line)) {
-                stringstream ss(line);
-                string k[5]; 
-                for(int j=0; j<5; j++) getline(ss, k[j], ',');
-
-                bool lolos = false;
-                if (isFilterTahun) {
-                    int thn = stoi(k[3]);
-                    if (pilihanTahun == 1) lolos = true;
-                    else if (pilihanTahun == 2) lolos = (thn >= 2000);
-                    else if (pilihanTahun == 3) lolos = (thn < 2000);
-                } else {
-                    if (kriteriaPilihan == "") lolos = true;
-                    else lolos = (k[indeksKolomTabel] == kriteriaPilihan);
-                }
-
-                if (lolos) {
-                    counter++;
-                    string modelTeks = k[2];
-                    if (modelTeks.length() > 22) modelTeks = modelTeks.substr(0, 19) + "...";
-                    cout << left << " " << setw(6) << k[0] << setw(15) << k[1] << setw(25) << modelTeks << setw(10) << k[3] << k[4] << endl;
-                }
-            }
-            file.close();
-
-            cout << setfill('=') << setw(78) << "=" << setfill(' ') << endl;
-            cout << " Berhasil menemukan " << counter << " unit." << endl;
-            cout << " Tekan Enter untuk kembali ke Menu Filter...";
-            cin.ignore(1000, '\n');
-            cin.get();
-        }
-    }
+        urutkanListMobil(hasilPencarian); 
+        cetakHasilFilter(hasilPencarian); 
+        hapusListBantuan(hasilPencarian); 
+        
+        cout << "\nTekan Enter untuk kembali ke Menu Filter..." << endl;
+        string pauseBuffer;
+        getline(cin, pauseBuffer); 
+    } 
 }

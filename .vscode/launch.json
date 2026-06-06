@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "d:/Tugas Kuliah/Semester 2/Tubes/New folder/CBlueAutos/app",
-      "program": "d:/Tugas Kuliah/Semester 2/Tubes/New folder/CBlueAutos/app/build/Debug/outDebug",
+      "cwd": "d:/Tugas Kuliah/Semester 2/UTS_SDA_CBlueAutos(Kelompok3)/Tubes/app",
+      "program": "d:/Tugas Kuliah/Semester 2/UTS_SDA_CBlueAutos(Kelompok3)/Tubes/app/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

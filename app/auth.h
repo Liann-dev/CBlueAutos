@@ -8,10 +8,12 @@ struct User {
     std::string username;
     std::string password;
     std::string role;
+    bool status;
+    std::string login_count;
 };
 
 void registerUser();
 bool loginUser(User &userTerdaftar);
-std::string inputPassword(); // Fungsi baru untuk sensor
+std::string inputPassword(); 
 
 #endif
