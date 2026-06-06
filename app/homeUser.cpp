@@ -6,14 +6,13 @@
 #include <iomanip>
 #include <thread>  
 #include <chrono>  
+#include <windows.h>
 #include <cctype>
 #include "homeUser.h"
 #include "features.h"
 
 using namespace std;
 string namaFile = "database_prefensi.csv";
-
-extern void tampilkanDetailMobil(int idTarget); 
 
 void integrasiDatabase(int idUser, string referensi[3]) {
     ifstream fileBaca(namaFile);
@@ -115,8 +114,8 @@ void menuUtama(string role, string login_count, int id_user) {
         tampilkanPreferensiTag(id_user);
         
         cout << "\n[+] Preferensi Anda berhasil disimpan!\n";
-        cout << "\nMenyiapkan profil dan preferensi Anda...\n";
-        this_thread::sleep_for(chrono::seconds(1));
+        cout << "\nMenyiapkan profil and preferensi Anda...\n";
+        Sleep(1000);
         
         #ifdef _WIN32
             system("cls");
@@ -131,7 +130,7 @@ void menuUtama(string role, string login_count, int id_user) {
         for(int i = 0; i <= 25; i++) {
             cout << "\r" << padding << "[" << string(i, '=') << string(25-i, ' ') << "] " << (i*4) << "%";
             cout.flush();
-            this_thread::sleep_for(chrono::milliseconds(50));
+            Sleep(50);
         }
         cout << "\033[?25h\n\n"; 
     }
@@ -178,10 +177,10 @@ void menuUtama(string role, string login_count, int id_user) {
                 tampilkanKatalog();
             }
             else if (menu == 'S') {
-                cariMobil();
+                cariMobil(false); 
             }
             else if (menu == 'F') {
-                filterMobil();
+                filterMobil(false); 
             }
             else if (menu == 'L') {
                 cout << "\nMenyimpan sesi...\nLogout berhasil!\n";

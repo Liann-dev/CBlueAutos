@@ -1,26 +1,26 @@
 ID,Merk,Model,Tahun,Kondisi,Benua,Transmisi,Tipe
 1,Toyota,2000GT (MF10),1967,Mint,Asia,Manual,Sport
-2,Ass,Skyline GT-R (KPGC10 "Hakosuka"),1971,Mint,Asia,Manual,Sport
+2,Nissan,Skyline GT-R (KPGC10 "Hakosuka"),1971,Mint,Asia,Manual,Sport
 3,Datsun,Fairlady 240Z (S30),1973,Good,Asia,Manual,Sport
 4,Toyota,Sprinter Trueno (AE86),1986,Project Car,Asia,Manual,Sport
-5,Ass,Skyline GT-R (R32),1989,Excellent,Asia,Manual,Sport
+5,Nissan,Skyline GT-R (R32),1989,Excellent,Asia,Manual,Sport
 6,Honda,NSX (NA1),1992,Mint,Asia,Manual,Sport
 7,Mazda,RX-7 (FD3S Spirit R),2002,Mint,Asia,Manual,Sport
 8,Toyota,Supra RZ (JZA80),1997,Excellent,Asia,Manual,Sport
 9,Subaru,Impreza 22B STi,1998,Mint,Asia,Manual,Sedan
 10,Honda,S2000 (AP1),2001,Good,Asia,Manual,Sport
 11,Mazda,MX-5 Miata (NA),1995,Project Car,Asia,Manual,Sport
-12,Ass,Silvia Spec-R (S15),1999,Excellent,Asia,Manual,Sport
+12,Nissan,Silvia Spec-R (S15),1999,Excellent,Asia,Manual,Sport
 13,Mitsubishi,3000GT VR-4 (Z16A),1994,Good,Asia,Manual,Sport
 14,Lexus,LFA,2011,Mint,Asia,Auto,Sport
-15,Ass,GT-R (R35 Nismo),2015,Excellent,Asia,Auto,Sport
+15,Nissan,GT-R (R35 Nismo),2015,Excellent,Asia,Auto,Sport
 16,Honda,Civic Type R (FK8),2019,Excellent,Asia,Manual,Hatchback
 17,Toyota,GR Yaris (RZ High Performance),2021,Brand New,Asia,Manual,Hatchback
 18,Subaru,BRZ (ZD8),2022,Excellent,Asia,Manual,Sport
 19,Toyota,GR Corolla (Morizo Edition),2023,Brand New,Asia,Manual,Hatchback
 20,Honda,Civic Type R (FL5),2023,Brand New,Asia,Manual,Hatchback
-21,Ass,mamais,1998,Brand New,Asia,Auto,Sedan
-22,Ass,180SX Type X (RPS13),1996,Excellent,Asia,Manual,Sport
+21,Nissan,Gloria,1998,Brand New,Asia,Auto,Sedan
+22,Nissan,180SX Type X (RPS13),1996,Excellent,Asia,Manual,Sport
 23,Toyota,MR2 GT-S (SW20),1993,Good,Asia,Manual,Sport
 24,Honda,Integra Type R (DC2),1998,Mint,Asia,Manual,Sport
 25,Mitsubishi,Lancer Evolution IX MR,2006,Excellent,Asia,Manual,Sedan
@@ -29,24 +29,24 @@ ID,Merk,Model,Tahun,Kondisi,Benua,Transmisi,Tipe
 28,Suzuki,Cappuccino (EA11R),1991,Project Car,Asia,Manual,Sport
 29,Honda,Beat (PP1),1991,Good,Asia,Manual,Sport
 30,Toyota,Celica GT-Four (ST205),1994,Excellent,Asia,Manual,Sport
-31,Ass,Skyline GT-R (R33),1995,Excellent,Asia,Manual,Sport
+31,Nissan,Skyline GT-R (R33),1995,Excellent,Asia,Manual,Sport
 32,Toyota,Chaser Tourer V (JZX100),1998,Good,Asia,Manual,Sedan
-33,Ass,Stagea Autech Version 260RS (WGNC34),1998,Excellent,Asia,Manual,MPV
+33,Nissan,Stagea Autech Version 260RS (WGNC34),1998,Excellent,Asia,Manual,MPV
 34,Honda,CR-X SiR (EF8),1989,Excellent,Asia,Manual,Hatchback
 35,Mazda,Eunos Cosmo (JC),1990,Good,Asia,Auto,Sport
 36,Mitsubishi,Galant VR-4 (EC5A),1998,Project Car,Asia,Manual,Sedan
 37,Subaru,Legacy B4 RSK (BE5),2001,Good,Asia,Manual,Sedan
 38,Toyota,Supra 2.5GT Twin Turbo (JZA70),1990,Excellent,Asia,Manual,Sport
-39,Ass,Fairlady Z (Z32 300ZX),1990,Good,Asia,Manual,Sport
+39,Nissan,Fairlady Z (Z32 300ZX),1990,Good,Asia,Manual,Sport
 40,Honda,NSX-R (NA2),2002,Mint,Asia,Manual,Sport
 41,Mazda,RX-8 Spirit R (SE3P),2012,Mint,Asia,Manual,Sport
-42,Ass,Silvia K's (S14 Kouki),1997,Good,Asia,Manual,Sport
+42,Nissan,Silvia K's (S14 Kouki),1997,Good,Asia,Manual,Sport
 43,Toyota,Altezza RS200 (SXE10),1998,Good,Asia,Manual,Sedan
 44,Suzuki,Jimny (JA11),1990,Project Car,Asia,Manual,SUV
 45,Daihatsu,Copen (L880K),2002,Good,Asia,Manual,Sport
 46,Honda,Civic SiR (EG6),1992,Project Car,Asia,Manual,Hatchback
-47,Ass,350Z,2003,Good,Asia,Manual,Sport
-48,Ass,Skyline,2001,Mint,Asia,Auto,Sedan
+47,Nissan,350Z,2003,Good,Asia,Manual,Sport
+48,Nissan,Skyline,2001,Mint,Asia,Auto,Sedan
 49,Toyota,Alphard Executive Lounge,2022,Excellent,Asia,Auto,MPV
 50,Mitsubishi,Eclipse Cross,2020,Excellent,Asia,Auto,SUV
 51,Ford,Mustang Fastback,1967,Mint,Amerika,Manual,Sport
@@ -159,11 +159,11 @@ ID,Merk,Model,Tahun,Kondisi,Benua,Transmisi,Tipe
 158,Honda,Freed,2015,Project Car,Asia,Auto,MPV
 159,Honda,CR-V,2021,Excellent,Asia,Auto,SUV
 160,Honda,NSX,1995,Project Car,Asia,Manual,Sport
-161,Ass,March,2014,Good,Asia,Manual,Hatchback
-162,Ass,Teana,2016,Good,Asia,Auto,Sedan
-163,Ass,Serena,2019,Mint,Asia,Auto,MPV
-164,Ass,X-Trail,2020,Excellent,Asia,Auto,SUV
-165,Ass,GT-R R35,2022,Brand New,Asia,Auto,Sport
+161,Nissan,March,2014,Good,Asia,Manual,Hatchback
+162,Nissan,Teana,2016,Good,Asia,Auto,Sedan
+163,Nissan,Serena,2019,Mint,Asia,Auto,MPV
+164,Nissan,X-Trail,2020,Excellent,Asia,Auto,SUV
+165,Nissan,GT-R R35,2022,Brand New,Asia,Auto,Sport
 166,Mazda,Mazda2,2018,Excellent,Asia,Auto,Hatchback
 167,Mazda,Mazda3,2021,Mint,Asia,Auto,Sedan
 168,Mazda,Biante,2017,Good,Asia,Auto,MPV
