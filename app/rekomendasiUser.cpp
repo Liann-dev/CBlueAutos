@@ -293,7 +293,7 @@ void recomendation(int userId) {
     if (skor[0].skor == 0) return;
 
     cout << "\n========================================================================\n";
-    cout << "🔥 THE CARS THAT ARE MEANT FOR YOU:\n";
+    cout << "                   🔥 THE CARS THAT ARE MEANT FOR YOU:\n";
     cout << "========================================================================\n";
     cout << left << " " << setw(5) << "ID" << setw(35) << "MERK & MODEL" << setw(10) << "TAHUN" << "KONDISI\n";
     cout << "------------------------------------------------------------------------\n";
