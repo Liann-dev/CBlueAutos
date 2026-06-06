@@ -16,9 +16,11 @@ id,username,password,role,status,login_count
 15,Lianfor,Lianfor3,user,true,1
 16,Lian123,Lian1231,user,false,4
 17,Lian21,Lian1212,user,true,1
-18,admin,admin123,admin,false,26
+18,admin,admin123,admin,false,27
 19,admin123,admin123,user,true,0
 20,Lian,Xonica2007,user,true,0
 21,Berlianda12,Xonica2007,user,true,0
 22,adad,Xonica2007,user,true,0
 23,Lian_12,Xonica2121,user,true,0
+24,Berlianda_12,Lian1804,user,true,0
+25,Berlianda_14,Lian1804,user,true,1
