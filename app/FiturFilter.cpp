@@ -5,12 +5,10 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include <set>
 #include "features.h"
 
 using namespace std;
 
-// Struktur data untuk Riwayat Pencarian (Khusus User)
 struct RiwayatPencarian {
     string kata;
     RiwayatPencarian *next;
@@ -51,32 +49,6 @@ string formatModelTeks(string model) {
         return model.substr(0, 15) + "...";
     }
     return model;
-}
-
-vector<string> ambilOpsiAdmin(int kolom) {
-    set<string> unik;
-    ifstream file("database_mobil.csv");
-    string line;
-
-    if (!file.is_open()) return {};
-    getline(file, line);
-
-    while (getline(file, line)) {
-        if (line.empty() || line.find_first_not_of("\r\n \t") == string::npos) continue;
-        
-        stringstream ss(line);
-        string temp;
-        int i = 0;
-
-        while (getline(ss, temp, ',')) {
-            if (i == kolom && !temp.empty()) {
-                if (temp.back() == '\r') temp.pop_back(); 
-                unik.insert(temp);
-            }
-            i++;
-        }
-    }
-    return vector<string>(unik.begin(), unik.end());
 }
 
 void simpanRiwayatPencarian(string kata) {
@@ -137,17 +109,19 @@ void traversalFilterAdmin(TreeAdmin* pohon, int pilihanFilter, int pilihanTahun,
     traversalFilterAdmin(pohon->left, pilihanFilter, pilihanTahun, kriteria, count);
 
     bool cocok = false;
+    string kriteriaKecil = keHurufKecil(kriteria);
+
     if (pilihanFilter == 1) {
         int tahunMobil = stoi(pohon->tahun);
         if (pilihanTahun == 1) cocok = true;
         else if (pilihanTahun == 2) cocok = (tahunMobil >= 2000);
         else if (pilihanTahun == 3) cocok = (tahunMobil < 2000);
     } 
-    else if (pilihanFilter == 2) cocok = (pohon->merk == kriteria);
-    else if (pilihanFilter == 3) cocok = (pohon->kondisi == kriteria);
-    else if (pilihanFilter == 4) cocok = (pohon->benua == kriteria);
-    else if (pilihanFilter == 5) cocok = (pohon->transmisi == kriteria);
-    else if (pilihanFilter == 6) cocok = (pohon->tipe == kriteria);
+    else if (pilihanFilter == 2) cocok = (keHurufKecil(pohon->merk).find(kriteriaKecil) != string::npos);
+    else if (pilihanFilter == 3) cocok = (keHurufKecil(pohon->kondisi).find(kriteriaKecil) != string::npos);
+    else if (pilihanFilter == 4) cocok = (keHurufKecil(pohon->benua).find(kriteriaKecil) != string::npos);
+    else if (pilihanFilter == 5) cocok = (keHurufKecil(pohon->transmisi).find(kriteriaKecil) != string::npos);
+    else if (pilihanFilter == 6) cocok = (keHurufKecil(pohon->tipe).find(kriteriaKecil) != string::npos);
 
     if (cocok) {
         count++;
@@ -159,7 +133,6 @@ void traversalFilterAdmin(TreeAdmin* pohon, int pilihanFilter, int pilihanTahun,
     traversalFilterAdmin(pohon->right, pilihanFilter, pilihanTahun, kriteria, count);
 }
 
-// FUNGSI CARI MOBIL DENGAN JALUR UI BERBEDA (ADMIN VS USER)
 void cariMobil(bool isAdmin) {
     string inputBuffer;
 
@@ -187,7 +160,6 @@ void cariMobil(bool isAdmin) {
 
                     if (keyKecil.empty() || modelKecil.find(keyKecil) != string::npos) {
                         counter++;
-                        // Menggunakan huruf kapital 'Transmisi' sesuai struct asli
                         cout << left << " " << setw(5) << temp->id << setw(15) << currKat->NamaMerk 
                              << setw(20) << formatModelTeks(temp->Model) << setw(8) << temp->Tahun << setw(15) << temp->Kondisi 
                              << setw(12) << temp->Tipe << setw(12) << temp->Transmisi << temp->Benua << endl;
@@ -205,7 +177,6 @@ void cariMobil(bool isAdmin) {
         return; 
     }
 
-    // JALUR 2: USER (Menggunakan Menu Pilihan 1, 2, 3)
     while (true) {
         bersihkanLayar();
         cout << "\n========================================\n";
@@ -279,7 +250,6 @@ void cariMobil(bool isAdmin) {
     }
 }
 
-// REVISI: Menyelaraskan Parameter Fungsi Filter (bool isAdmin)
 void filterMobil(bool isAdmin) {
     string inputBuffer;
     while (true) {
@@ -309,48 +279,40 @@ void filterMobil(bool isAdmin) {
             try { pilihanTahun = stoi(inputBuffer); } catch(...) { continue; }
             if (pilihanTahun < 1 || pilihanTahun > 3) continue;
         }
-        else if (pilihan == 3) {
-            cout << "\n>>> FILTER KONDISI\n [1] Brand New\n [2] Mint\n [3] Excellent\n [4] Good\n [5] Project Car\n Pilih (Enter untuk batal): ";
-            getline(cin, inputBuffer);
-            if (inputBuffer.empty()) continue;
-            int pilihKondisi = 0;
-            try { pilihKondisi = stoi(inputBuffer); } catch(...) { continue; }
-            if (pilihKondisi < 1 || pilihKondisi > 5) continue;
-            string kondisi[] = {"Brand New", "Mint", "Excellent", "Good", "Project Car"};
-            kriteria = kondisi[pilihKondisi - 1];
-        }
         else {
-            int kolomPencarian = (pilihan == 2) ? 1 : (pilihan == 4) ? 5 : (pilihan == 5) ? 6 : 7;
-            string namaFilter = (pilihan == 2) ? "MERK" : (pilihan == 4) ? "BENUA" : (pilihan == 5) ? "TRANSMISI" : "TIPE";
+            if (pilihan == 2) {
+                cout << "\n>>> FILTER MERK\n";
+                cout << " Masukkan nama Merk (contoh: Toyota, Esemka, BMW, Etc..) atau Enter untuk batal: ";
+            } 
+            else if (pilihan == 3) {
+                cout << "\n>>> FILTER KONDISI\n";
+                cout << " Masukkan Kondisi (contoh: Brand New, Mint, Project Car, Excellent, Good) atau Enter untuk batal: ";
+            } 
+            else if (pilihan == 4) {
+                cout << "\n>>> FILTER BENUA\n";
+                cout << " Masukkan nama Benua (contoh: Asia, Amerika, Eropa) atau Enter untuk batal: ";
+            } 
+            else if (pilihan == 5) {
+                cout << "\n>>> FILTER TRANSMISI\n";
+                cout << " Masukkan jenis Transmisi (contoh: Auto, Manual) atau Enter untuk batal: ";
+            } 
+            else if (pilihan == 6) {
+                cout << "\n>>> FILTER TIPE\n";
+                cout << " Masukkan Tipe bodi (contoh: SUV, Sedan, Hatchback, MPV, Sport) atau Enter untuk batal: ";
+            }
 
-            vector<string> opsi = ambilOpsiAdmin(kolomPencarian);
-            if (opsi.empty()) {
-                cout << "[!] Data " << namaFilter << " tidak tersedia. Tekan Enter...";
-                getline(cin, inputBuffer);
-                continue;
-            }
-            
-            cout << "\n>>> FILTER " << namaFilter << "\n";
-            int kolomGrid = 0;
-            for (size_t i = 0; i < opsi.size(); i++) {
-                cout << left << setw(25) << ("[" + to_string(i + 1) + "] " + opsi[i]);
-                if (++kolomGrid == 4) { cout << "\n"; kolomGrid = 0; }
-            }
-            if (kolomGrid != 0) cout << "\n"; 
-            cout << "\n Pilih (Enter untuk batal): ";
-            getline(cin, inputBuffer);
-            if (inputBuffer.empty()) continue;
-            
-            int pilihOpsi = 0;
-            try { pilihOpsi = stoi(inputBuffer); } catch(...) { continue; }
-            if (pilihOpsi < 1 || pilihOpsi > opsi.size()) continue;
-            
-            kriteria = opsi[pilihOpsi - 1];
+            getline(cin, kriteria);
+            if (kriteria.empty()) continue; 
         }
 
         TreeAdmin *pohonUtama = nullptr;
         ifstream file("database_mobil.csv");
         string line;
+        if (!file.is_open()) {
+            cout << "\n[!] Gagal membuka file database_mobil.csv. Tekan Enter...";
+            getline(cin, inputBuffer);
+            return;
+        }
         getline(file, line); 
 
         while (getline(file, line)) {
